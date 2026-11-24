@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GM Legal · Your instructions</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="description" content="Ten short parts before the demonstration. About 12 minutes, every answer optional, no client details needed.">
+<meta property="og:title" content="GM Legal · Your instructions">
+<meta property="og:description" content="Ten short parts before the demonstration. About 12 minutes, every answer optional.">
+<meta property="og:image" content="https://mia050.github.io/gm-legal/og.jpg">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#141414">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Courier+Prime:wght@400;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* VOICE: courteous, precise, a little dry; one professional briefing another
+IDEA: the roles reverse for ten minutes: the advocate instructs, MIA acts
+PICTURE: a court document with numbered paragraphs, an index that fills as he answers, and a Statement of Truth to sign off
+COLOUR and TYPE: black, white and gold on warm paper; Libre Caslon for titles, Courier Prime for the court paper, Inter for reading
+LAYOUT: one calm column, nine numbered parts, a sticky index, the statement and send card at the end */
+:root{color-scheme:light;--ink:#141414;--ink2:#262626;--gold:#B8913A;--gold2:#E7D6AE;--gold3:#F7F0DF;--paper:#F8F6F1;--text:#1C1B19;--mute:#66625A;--line:#E3DDD0}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--paper);color:var(--text);font:16px/1.55 Inter,system-ui,-apple-system,"Segoe UI",sans-serif;overflow-x:clip}
+.hero{background:var(--ink);color:#fff;position:relative;overflow:hidden;padding:clamp(34px,6vw,72px) max(6vw,18px) clamp(40px,6vw,70px)}
+.hero svg.doc{position:absolute;right:-40px;top:-30px;width:min(420px,80vw);height:auto;opacity:.9}
+.hero .in{position:relative;max-width:640px}
+.brand{font-weight:700;letter-spacing:.38em;font-size:12.5px;color:rgba(255,255,255,.62)}
+h1{font-family:"Libre Caslon Text",Georgia,serif;font-weight:400;font-size:clamp(40px,8vw,58px);line-height:1.04;margin:14px 0 8px;text-wrap:balance}
+.lede{font-family:"Libre Caslon Text",Georgia,serif;font-style:italic;color:var(--gold);font-size:clamp(19px,3.6vw,23px);margin:0 0 18px}
+.hero p.body{color:rgba(255,255,255,.84);max-width:580px;margin:0 0 10px}
+.meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.meta span{border:1px solid rgba(255,255,255,.22);border-radius:20px;padding:5px 12px;font-size:13px;color:rgba(255,255,255,.82)}
+.strip{position:sticky;top:0;z-index:5;background:rgba(248,246,241,.96);backdrop-filter:blur(6px);border-bottom:1px solid var(--line);padding:10px max(6vw,18px)}
+.ix{margin:0 auto;display:grid;grid-template-columns:auto repeat(10,minmax(0,1fr)) auto;max-width:760px;border:1.5px solid var(--ink);border-radius:8px;overflow:hidden;background:#fff;font-size:13px}
+.ix div{padding:6px 2px;text-align:center;border-right:1px solid var(--line)}
+.ix div:last-child{border-right:none}
+.ix .lab{background:var(--ink);color:#fff;padding:6px 10px;font-weight:600}
+.ix a{display:block;color:var(--text);text-decoration:none;font-family:"Courier Prime","Courier New",monospace;font-size:16px}
+.ix .p.done{background:var(--gold3)}
+.ix .p.done a{color:#7A5A16;font-weight:700}
+.ix .tot{background:var(--gold3);padding:6px 10px;font-weight:700;color:#7A5A16;white-space:nowrap}
+main{max-width:760px;margin:0 auto;padding:10px max(5vw,16px) 60px}
+.who{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin:24px 0 8px;display:grid;gap:12px;grid-template-columns:1fr 1fr}
+.part{background:#fff;border:1px solid var(--line);border-radius:16px;padding:clamp(18px,3vw,28px);margin-top:18px;scroll-margin-top:70px;border-left:3px solid var(--gold)}
+.phead{display:flex;align-items:baseline;gap:12px;margin-bottom:4px}
+.pn{font-family:"Courier Prime","Courier New",monospace;font-size:26px;line-height:1;color:var(--gold);font-weight:700;white-space:nowrap}
+.part h2{font-family:"Libre Caslon Text",Georgia,serif;font-weight:400;font-size:clamp(24px,4vw,29px);line-height:1.15;margin:0;color:var(--ink)}
+.part .why{color:var(--mute);margin:4px 0 12px;font-size:15px}
+.q{margin-top:18px}
+.q > label,.q > .ql{display:block;font-weight:600;font-size:15.5px;margin-bottom:8px;color:var(--ink)}
+.q .hint{display:block;font-weight:400;color:var(--mute);font-size:13.5px;margin-top:2px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chips button{font:inherit;font-size:15px;min-height:44px;padding:9px 15px;border-radius:24px;border:1.5px solid var(--line);background:#fff;color:var(--text);cursor:pointer;transition:.12s;text-align:left}
+.chips button:hover{border-color:var(--gold)}
+.chips button[aria-pressed=true]{background:var(--ink);border-color:var(--ink);color:#fff}
+.chips button:focus-visible,input:focus-visible,textarea:focus-visible,.btn:focus-visible{outline:3px solid rgba(184,145,58,.55);outline-offset:2px}
+input[type=text],textarea{width:100%;font:inherit;font-size:16px;border:1.5px solid var(--line);border-radius:12px;padding:11px 14px;background:#fff;color:var(--text)}
+textarea{min-height:92px;resize:vertical}
+.small{font-size:13px;color:var(--mute)}
+.truth{margin-top:28px;background:#fff;border:1px solid var(--line);border-radius:4px;padding:clamp(22px,4vw,36px);font-family:"Courier Prime","Courier New",monospace;font-size:16px;line-height:1.7;box-shadow:0 1px 0 var(--line),0 6px 0 -3px #fff,0 7px 0 -3px var(--line)}
+.truth h3{font:700 16px/1.4 "Courier Prime","Courier New",monospace;letter-spacing:.04em;margin:0 0 10px;text-decoration:underline;text-underline-offset:4px}
+.truth .dated{margin:26px 0 30px}
+.truth .sig{border-top:2px dotted var(--ink);width:min(340px,100%);margin:0 auto;padding-top:6px;text-align:center;font-weight:700;letter-spacing:.06em}
+.truth .drawn{margin-top:28px;margin-left:auto;width:fit-content;max-width:100%;text-align:right}
+.truth .drawn b{display:block;font-weight:400}
+.truth .drawn u{text-underline-offset:4px}
+.send{margin-top:20px;background:var(--ink);color:#fff;border-radius:18px;padding:clamp(22px,4vw,34px)}
+.send h2{font-family:"Libre Caslon Text",Georgia,serif;font-weight:400;font-size:clamp(26px,5vw,34px);margin:0 0 6px}
+.send p{color:rgba(255,255,255,.8);margin:0 0 18px;max-width:540px}
+.send .row{display:flex;flex-wrap:wrap;gap:10px}
+.btn{font:inherit;font-weight:700;font-size:16px;min-height:48px;padding:12px 22px;border-radius:12px;border:none;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:8px}
+.btn.gold{background:var(--gold);color:var(--ink)}
+.btn.ghost{background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,.4)}
+.send .note{font-size:13px;color:rgba(255,255,255,.62);margin-top:14px}
+.send .ok{color:var(--gold2);font-weight:600;min-height:22px;margin-top:10px}
+footer{text-align:center;color:var(--mute);font-size:13px;padding:10px 16px 40px}
+footer i{font-family:"Libre Caslon Text",Georgia,serif;font-size:17px;color:var(--ink)}
+@media(max-width:600px){.who{grid-template-columns:1fr}.ix{font-size:11.5px}.ix .lab,.ix .tot{padding:6px 6px}.ix a{font-size:14px}.hero svg.doc{right:-170px;top:-10px;opacity:.18}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+html{scroll-behavior:smooth}
+</style>
+</head>
+<body>
+<header class="hero">
+<svg class="doc" viewBox="0 0 220 260" aria-hidden="true">
+<g fill="none" stroke="#B8913A" stroke-width="1" stroke-linecap="round">
+<rect x="58" y="22" width="140" height="196" rx="2" opacity=".35" transform="rotate(5 128 120)"/>
+<rect x="46" y="30" width="140" height="196" rx="2" opacity=".9"/>
+<line x1="80" y1="50" x2="152" y2="50" opacity=".8"/><line x1="90" y1="58" x2="142" y2="58" opacity=".6"/>
+<line x1="60" y1="80" x2="60" y2="206" opacity=".35"/>
+<line x1="68" y1="84" x2="172" y2="84" opacity=".7"/><line x1="68" y1="92" x2="166" y2="92" opacity=".5"/><line x1="68" y1="100" x2="150" y2="100" opacity=".5"/>
+<line x1="68" y1="116" x2="172" y2="116" opacity=".7"/><line x1="68" y1="124" x2="160" y2="124" opacity=".5"/>
+<line x1="68" y1="140" x2="172" y2="140" opacity=".7"/><line x1="68" y1="148" x2="140" y2="148" opacity=".5"/>
+<path d="M76 186c6-10 10 4 14-4s6 2 10-3 4 6 9 1" opacity=".9"/>
+<line x1="70" y1="192" x2="128" y2="192" stroke-dasharray="1.5 2.5" opacity=".7"/>
+<circle cx="160" cy="190" r="15" opacity=".8"/><circle cx="160" cy="190" r="11" opacity=".45"/>
+</g>
+<g fill="#B8913A" font-family="Courier Prime, Courier New, monospace" font-size="7">
+<text x="50" y="87" opacity=".8">11.</text><text x="50" y="119" opacity=".8">12.</text><text x="50" y="143" opacity=".8">13.</text>
+</g>
+</svg>
+<div class="in">
+<div class="brand">GM LEGAL PRACTITIONERS</div>
+<h1>Your instructions</h1>
+<p class="lede">For a few minutes, you instruct and we act.</p>
+<p class="body">Mr Mulele, thank you for your time. Ten short parts, set out like a pleading. Your answers shape the demonstration around GM Legal: your courts, your matters, your two offices and your people.</p>
+<p class="body">No client names or case details are needed. Please keep it that way.</p>
+<div class="meta"><span>About 12 minutes</span><span>Every answer is optional</span><span>No client details needed</span><span>Seen only by Moshe</span></div>
+</div>
+</header>
+<nav class="strip" aria-label="Index"><div class="ix" id="ix"></div></nav>
+<main>
+<div class="who">
+<div><label class="small" for="nm">Your name</label><input type="text" id="nm" value="Mukumba Mulele"></div>
+<div><label class="small" for="rl">Your role</label><input type="text" id="rl" value="Partner, GM Legal Practitioners"></div>
+</div>
+<div id="parts"></div>
+<section class="truth" aria-labelledby="st">
+<h3 id="st">STATEMENT OF TRUTH</h3>
+<div>The contents of these instructions are true and correct to the best of my knowledge and belief.</div>
+<div class="dated" id="dated">Dated at Lusaka this day.</div>
+<div class="sig" id="signame">MUKUMBA MULELE</div>
+<div class="drawn"><b>Drawn by:</b><b>MIA Technology</b><b>Lusaka</b><u>For GM Legal Practitioners</u></div>
+</section>
+<section class="send" id="send">
+<h2>File and serve</h2>
+<p>One tap sends your instructions to Moshe on WhatsApp. The demonstration will be set up around them.</p>
+<div class="row"><a class="btn gold" id="wa" href="#" target="_blank" rel="noopener">Send to Moshe on WhatsApp</a><button class="btn ghost" id="cp" type="button">Copy my answers</button></div>
+<div class="ok" id="okmsg" aria-live="polite"></div>
+<p class="note">If WhatsApp does not open, copy your answers and send them to +972 50 959 1299, or by email to 9591299@gmail.com.</p>
+</section>
+</main>
+<footer><i>Taken down as instructed.</i><br>Prepared by MIA Technology for GM Legal Practitioners</footer>
+<script>
+{
+const PARTS = [
+{t:"The firm", w:"So the demonstration greets your team by name and fits your size.", q:[
+{id:"partners",l:"How many partners?",o:["2","3","4","5 or more"]},
+{id:"team",l:"How many people across both offices, partners included?",o:["Under 15","15 to 25","26 to 40","More than 40"]},
+{id:"offices",l:"How do Lusaka and Kitwe work together?",o:["One team across both","Separate teams, shared partners","Kitwe mostly runs on its own"]},
+{id:"decide",l:"Who decides on systems and budget?",o:["Mr Mulele","Mr Mulele with Mr Kalandanya","All the partners together"]},
+{id:"people",l:"Who would use the system?",h:"Names and roles, for example: P. Banda, Associate, Lusaka",x:"area"}]},
+{t:"Your practice", w:"The demonstration will open on your kind of matters.", q:[
+{id:"areas",l:"Main practice areas",m:1,o:["Litigation and dispute resolution","Debt recovery","Conveyancing and property","Corporate and company secretarial","Tax and commercial","Immigration","Probate and succession","Notary public","Intellectual property","Employment and labour","Family","Criminal","Insolvency","Mining"]},
+{id:"open",l:"Open matters today",o:["Under 100","100 to 300","300 to 600","600 to 1,000","Over 1,000"]},
+{id:"newm",l:"New matters a month",o:["Under 10","10 to 25","25 to 50","Over 50"]},
+{id:"instruct",l:"Who instructs you most?",m:1,o:["Individuals","Zambian companies","Foreign companies and investors","Banks and lenders","Government bodies","Insurers","NGOs"]}]},
+{t:"Courts and deadlines", w:"Where a missed date costs the most, the system works hardest.", q:[
+{id:"courts",l:"Where does the firm appear most?",m:1,o:["High Court, Lusaka","Commercial Registry, Lusaka","High Court, Kitwe","Commercial Registry, Kitwe","Subordinate Courts","Court of Appeal","Supreme Court","Industrial Relations Division","Lands Tribunal","Arbitration"]},
+{id:"track",l:"How are hearings and deadlines tracked today?",m:1,o:["Office diary","Each lawyer's own diary","Spreadsheet","Outlook or Google calendar","The clerk's book","Software"]},
+{id:"sure",l:"How sure are you that no date can slip?",o:["Completely","Fairly","Less than I would like"]},
+{id:"ecms",l:"Has the firm started on the Judiciary's electronic case management system?",o:["Yes, filing already","Registered, not yet filing","Not yet","Not sure"]}]},
+{t:"Taking on a client", w:"Conflict check, KYC and engagement letter, set up the way you already work.", q:[
+{id:"conflict",l:"How is a conflict check done today?",o:["Asking the partners","Searching a list or spreadsheet","In software","Not formally"]},
+{id:"kyc",l:"How are ID and company documents collected?",m:1,o:["Paper copies at the office","Scans by email","Photos on WhatsApp","Not always collected"]},
+{id:"engage",l:"Is there a signed engagement letter for each new matter?",o:["Always","Usually","Sometimes","Rarely"]},
+{id:"deposit",l:"Do you take a deposit on account before starting?",o:["Always","For some matters","Rarely"]}]},
+{t:"Files and documents", w:"So every pleading, letter and order is one search away.", q:[
+{id:"files",l:"Where do files live today?",m:1,o:["Paper files","A shared drive or server","Google Drive","OneDrive or SharePoint","Lawyers' own laptops","Email inboxes"]},
+{id:"tmpl",l:"Precedents and templates",o:["One shared precedent bank","Each lawyer keeps their own","We start from a previous matter"]},
+{id:"custody",l:"Original documents held in safe custody, such as titles and wills",o:["None","A few","Many"]},
+{id:"mail",l:"Email",o:["Google Workspace","Microsoft 365 or Outlook","Our own domain host","A mix"]}]},
+{t:"Fees and the client account", w:"The money view will show the partners what matters, and nothing more.", q:[
+{id:"fees",l:"How are fees charged?",m:1,o:["Hourly, by seniority","Scale fees under the Costs Orders","Fixed fees","Monthly retainers","Collection commission","Contingency fees"]},
+{id:"time",l:"Do the lawyers record their time?",o:["All of them","Some","No"]},
+{id:"cur",l:"Currencies billed",o:["Kwacha only","Kwacha and US dollars","Mostly US dollars"]},
+{id:"si",l:"Smart Invoice today",o:["Integrated with our software","ZRA online portal","ZRA mobile app","Not VAT registered","Not sure"]},
+{id:"clacc",l:"How is the client account kept?",o:["Accounting software","Spreadsheet","From bank statements","By an outside accountant"]},
+{id:"soft",l:"Accounting software",m:1,o:["Sage Pastel","QuickBooks","Xero","Zoho Books","Excel","Other"]},
+{id:"owed",l:"Fees unpaid after 60 days are",o:["Not an issue","Sometimes an issue","A real concern"]}]},
+{t:"Chambers and the team", w:"So everyone from trainee to runner has a screen made for their day.", q:[
+{id:"trainees",l:"Trainees and interns",o:["None","1 to 2","3 or more"]},
+{id:"support",l:"Support staff",m:1,o:["Secretaries","Court clerks and runners","Accounts","Reception","Office manager","IT support"]},
+{id:"approve",l:"How is a trainee's draft approved today?",o:["Printed and marked up","By email","In a shared document","Verbally"]},
+{id:"cpd",l:"Who keeps track of practising certificates and CPD?",o:["Each lawyer","The office manager","A partner","Nobody in particular"]}]},
+{t:"Your clients' experience", w:"Your website promises a monthly status report. A client portal can deliver it.", q:[
+{id:"asks",l:"What do clients ask most often?",m:1,o:["What is happening in my case?","When is the next hearing?","How much do I owe?","What do you need from me?","Can I have a copy?"]},
+{id:"update",l:"How are clients updated today?",m:1,o:["Monthly written report","Phone calls","WhatsApp","Email","Meetings"]},
+{id:"portal",l:"A client portal and app in GM Legal's name",o:["Very interested","Maybe","Not now"]},
+{id:"dash",l:"Would your bank and corporate clients use a dashboard of all their matters?",o:["Yes, several would","One or two","Not sure"]}]},
+{t:"Criminal practice", w:"Your criminal law partner will get a desk built around his own day: arrests, custody, bail and trial.", q:[
+{id:"crimname",l:"Your criminal law partner",h:"Name, and the best way to reach him",x:"line"},
+{id:"crimshare",l:"Share of the firm's work that is criminal",o:["Under 10%","10 to 25%","25 to 50%","Over half"]},
+{id:"crimtypes",l:"Main criminal work",m:1,o:["Corruption and economic crimes","Fraud and money laundering","Tax offences","Drug offences","Violent crime","Sexual offences","Cyber offences","Corporate and regulatory investigations","Appeals"]},
+{id:"crimcourts",l:"Where does he appear most?",m:1,o:["Subordinate Courts","High Court criminal sessions","Economic and Financial Crimes Court","Court of Appeal","Supreme Court"]},
+{id:"crimagency",l:"Agencies he deals with most",m:1,o:["Zambia Police","Anti-Corruption Commission","Drug Enforcement Commission","National Prosecution Authority","Zambia Revenue Authority","Financial Intelligence Centre referrals"]},
+{id:"crimnight",l:"When a client is arrested at night, what happens today?",o:["He is called on his mobile","The office hears the next day","An on-call lawyer goes","It depends"]},
+{id:"crimcustody",l:"Clients in custody at any one time",o:["None","1 to 5","6 to 15","More than 15"]},
+{id:"crimhelp",l:"What would help him most?",h:"Choose up to three",m:3,o:["A detention and bail clock","Witness and evidence sheets for trial","Tracking what the prosecution has disclosed","Appeal deadlines","A secure line with clients and families","Court notes from his phone","Fees by stage, paid upfront"]},
+{id:"crimsee",l:"Anything he would want built just for him?",x:"area"}]},
+{t:"The win", w:"Where the real conversation starts.", q:[
+{id:"prio",l:"Your top three priorities",h:"Choose up to three",m:3,o:["Never missing a court date","A client account that always reconciles","Faster drafting","Billing every hour worked","Getting paid faster","Client reports without effort","Running Lusaka and Kitwe as one firm","Debt recovery at volume","FIC, data protection and ZRA compliance"]},
+{id:"win",l:"What would make this a win for GM Legal six months from now?",x:"area"},
+{id:"see",l:"Anything you would like to see in the demonstration?",x:"area"},
+{id:"meet",l:"Best day and time for the demonstration",h:"For example: Thursday morning, at our Kabulonga office",x:"line"}]}
+];
+const A = {};
+try{ Object.assign(A, JSON.parse(localStorage.getItem("gmlegal-ins")||"{}")); }catch(e){}
+const save = () => { try{ localStorage.setItem("gmlegal-ins", JSON.stringify(A)); }catch(e){} };
+const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const MONTHS = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+const ord = n => { const s=["th","st","nd","rd"], v=n%100; return n+(s[(v-20)%10]||s[v]||s[0]); };
+const today = () => { const d=new Date(); return `this ${ord(d.getDate())} day of ${MONTHS[d.getMonth()]} ${d.getFullYear()}`; };
+
+document.getElementById("parts").innerHTML = PARTS.map((p,i)=>`
+<section class="part" id="part-${i+1}"><div class="phead"><span class="pn">${i+1}.</span><h2>${p.t}</h2></div><p class="why">${p.w}</p>
+${p.q.map(q=>`<div class="q">${q.x?`<label for="${q.id}">${q.l}${q.h?`<span class="hint">${q.h}</span>`:""}</label>${q.x==="area"?`<textarea id="${q.id}" data-id="${q.id}"></textarea>`:`<input type="text" id="${q.id}" data-id="${q.id}">`}`
+:`<span class="ql" id="l-${q.id}">${q.l}${q.h?`<span class="hint">${q.h}</span>`:""}</span><div class="chips" role="group" aria-labelledby="l-${q.id}">${q.o.map(o=>`<button type="button" data-q="${q.id}" data-m="${q.m||0}" data-v="${esc(o)}" aria-pressed="false">${esc(o)}</button>`).join("")}</div>`}</div>`).join("")}
+</section>`).join("");
+
+function partDone(i){ return PARTS[i].q.some(q=>{const v=A[q.id];return Array.isArray(v)?v.length:v&&String(v).trim();}); }
+function sigName(){ return (document.getElementById("nm").value.trim()||"Mukumba Mulele").toUpperCase(); }
+function draw(){
+const done = PARTS.map((p,i)=>partDone(i));
+document.getElementById("ix").innerHTML = `<div class="lab">Index</div>${done.map((d,i)=>`<div class="p ${d?"done":""}"><a href="#part-${i+1}" aria-label="Part ${i+1}${d?", answered":""}">${i+1}</a></div>`).join("")}<div class="tot">${done.filter(Boolean).length} / ${PARTS.length}</div>`;
+document.getElementById("dated").textContent = `Dated at Lusaka ${today()}.`;
+document.getElementById("signame").textContent = sigName();
+document.getElementById("wa").href = "https://wa.me/972509591299?text=" + encodeURIComponent(compose());
+}
+function sync(){
+document.querySelectorAll(".chips button").forEach(b=>{ const v=A[b.dataset.q]; const on = Array.isArray(v)? v.includes(b.dataset.v) : v===b.dataset.v; b.setAttribute("aria-pressed", on?"true":"false"); });
+document.querySelectorAll("[data-id]").forEach(el=>{ if(A[el.dataset.id] && el.value!==A[el.dataset.id]) el.value=A[el.dataset.id]; });
+if(A._nm) document.getElementById("nm").value=A._nm; if(A._rl) document.getElementById("rl").value=A._rl;
+}
+function compose(){
+const nm=document.getElementById("nm").value.trim(), rl=document.getElementById("rl").value.trim();
+let out = `GM Legal · Instructions to MIA Technology\nFrom: ${nm}${rl?", "+rl:""}\n`;
+PARTS.forEach((p,i)=>{
+const lines = p.q.map(q=>{ const v=A[q.id]; const val = Array.isArray(v)? v.join(", ") : (v||"").trim(); return val? `• ${q.l}${/[?:]$/.test(q.l)?"":":"} ${val}` : ""; }).filter(Boolean);
+if(lines.length) out += `\n${i+1}. ${p.t}\n` + lines.join("\n") + "\n";
+});
+out += `\nStatement of truth: true and correct to the best of my knowledge and belief. Dated at Lusaka ${today()}.`;
+return out.trim();
+}
+document.addEventListener("click", e=>{
+const b = e.target.closest(".chips button"); if(!b) return;
+const id=b.dataset.q, m=+b.dataset.m, v=b.dataset.v;
+if(m){ const arr = Array.isArray(A[id])? A[id] : []; const k=arr.indexOf(v);
+if(k>=0) arr.splice(k,1); else { if(m>1 && arr.length>=m) arr.shift(); arr.push(v); } A[id]=arr; }
+else A[id] = A[id]===v ? "" : v;
+save(); sync(); draw();
+});
+document.addEventListener("input", e=>{
+const el=e.target;
+if(el.dataset && el.dataset.id){ A[el.dataset.id]=el.value; }
+if(el.id==="nm") A._nm=el.value; if(el.id==="rl") A._rl=el.value;
+save(); draw();
+});
+document.getElementById("cp").addEventListener("click", async ()=>{
+const msg=document.getElementById("okmsg");
+try{ await navigator.clipboard.writeText(compose()); msg.textContent="Copied. Paste it into WhatsApp or an email to Moshe."; }
+catch(err){ msg.textContent="Copying is blocked here. Please use the WhatsApp button, or select and copy the text below."; const pre=document.createElement("textarea"); pre.value=compose(); pre.style.marginTop="12px"; pre.style.minHeight="220px"; msg.after(pre); }
+});
+document.getElementById("wa").addEventListener("click", ()=>{ document.getElementById("wa").href = "https://wa.me/972509591299?text=" + encodeURIComponent(compose()); document.getElementById("okmsg").textContent="WhatsApp is opening with your answers. Press send there to deliver them."; });
+sync(); draw();
+}
+</script>
+</body>
+</html>

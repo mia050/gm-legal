@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GM Chambers · Demonstration</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="description" content="A demonstration of GM Chambers, the practice system for GM Legal Practitioners. Sample data only.">
+<meta property="og:title" content="GM Chambers · Demonstration">
+<meta property="og:description" content="The practice system for GM Legal Practitioners. Sample data only.">
+<meta property="og:image" content="https://mia050.github.io/gm-legal/og.jpg">
+<meta name="theme-color" content="#141414">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Courier+Prime:wght@400;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#141414;--ink2:#1f1f1f;--ink3:#2b2b2b;--gold:#B8913A;--gold2:#E7D6AE;--gold3:#F7F0DF;--paper:#F8F6F1;--card:#fff;--text:#1C1B19;--mute:#6B675F;--line:#E6E0D3;--good:#2F7D4F;--good2:#E4F2E9;--warn:#B26A00;--warn2:#FBEFD9;--bad:#B3261E;--bad2:#FBE7E5;--blue:#2F5D8A;--blue2:#E6EEF7}
+*{box-sizing:border-box;min-width:0}
+html,body{margin:0;height:100%}
+body{background:var(--paper);color:var(--text);font:15px/1.5 Inter,system-ui,-apple-system,"Segoe UI",sans-serif}
+button{font:inherit;cursor:pointer}
+.mono{font-family:"Courier Prime","Courier New",monospace}
+.serif{font-family:"Libre Caslon Text",Georgia,serif}
+/* login */
+#login{position:fixed;inset:0;z-index:50;background:var(--ink);color:#fff;display:flex;align-items:center;justify-content:center;padding:24px;overflow:auto}
+#login .box{max-width:560px;width:100%}
+#login .brand{letter-spacing:.38em;font-weight:700;font-size:12.5px;color:rgba(255,255,255,.6)}
+#login h1{font-family:"Libre Caslon Text",Georgia,serif;font-weight:400;font-size:clamp(40px,8vw,60px);margin:12px 0 4px;line-height:1.05}
+#login .slogan{font-family:"Libre Caslon Text",Georgia,serif;font-style:italic;color:var(--gold);font-size:22px;margin:0 0 22px}
+#login p{color:rgba(255,255,255,.78);margin:0 0 18px}
+.roles{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.roles button{background:var(--ink2);color:#fff;border:1px solid #3a3a3a;border-radius:12px;padding:14px;text-align:left;min-height:64px}
+.roles button:hover,.roles button:focus-visible{border-color:var(--gold);outline:none}
+.roles b{display:block;font-weight:600}
+.roles span{font-size:13px;color:rgba(255,255,255,.6)}
+#login .note{margin-top:18px;font-size:12.5px;color:rgba(255,255,255,.5)}
+/* shell */
+.shell{display:grid;grid-template-columns:240px 1fr;min-height:100vh}
+aside{background:var(--ink);color:#fff;padding:18px 12px;position:sticky;top:0;height:100vh;overflow:auto}
+aside .logo{padding:4px 10px 16px;border-bottom:1px solid #2e2e2e;margin-bottom:10px}
+aside .logo b{font-family:"Libre Caslon Text",Georgia,serif;font-weight:400;font-size:22px;display:block}
+aside .logo i{font-family:"Libre Caslon Text",Georgia,serif;color:var(--gold);font-size:13px}
+nav a{display:flex;align-items:center;gap:10px;color:rgba(255,255,255,.8);text-decoration:none;padding:9px 10px;border-radius:9px;font-size:14.5px}
+nav a:hover{background:#1e1e1e;color:#fff}
+nav a.on{background:#262218;color:var(--gold2);box-shadow:inset 3px 0 0 var(--gold)}
+nav a .dot{width:7px;height:7px;border-radius:50%;background:#555;flex:none}
+nav a.on .dot{background:var(--gold)}
+nav .sec{font-size:11px;letter-spacing:.14em;color:#8a8a8a;padding:14px 10px 4px;text-transform:uppercase}
+.top{display:flex;align-items:center;gap:12px;justify-content:space-between;padding:14px 26px;border-bottom:1px solid var(--line);background:rgba(248,246,241,.95);position:sticky;top:0;z-index:5;backdrop-filter:blur(6px)}
+.top .who{display:flex;align-items:center;gap:10px}
+.av{width:34px;height:34px;border-radius:50%;background:var(--ink);color:var(--gold2);display:grid;place-items:center;font-weight:700;font-size:13px;flex:none}
+.top select{font:inherit;font-size:14px;border:1px solid var(--line);border-radius:9px;padding:7px 10px;background:#fff}
+.sample{font-size:12px;background:var(--gold3);color:#7A5A16;border:1px solid var(--gold2);border-radius:20px;padding:3px 10px;white-space:nowrap}
+main{padding:22px 26px 60px;max-width:1240px}
+h2.page{font-family:"Libre Caslon Text",Georgia,serif;font-weight:400;font-size:30px;margin:4px 0 2px}
+.sub{color:var(--mute);margin:0 0 18px}
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:repeat(2,minmax(0,1fr))}.g3{grid-template-columns:repeat(3,minmax(0,1fr))}.g4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px}
+.card h3{margin:0 0 10px;font-size:15px;font-weight:600;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.card h3 small{font-weight:400;color:var(--mute);font-size:12.5px}
+.kpi .v{font-family:"Libre Caslon Text",Georgia,serif;font-size:28px;line-height:1.1}
+.kpi .l{color:var(--mute);font-size:13px}
+.kpi .d{font-size:12.5px;margin-top:4px}
+.up{color:var(--good)}.dn{color:var(--bad)}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{text-align:left;font-weight:600;color:var(--mute);font-size:12px;letter-spacing:.04em;text-transform:uppercase;padding:8px 8px;border-bottom:1px solid var(--line)}
+td{padding:10px 8px;border-bottom:1px solid #F0EBE0;vertical-align:top}
+tr.click{cursor:pointer}tr.click:hover td{background:#FBF9F4}
+.tag{display:inline-block;font-size:12px;border-radius:20px;padding:2px 9px;white-space:nowrap;border:1px solid transparent}
+.t-good{background:var(--good2);color:var(--good)}.t-warn{background:var(--warn2);color:var(--warn)}.t-bad{background:var(--bad2);color:var(--bad)}.t-blue{background:var(--blue2);color:var(--blue)}.t-gold{background:var(--gold3);color:#7A5A16;border-color:var(--gold2)}.t-mute{background:#F1EEE7;color:var(--mute)}
+.btn{border:none;border-radius:10px;padding:9px 14px;font-weight:600;font-size:14px;min-height:40px}
+.b-ink{background:var(--ink);color:#fff}.b-gold{background:var(--gold);color:var(--ink)}.b-line{background:#fff;border:1px solid var(--line);color:var(--text)}
+.b-ink:disabled,.b-gold:disabled{opacity:.45;cursor:not-allowed}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.list .it{display:flex;gap:12px;padding:10px 0;border-bottom:1px solid #F0EBE0;align-items:flex-start}
+.list .it:last-child{border-bottom:none}
+.when{font-family:"Courier Prime","Courier New",monospace;font-size:13.5px;min-width:64px;color:var(--mute)}
+.ttl{font-weight:600}
+.muted{color:var(--mute)}.small{font-size:13px}
+.bar{height:8px;border-radius:8px;background:#EEE8DC;overflow:hidden}.bar i{display:block;height:100%;background:var(--gold)}
+input[type=text],input[type=number],input[type=date],select.f,textarea{font:inherit;font-size:14.5px;border:1px solid var(--line);border-radius:9px;padding:9px 11px;background:#fff;width:100%}
+label.f{display:block;font-size:12.5px;color:var(--mute);margin:10px 0 4px}
+.result{margin-top:14px;border-radius:12px;padding:14px;border:1px solid var(--line);background:#FBF9F4}
+.ok{border-color:#CDE6D6;background:var(--good2)}.no{border-color:#F2C9C4;background:var(--bad2)}.wait{border-color:var(--gold2);background:var(--gold3)}
+.steps{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.steps span{font-size:13px;padding:6px 12px;border-radius:20px;background:#EFEAE0;color:var(--mute)}
+.steps span.done{background:var(--good2);color:var(--good)}.steps span.cur{background:var(--ink);color:#fff}
+.case{font-family:"Courier Prime","Courier New",monospace;font-size:13px;color:var(--mute)}
+.tl{position:relative;padding-left:18px}.tl:before{content:"";position:absolute;left:5px;top:6px;bottom:6px;width:2px;background:var(--line)}
+.tl .e{position:relative;padding:0 0 14px}.tl .e:before{content:"";position:absolute;left:-17px;top:6px;width:10px;height:10px;border-radius:50%;background:#fff;border:2px solid var(--gold)}
+.tl .e.fut:before{border-color:#C9C2B3}
+.clock{font-family:"Courier Prime","Courier New",monospace;font-size:40px;line-height:1;letter-spacing:.02em}
+.phone{width:330px;max-width:100%;border:10px solid var(--ink);border-radius:36px;background:#fff;overflow:hidden;margin:0 auto;box-shadow:0 20px 40px -20px rgba(0,0,0,.35)}
+.phone .ph{background:var(--ink);color:#fff;padding:18px 16px 14px}
+.phone .ph b{font-family:"Libre Caslon Text",Georgia,serif;font-weight:400;font-size:20px}
+.phone .pb{padding:14px;font-size:14px}
+.stage{display:flex;gap:4px;margin:8px 0}.stage i{flex:1;height:6px;border-radius:4px;background:#E8E2D5}.stage i.on{background:var(--gold)}
+.sheet{border:1px solid var(--line);border-radius:12px;padding:12px;margin-top:10px}
+.ai{border:1px dashed var(--gold);background:#FFFDF7;border-radius:12px;padding:14px}
+.ai .lab{font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:#7A5A16;font-weight:700}
+.kan{display:grid;grid-template-columns:repeat(5,minmax(160px,1fr));gap:10px;overflow-x:auto}
+.kan .col{background:#F2EEE5;border-radius:12px;padding:10px}
+.kan .col h4{margin:0 0 8px;font-size:13px;display:flex;justify-content:space-between}
+.kan .c{background:#fff;border:1px solid var(--line);border-radius:10px;padding:9px;margin-bottom:8px;font-size:13px}
+footer.demo{color:var(--mute);font-size:12.5px;margin-top:28px;border-top:1px solid var(--line);padding-top:12px}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:12px 18px;border-radius:12px;font-size:14px;z-index:60;opacity:0;transition:.2s;pointer-events:none;max-width:90vw}
+.toast.on{opacity:1}
+@media(max-width:1000px){.g4{grid-template-columns:repeat(2,minmax(0,1fr))}.g3{grid-template-columns:1fr 1fr}}
+@media(max-width:860px){
+.shell{grid-template-columns:1fr}
+aside{position:sticky;top:0;height:auto;z-index:10;padding:8px 8px 6px}
+aside .logo{display:none}
+nav{display:flex;gap:4px;overflow-x:auto;white-space:nowrap;scrollbar-width:none}
+nav .sec{display:none}
+nav a{padding:8px 11px;font-size:13.5px;flex:none}
+nav a .dot{display:none}
+nav a.on{box-shadow:inset 0 -2px 0 var(--gold)}
+.top{position:static;padding:12px 16px;flex-wrap:wrap}
+main{padding:16px 14px 50px}
+.g2,.g3{grid-template-columns:1fr}
+.roles{grid-template-columns:1fr}
+.hide-sm{display:none}
+table{font-size:13.5px}
+}
+@media(max-width:520px){.g4{grid-template-columns:1fr 1fr}.kpi .v{font-size:23px}}
+</style>
+</head>
+<body>
+<div id="login" role="dialog" aria-labelledby="lg-h">
+<div class="box">
+<div class="brand">GM LEGAL PRACTITIONERS</div>
+<h1 id="lg-h">GM Chambers</h1>
+<p class="slogan">Consider it done.</p>
+<p>One system for both offices: matters, court dates, documents, the client account and the clients themselves. Choose who you are for this demonstration.</p>
+<div class="roles" id="roles"></div>
+<p class="note">Demonstration with invented sample data. No real client, matter or case information is used. Prepared by MIA Technology.</p>
+</div>
+</div>
+
+<div class="shell" id="shell" hidden>
+<aside><div class="logo"><b>GM Chambers</b><i>Consider it done.</i></div><nav id="nav" aria-label="Sections"></nav></aside>
+<div>
+<div class="top">
+<div class="who"><div class="av" id="av">MM</div><div><div id="whoName" style="font-weight:600">Mukumba Mulele</div><div class="small muted" id="whoRole">Partner · both offices</div></div></div>
+<div class="row"><span class="sample">Sample data</span><select id="roleSel" aria-label="Switch role"></select></div>
+</div>
+<main id="main"></main>
+</div>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+{
+/* ---------- dates relative to today, so the demo never looks stale ---------- */
+const T0 = new Date(); T0.setHours(0,0,0,0);
+const D = n => { const d = new Date(T0); d.setDate(d.getDate()+n); return d; };
+const W = n => { const d = D(n); while(d.getDay()===0||d.getDay()===6) d.setDate(d.getDate()+1); return d; };
+const MON = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+const DAY = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+const fd = d => `${DAY[d.getDay()]} ${d.getDate()} ${MON[d.getMonth()]}`;
+const fdy = d => `${d.getDate()} ${MON[d.getMonth()]} ${d.getFullYear()}`;
+const K = n => "K" + Math.round(n).toLocaleString("en-US");
+const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const YR = T0.getFullYear();
+const iso = d => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+
+/* ---------- people (users of the system) ---------- */
+const ROLES = [
+ {id:"partner", name:"Mukumba Mulele", ini:"MM", role:"Partner · both offices", home:"today", desc:"The firm at a glance"},
+ {id:"associate", name:"Prisca Banda", ini:"PB", role:"Associate · Lusaka", home:"today", desc:"My day, my matters, my time"},
+ {id:"criminal", name:"Criminal Partner", ini:"CP", role:"Senior Partner · Criminal Desk", home:"criminal", desc:"Arrests, custody, bail, trial"},
+ {id:"clerk", name:"Court Clerk", ini:"CC", role:"Registry runs · Lusaka", home:"runs", desc:"Today's filings and collections"},
+ {id:"accounts", name:"Accounts", ini:"AC", role:"Client account and billing", home:"account", desc:"Ledgers, reconciliation, Smart Invoice"},
+ {id:"client", name:"Client view", ini:"CL", role:"My GM Legal · client app", home:"portal", desc:"What the firm's clients see"}
+];
+const NAV = [
+ {sec:"Practice"},
+ {id:"today", t:"Today", r:["partner","associate"]},
+ {id:"matters", t:"Matters", r:["partner","associate","criminal"]},
+ {id:"intake", t:"New client", r:["partner","associate"]},
+ {id:"deadlines", t:"Court dates", r:["partner","associate","criminal","clerk"]},
+ {id:"criminal", t:"Criminal Desk", r:["partner","criminal"]},
+ {id:"recovery", t:"Debt recovery", r:["partner","associate"]},
+ {sec:"Money"},
+ {id:"account", t:"Client account", r:["partner","accounts"]},
+ {id:"billing", t:"Billing", r:["partner","accounts","associate"]},
+ {sec:"Office"},
+ {id:"runs", t:"Registry runs", r:["partner","clerk"]},
+ {id:"portal", t:"Client app", r:["partner","associate","client"]},
+ {id:"reports", t:"Reports", r:["partner","accounts"]}
+];
+
+/* ---------- sample matters (all invented) ---------- */
+const M = [
+ {id:"GM/LSK/2026/0187", t:"First Kafue Bank Ltd v Copperline Traders Ltd and 2 Others", area:"Debt recovery", court:"High Court, Commercial Registry, Lusaka", cause:`${YR}/HPC/0412`, lead:"Freddie Tembo", partner:"Chishimba Kaela", office:"Lusaka", stage:"Scheduling conference", value:4850000, cur:"ZMW", next:{d:W(9),w:"Scheduling conference"}, risk:"t-warn", client:"First Kafue Bank Ltd"},
+ {id:"GM/KTW/2026/0061", t:"Zambezi Copper Haulage Ltd v Mwila Transport Ltd", area:"Commercial litigation", court:"High Court, Commercial Registry, Kitwe", cause:`${YR}/HKC/0088`, lead:"Freddie Tembo", partner:"Mukumba Mulele", office:"Kitwe", stage:"Trial", value:1120000, cur:"USD", next:{d:W(15),w:"Trial, day 1"}, risk:"t-good", client:"Zambezi Copper Haulage Ltd"},
+ {id:"GM/LSK/2026/0201", t:"Estate of the late Peter Chanda", area:"Probate and succession", court:"High Court, Principal Registry, Lusaka", cause:`${YR}/HP/0977`, lead:"Prisca Banda", partner:"Mukumba Mulele", office:"Lusaka", stage:"Letters of administration", value:2400000, cur:"ZMW", next:{d:W(4),w:"Inventory to beneficiaries"}, risk:"t-good", client:"Chanda family"},
+ {id:"GM/LSK/2026/0209", t:"Stand 18832, Lusaka West: sale to Lumbwe Holdings Ltd", area:"Conveyancing", court:"Ministry of Lands · ZILAS", cause:"Lands ref. pending", lead:"Bennet Banda", partner:"Gideon Kalandanya", office:"Lusaka", stage:"Consent to assign", value:1250000, cur:"ZMW", next:{d:W(2),w:"Follow up consent to assign"}, risk:"t-warn", client:"Lumbwe Holdings Ltd"},
+ {id:"GM/LSK/2026/0213", t:"Kafue Agro Ltd: employment permits for five staff", area:"Immigration", court:"Department of Immigration", cause:"5 applications", lead:"Natasha Mumba", partner:"Gideon Kalandanya", office:"Lusaka", stage:"Submitted", value:0, cur:"ZMW", next:{d:W(6),w:"Two permits expire within 60 days"}, risk:"t-bad", client:"Kafue Agro Ltd"},
+ {id:"GM/LSK/2026/0219", t:"The People v J. Mwale", area:"Criminal defence", court:"Economic and Financial Crimes Court, Lusaka", cause:`${YR}/SSP/EF/114`, lead:"Natasha Mumba", partner:"Criminal Partner", office:"Lusaka", stage:"Bail and disclosure", value:0, cur:"ZMW", next:{d:W(1),w:"Mention, bail variation"}, risk:"t-bad", client:"J. Mwale", restricted:true},
+ {id:"GM/LSK/2026/0221", t:"Northgate Insurance Ltd: defence of fire claim", area:"Insurance", court:"Arbitration (CIArb rules)", cause:"Arb. 07/26", lead:"Prisca Banda", partner:"Chishimba Kaela", office:"Lusaka", stage:"Statements of case", value:3600000, cur:"ZMW", next:{d:W(11),w:"Statement of defence due"}, risk:"t-good", client:"Northgate Insurance Ltd"},
+ {id:"GM/KTW/2026/0034", t:"Copperbelt Ventures Ltd: company secretarial", area:"Corporate", court:"PACRA", cause:"Annual return", lead:"Natasha Mumba", partner:"Mukumba Mulele", office:"Kitwe", stage:"Annual return", value:0, cur:"ZMW", next:{d:W(19),w:"Annual return to PACRA"}, risk:"t-good", client:"Copperbelt Ventures Ltd"}
+];
+const HEAR = [
+ {d:W(0), time:"09:00", m:M[2], what:"Application for letters of administration", who:"Prisca Banda", where:"Lusaka High Court, Chambers"},
+ {d:W(0), time:"10:30", m:M[1], what:"Status conference", who:"Freddie Tembo", where:"Kitwe High Court, Court 2"},
+ {d:W(1), time:"09:00", m:M[5], what:"Mention, bail variation", who:"Criminal Partner", where:"Lusaka, EFC Court 1"},
+ {d:W(9), time:"09:30", m:M[0], what:"Scheduling conference", who:"Freddie Tembo", where:"Lusaka High Court, Commercial"}
+];
+const DL = [
+ {d:W(2), m:M[0], w:"Scheduling conference brief", rule:"At least 7 days before the scheduling conference", who:"Freddie Tembo", back:"Prisca Banda", st:"t-warn", s:"Draft ready"},
+ {d:W(2), m:M[3], w:"Follow up consent to assign", rule:"Firm rule: every 10 days while pending", who:"Bennet Banda", back:"Natasha Mumba", st:"t-mute", s:"Open"},
+ {d:W(4), m:M[2], w:"Inventory to beneficiaries", rule:"Firm rule after grant", who:"Prisca Banda", back:"Natasha Mumba", st:"t-mute", s:"Open"},
+ {d:W(6), m:M[4], w:"Two permits expire within 60 days", rule:"Renewal alert", who:"Natasha Mumba", back:"Bennet Banda", st:"t-bad", s:"Client not yet told"},
+ {d:W(11), m:M[6], w:"Statement of defence", rule:"Tribunal's directions", who:"Prisca Banda", back:"Chishimba Kaela", st:"t-mute", s:"Open"}
+];
+const LEDGER = [
+ {c:"First Kafue Bank Ltd", m:"GM/LSK/2026/0187", bal:312400, note:"Collections from debtors, to remit"},
+ {c:"Lumbwe Holdings Ltd", m:"GM/LSK/2026/0209", bal:1250000, note:"Purchase price held to completion"},
+ {c:"Estate of the late Peter Chanda", m:"GM/LSK/2026/0201", bal:96500, note:"Estate funds for distribution"},
+ {c:"Kafue Agro Ltd", m:"GM/LSK/2026/0213", bal:18000, note:"Deposit on account of fees"},
+ {c:"J. Mwale", m:"GM/LSK/2026/0219", bal:45000, note:"Deposit, paid by family (source checked)"}
+];
+const INV = [
+ {n:"GM-INV-2026-0418", c:"First Kafue Bank Ltd", amt:68400, st:"Paid", zra:true, age:0},
+ {n:"GM-INV-2026-0421", c:"Northgate Insurance Ltd", amt:42750, st:"Sent", zra:true, age:12},
+ {n:"GM-INV-2026-0423", c:"Kafue Agro Ltd", amt:24000, st:"Sent", zra:true, age:34},
+ {n:"GM-INV-2026-0427", c:"Zambezi Copper Haulage Ltd", amt:91200, st:"Overdue", zra:true, age:67},
+ {n:"Draft", c:"Estate of the late Peter Chanda", amt:18600, st:"Pre-bill review", zra:false, age:0}
+];
+
+/* ---------- state ---------- */
+let ROLE = ROLES[0];
+const S = {intake:0, conflictDecision:"", kyc:{id:false,addr:false,bo:false}, engaged:false, transfer:null, arrest: (()=>{const d=new Date(); d.setHours(d.getHours()-11, d.getMinutes()-20); return d;})(), consent:false, briefApproved:false, paid:false};
+
+/* ---------- helpers ---------- */
+const $ = s => document.querySelector(s);
+const toast = msg => { const t=$("#toast"); t.textContent=msg; t.classList.add("on"); clearTimeout(toast.h); toast.h=setTimeout(()=>t.classList.remove("on"),2600); };
+const mLink = m => `<span class="case">${esc(m.id)}</span>`;
+const tagRisk = m => `<span class="tag ${m.risk}">${m.risk==="t-bad"?"Needs attention":m.risk==="t-warn"?"Watch":"On track"}</span>`;
+const foot = `<footer class="demo">Demonstration only. Every client, matter, case number and figure here is invented. Prepared by MIA Technology for GM Legal Practitioners.</footer>`;
+
+/* ---------- views ---------- */
+const V = {};
+
+V.today = () => {
+ const isP = ROLE.id==="partner";
+ const hello = `Good ${new Date().getHours()<12?"morning":"afternoon"}, ${ROLE.name.split(" ")[0]==="Mukumba"?"Mr Mulele":ROLE.name.split(" ")[0]}`;
+ return `<h2 class="page">${hello}</h2><p class="sub">${fd(T0)} · ${isP?"Lusaka and Kitwe, all matters":"Your matters"}</p>
+ <div class="grid g4">
+  <div class="card kpi"><div class="l">Open matters</div><div class="v">${isP?"214":"23"}</div><div class="d up">+9 this month</div></div>
+  <div class="card kpi"><div class="l">Court dates, 7 days</div><div class="v">${isP?"17":"4"}</div><div class="d muted">${isP?"11 Lusaka · 5 Kitwe · 1 Ndola":"2 Lusaka · 2 chambers"}</div></div>
+  <div class="card kpi"><div class="l">${isP?"Billed this month":"Hours this week"}</div><div class="v">${isP?"K612,400":"26.4"}</div><div class="d ${isP?"up":"muted"}">${isP?"78% collected":"Target 30"}</div></div>
+  <div class="card kpi"><div class="l">Client account</div><div class="v">${K(LEDGER.reduce((a,b)=>a+b.bal,0))}</div><div class="d up">Reconciled to last month-end</div></div>
+ </div>
+ <div class="grid g2" style="margin-top:16px">
+  <div class="card"><h3>Today in court <small>${HEAR.filter(h=>h.d.getTime()===T0.getTime()).length} hearings</small></h3><div class="list">
+  ${HEAR.map(h=>`<div class="it"><div class="when">${h.d.getTime()===T0.getTime()?h.time:fd(h.d).slice(0,6)}</div><div><div class="ttl">${esc(h.what)}</div><div class="small muted">${esc(h.m.t)}</div><div class="small">${esc(h.where)} · ${esc(h.who)}</div></div></div>`).join("")}
+  </div></div>
+  <div class="card"><h3>Deadlines that matter <small>owner and backup on each</small></h3><div class="list">
+  ${DL.map(x=>`<div class="it"><div class="when">${fd(x.d).slice(0,6)}</div><div style="flex:1"><div class="ttl">${esc(x.w)} <span class="tag ${x.st}">${esc(x.s)}</span></div><div class="small muted">${esc(x.m.t)}</div><div class="small">${esc(x.who)} · backup ${esc(x.back)}</div></div></div>`).join("")}
+  </div></div>
+ </div>
+ <div class="ai" style="margin-top:16px"><div class="lab">Morning brief · draft by the assistant</div>
+ <p style="margin:8px 0">Two items need a partner today. The scheduling conference brief in <b>First Kafue Bank v Copperline</b> is due in 2 days and the draft is ready for review. Kafue Agro has two employment permits expiring within 60 days and the client has not been told. One Kitwe invoice of K91,200 is 67 days unpaid. The client account reconciled with no difference.</p>
+ <div class="row"><button class="btn b-ink" data-act="brief">${S.briefApproved?"Sent to partners ✓":"Approve and send to partners"}</button><span class="small muted">Nothing goes out until a person approves it.</span></div></div>
+ ${foot}`;
+};
+
+V.matters = () => {
+ const list = ROLE.id==="criminal" ? M.filter(m=>m.area==="Criminal defence") : M;
+ return `<h2 class="page">Matters</h2><p class="sub">Every matter has an owner, a backup, a stage and a next date. Restricted matters show only to their team.</p>
+ <div class="card" style="overflow-x:auto"><table><thead><tr><th>Matter</th><th class="hide-sm">Area</th><th class="hide-sm">Court and number</th><th>Next</th><th>Status</th></tr></thead><tbody>
+ ${list.map((m,i)=>`<tr class="click" data-matter="${M.indexOf(m)}"><td><div class="ttl">${esc(m.t)}${m.restricted?' <span class="tag t-bad">Restricted</span>':""}</div>${mLink(m)} · <span class="small">${esc(m.lead)}</span></td><td class="hide-sm">${esc(m.area)}</td><td class="hide-sm small">${esc(m.court)}<br><span class="case">${esc(m.cause)}</span></td><td class="small"><b>${fd(m.next.d)}</b><br>${esc(m.next.w)}</td><td>${tagRisk(m)}</td></tr>`).join("")}
+ </tbody></table></div>${foot}`;
+};
+
+V.matter = i => {
+ const m = M[i]; const isBank = i===0;
+ const tl = isBank ? [
+  {d:W(-74), t:"Letter of demand served on all three defendants", f:false},
+  {d:W(-52), t:"Writ and statement of claim filed and served", f:false},
+  {d:W(-38), t:"Appearance and defence filed by the 1st and 2nd defendants", f:false},
+  {d:W(-12), t:"Order for directions: scheduling conference fixed", f:false},
+  {d:W(2), t:"Scheduling conference brief due (7 days before)", f:true},
+  {d:W(9), t:"Scheduling conference", f:true}
+ ] : [{d:W(-20), t:"Instructions received and engagement signed", f:false},{d:m.next.d, t:m.next.w, f:true}];
+ return `<p class="small"><a href="#matters" style="color:var(--mute)">← Matters</a></p>
+ <h2 class="page" style="font-size:25px">${esc(m.t)}</h2><p class="sub">${mLink(m)} · ${esc(m.area)} · ${esc(m.court)} · <span class="case">${esc(m.cause)}</span></p>
+ <div class="grid g3">
+  <div class="card"><h3>Team</h3><div class="small">Partner: <b>${esc(m.partner)}</b><br>Handling: <b>${esc(m.lead)}</b><br>Office: ${esc(m.office)}<br>Client: ${esc(m.client)}</div></div>
+  <div class="card"><h3>Value</h3><div class="kpi"><div class="v">${m.value?(m.cur==="USD"?"US$"+m.value.toLocaleString("en-US"):K(m.value)):"Fixed fee"}</div><div class="l">${isBank?"Claimed, with interest at the contract rate":"Matter value"}</div></div></div>
+  <div class="card"><h3>Money</h3><div class="small">Work in progress: <b>K38,250</b><br>Billed: <b>K68,400</b> · paid<br>Client account: <b>${K((LEDGER.find(l=>l.m===m.id)||{bal:0}).bal)}</b></div></div>
+ </div>
+ <div class="grid g2" style="margin-top:16px">
+  <div class="card"><h3>Timeline <small>past and next steps</small></h3><div class="tl">${tl.map(e=>`<div class="e ${e.f?"fut":""}"><div class="small muted">${fdy(e.d)}</div><div>${esc(e.t)}</div></div>`).join("")}</div></div>
+  <div class="card"><h3>Documents <small>${isBank?"14 files":"3 files"}</small></h3><div class="list">
+   ${(isBank?["Letter of demand, signed and served.pdf","Writ and statement of claim.pdf","Defence of 1st and 2nd defendants.pdf","Order for directions.pdf","Scheduling conference brief, draft 2.docx"]:["Engagement letter, signed.pdf","Client instructions.docx","KYC pack.pdf"]).map((f,k)=>`<div class="it"><div class="when">${k===4?"Draft":"Final"}</div><div>${esc(f)}</div></div>`).join("")}
+  </div>
+  <div class="ai" style="margin-top:10px"><div class="lab">Assistant</div><p class="small" style="margin:6px 0 0">${isBank?"The 3rd defendant has not entered appearance. Default judgment against the 3rd defendant can be considered. Draft application prepared for review.":"No action needed this week."}</p></div></div>
+ </div>${foot}`;
+};
+
+V.intake = () => {
+ const st = S.intake;
+ const steps = ["Inquiry","Conflict check","KYC","Engagement","Matter open"];
+ const kycDone = Object.values(S.kyc).every(Boolean);
+ let body = "";
+ if(st===0) body = `<div class="card"><h3>New inquiry <small>from the website form</small></h3>
+  <div class="grid g2"><div><label class="f">Client</label><input type="text" value="Mwila Transport Ltd" readonly></div><div><label class="f">Matter type</label><input type="text" value="Commercial dispute: unpaid haulage invoices" readonly></div>
+  <div><label class="f">Other side</label><input type="text" value="Zambezi Copper Haulage Ltd" readonly></div><div><label class="f">Office</label><input type="text" value="Kitwe" readonly></div></div>
+  <div class="row" style="margin-top:14px"><button class="btn b-ink" data-act="runConflict">Run conflict check</button><span class="small muted">Searches clients, opposing parties, directors and closed matters.</span></div></div>`;
+ if(st===1) body = `<div class="card"><h3>Conflict check <small>3 names searched in 0.4 seconds</small></h3>
+  <div class="result no"><b>Conflict found.</b> Zambezi Copper Haulage Ltd is a current client of the firm in <span class="case">GM/KTW/2026/0061</span>, against Mwila Transport Ltd. The firm cannot act for both sides in the same dispute.</div>
+  <p class="small muted">A partner records the decision and the reason. The record stays on file.</p>
+  <div class="row"><button class="btn b-ink" data-act="declineConflict">Decline and send a polite letter</button><button class="btn b-line" data-act="demoClear">Show a clear result instead</button></div>
+  ${S.conflictDecision?`<div class="result ok">${esc(S.conflictDecision)}</div>`:""}</div>`;
+ if(st===2) body = `<div class="card"><h3>KYC and risk <small>Lumbwe Holdings Ltd · conveyancing</small></h3>
+  <div class="result ok" style="margin-top:0"><b>Conflict check clear.</b> No match on the company, its 2 directors or its 3 shareholders.</div>
+  <p>Documents uploaded by the client through the client app:</p>
+  <div class="row">${[["id","Director IDs (NRC)"],["addr","Certificate of incorporation (PACRA)"],["bo","Beneficial owners declaration"]].map(([k,l])=>`<button class="btn ${S.kyc[k]?"b-gold":"b-line"}" data-kyc="${k}">${S.kyc[k]?"✓ ":""}${l}</button>`).join("")}</div>
+  <div class="result ${kycDone?"ok":"wait"}">Risk rating: <b>${kycDone?"Standard":"Incomplete"}</b>. ${kycDone?"Purchase funds of K1,250,000 come from a Zambian bank account in the client's own name. UN sanctions list checked.":"Tap each document to mark it received."}</div>
+  <div class="row" style="margin-top:12px"><button class="btn b-ink" data-act="toEngage" ${kycDone?"":"disabled"}>Continue to engagement letter</button></div></div>`;
+ if(st===3) body = `<div class="card"><h3>Engagement letter <small>drafted from the firm's template</small></h3>
+  <div class="sheet small mono" style="line-height:1.7">Dear Sirs,<br>RE: SALE OF STAND 18832, LUSAKA WEST<br>We confirm your instructions to act for you in the purchase ... Our fees will be charged on the scale under the Legal Practitioners' (Conveyancing and Non-Contentious Matters) (Costs) Order, as agreed with you on taking instructions ...<br><br>Yours faithfully,<br>GM LEGAL PRACTITIONERS</div>
+  <div class="row" style="margin-top:12px"><button class="btn b-ink" data-act="sign">Send for e-signature and request the deposit</button></div></div>`;
+ if(st===4) body = `<div class="card"><h3>Matter opened <span class="tag t-good">All three gates passed</span></h3>
+  <p>The matter <span class="case">GM/LSK/2026/0209</span> is open. Bennet Banda handles it with Gideon Kalandanya as partner. The client received a welcome message in the client app with the next steps.</p>
+  <div class="row"><a class="btn b-ink" href="#matters" style="text-decoration:none">Go to matters</a><button class="btn b-line" data-act="resetIntake">Run the demo again</button></div></div>`;
+ return `<h2 class="page">New client</h2><p class="sub">A matter opens only after three gates: conflict check, KYC and a signed engagement letter.</p>
+ <div class="steps">${steps.map((s,k)=>`<span class="${k<st?"done":k===st?"cur":""}">${k<st?"✓ ":""}${s}</span>`).join("")}</div>${body}${foot}`;
+};
+
+V.deadlines = () => `<h2 class="page">Court dates</h2><p class="sub">Dates are calculated from rules the partners approve. Nothing is deleted; a date is closed with a reason.</p>
+ <div class="grid g2">
+  <div class="card"><h3>Try the rule engine <small>appearance and defence</small></h3>
+   <label class="f" for="srv">Writ and statement of claim served on</label><input type="date" id="srv" value="${iso(T0)}">
+   <label class="f" for="dist">Where the defendant is</label>
+   <select class="f" id="dist"><option value="14">Within 100 km of the registry</option><option value="21">100 to 500 km away</option><option value="30">500 km or more</option><option value="42">Outside Zambia</option></select>
+   <div class="result" id="calcOut"></div>
+   <p class="small muted" style="margin-top:10px">Rule source shown with every date. If the date falls on a weekend or public holiday, the firm's rule moves it.</p></div>
+  <div class="card"><h3>Next 14 days</h3><div class="list">
+  ${[...HEAR.map(h=>({d:h.d,w:h.what,m:h.m,k:"Hearing"})),...DL.map(x=>({d:x.d,w:x.w,m:x.m,k:"Deadline"}))].sort((a,b)=>a.d-b.d).map(x=>`<div class="it"><div class="when">${fd(x.d).slice(0,6)}</div><div><div class="ttl">${esc(x.w)} <span class="tag ${x.k==="Hearing"?"t-blue":"t-gold"}">${x.k}</span></div><div class="small muted">${esc(x.m.t)}</div></div></div>`).join("")}
+  </div></div>
+ </div>${foot}`;
+
+V.criminal = () => `<h2 class="page">Criminal Desk</h2><p class="sub">Built around the criminal partner's day: the call at night, the custody clock, bail and trial. Restricted to the criminal team.</p>
+ <div class="grid g3">
+  <div class="card" style="grid-column:span 1"><h3>Arrest card <span class="tag t-bad">In custody</span></h3>
+   <div class="small muted">Client</div><div class="ttl">K. Phiri (sample)</div>
+   <div class="small" style="margin-top:6px">Held at Lusaka Central Police<br>Alleged: theft by servant<br>Called in: ${S.arrest.getHours().toString().padStart(2,"0")}:${S.arrest.getMinutes().toString().padStart(2,"0")} · on-call: Natasha Mumba</div>
+   <div class="small muted" style="margin-top:10px">Time in custody</div><div class="clock" id="clock">--:--:--</div>
+   <div class="row" style="margin-top:12px"><button class="btn b-ink" data-act="bond">Draft police bond request</button></div>
+   <label class="row small" style="margin-top:10px;gap:8px"><input type="checkbox" id="consent" ${S.consent?"checked":""}> Client consents to updates to his wife</label></div>
+  <div class="card"><h3>Bail tracker <small>The People v J. Mwale</small></h3>
+   <div class="small">Bail granted: <b>K50,000</b>, two sureties<br>Conditions: report to Lusaka Central every Monday; passport surrendered</div>
+   <div class="result wait small">Next reporting: <b>${fd(D((8-T0.getDay())%7||7))}</b>. Reminder by SMS to the client the evening before.</div>
+   <div class="small muted" style="margin-top:10px">Next in court</div><div class="ttl">${fd(D(1))} · Mention, bail variation</div>
+   <div class="small">Economic and Financial Crimes Court, Lusaka</div></div>
+  <div class="card"><h3>Trial preparation</h3>
+   <div class="small muted">Disclosure</div>
+   <div class="bar" style="margin:6px 0"><i style="width:62%"></i></div><div class="small">8 of 13 prosecution statements received · 5 requested on ${fdy(D(-9))}</div>
+   <div class="small muted" style="margin-top:12px">Witness sheets</div>
+   <div class="list small">${[["PW1, investigating officer","2 contradictions flagged"],["PW2, accounts clerk","Cross-examination: 14 questions"],["PW3, bank officer","Statement outstanding"]].map(([a,b])=>`<div class="it"><div style="flex:1"><b>${a}</b><br><span class="muted">${b}</span></div></div>`).join("")}</div></div>
+ </div>
+ <div class="ai" style="margin-top:16px"><div class="lab">Assistant · comparison of witness statements</div><p class="small" style="margin:6px 0 0">PW1 puts the cash count at 16:00; PW2 puts it "after closing, around 18:00". PW1 says two keys exist; PW2 says three. Draft cross-examination points prepared for the partner. Marked privileged; not stored by the AI provider.</p></div>
+ ${foot}`;
+
+V.recovery = () => {
+ const cols = [["Letter of demand",[ ["Copperline Traders Ltd","K1.9m"],["Lubuto Farms","K240k"],["Mansa Hardware","K88k"] ]],["Writ filed",[ ["Chipata Grain Co.","K610k"],["Kabwe Motors","K312k"] ]],["Judgment",[ ["Solwezi Supplies","K1.1m"] ]],["Enforcement",[ ["Nkana Builders","K455k"] ]],["Paid or settled",[ ["Kasama Retail","K96k"],["Mufulira Fresh","K143k"] ]]];
+ return `<h2 class="page">Debt recovery</h2><p class="sub">First Kafue Bank portfolio (sample). Each debtor carries an asset and director search, the demand served, and every kwacha collected.</p>
+ <div class="grid g4"><div class="card kpi"><div class="l">Debtors in portfolio</div><div class="v">48</div></div><div class="card kpi"><div class="l">Amount claimed</div><div class="v">K9.8m</div></div><div class="card kpi"><div class="l">Collected this year</div><div class="v">K2.3m</div><div class="d up">23.5% of claims</div></div><div class="card kpi"><div class="l">Remitted to bank</div><div class="v">K1.99m</div><div class="d muted">K312k awaiting remittance</div></div></div>
+ <div class="kan" style="margin-top:16px">${cols.map(([h,cs])=>`<div class="col"><h4>${h}<span class="muted">${cs.length}</span></h4>${cs.map(([n,a])=>`<div class="c"><b>${n}</b><br><span class="muted">${a}</span></div>`).join("")}</div>`).join("")}</div>
+ <div class="row" style="margin-top:14px"><button class="btn b-ink" data-act="batch">Prepare 12 letters of demand</button><span class="small muted">Proof of service is kept, because a High Court action needs it.</span></div>${foot}`;
+};
+
+V.account = () => {
+ const total = LEDGER.reduce((a,b)=>a+b.bal,0);
+ return `<h2 class="page">Client account</h2><p class="sub">Money held for clients is kept apart, cannot go below zero on any client, and leaves only against a bill with a second partner's approval.</p>
+ <div class="grid g3">
+  <div class="card kpi"><div class="l">Bank statement</div><div class="v">${K(total)}</div></div>
+  <div class="card kpi"><div class="l">Cash book</div><div class="v">${K(total)}</div></div>
+  <div class="card kpi"><div class="l">Sum of client ledgers</div><div class="v">${K(total)}</div><div class="d up">Three-way reconciliation: no difference</div></div>
+ </div>
+ <div class="grid g2" style="margin-top:16px">
+  <div class="card" style="overflow-x:auto"><h3>Client ledgers</h3><table><thead><tr><th>Client</th><th>Balance</th></tr></thead><tbody>
+  ${LEDGER.map(l=>`<tr><td><b>${esc(l.c)}</b><br><span class="case">${l.m}</span> <span class="small muted">${esc(l.note)}</span></td><td class="mono">${K(l.bal)}</td></tr>`).join("")}
+  </tbody></table></div>
+  <div class="card"><h3>Transfer to office account <small>try it</small></h3>
+   <label class="f" for="trL">Client ledger</label><select class="f" id="trL">${LEDGER.map((l,k)=>`<option value="${k}" ${String(k)===S.trL?"selected":""}>${esc(l.c)} · ${K(l.bal)}</option>`).join("")}</select>
+   <label class="f" for="trA">Amount (K)</label><input type="number" id="trA" value="${S.trA||24000}" min="0">
+   <label class="f" for="trB">Against bill</label><select class="f" id="trB"><option value="">No bill</option>${INV.filter(x=>x.zra).map(x=>`<option ${S.trB===(x.n+" · "+x.c)?"selected":""}>${x.n} · ${esc(x.c)}</option>`).join("")}</select>
+   <div class="row" style="margin-top:12px"><button class="btn b-ink" data-act="transfer">Request transfer</button></div>
+   <div id="trOut">${S.transfer||""}</div></div>
+ </div>${foot}`;
+};
+
+V.billing = () => `<h2 class="page">Billing</h2><p class="sub">Time becomes a bill, the partner reviews it, ZRA Smart Invoice fiscalises it, and the client can pay by mobile money or card.</p>
+ <div class="grid g4"><div class="card kpi"><div class="l">Work in progress</div><div class="v">K418k</div></div><div class="card kpi"><div class="l">Billed, this month</div><div class="v">K612k</div></div><div class="card kpi"><div class="l">Collected</div><div class="v">K478k</div></div><div class="card kpi"><div class="l">Over 60 days</div><div class="v dn">K91k</div></div></div>
+ <div class="card" style="margin-top:16px;overflow-x:auto"><table><thead><tr><th>Invoice</th><th>Client</th><th>Amount</th><th>ZRA</th><th>Status</th></tr></thead><tbody>
+ ${INV.map(x=>`<tr><td class="mono">${x.n}</td><td>${esc(x.c)}</td><td class="mono">${K(x.amt)}</td><td>${x.zra?'<span class="tag t-good">Fiscalised · QR</span>':'<span class="tag t-mute">Not yet</span>'}</td><td><span class="tag ${x.st==="Paid"?"t-good":x.st==="Overdue"?"t-bad":x.st==="Sent"?"t-blue":"t-gold"}">${x.st}${x.age?` · ${x.age} days`:""}</span></td></tr>`).join("")}
+ </tbody></table></div>
+ <div class="ai" style="margin-top:16px"><div class="lab">Pre-bill check</div><p class="small" style="margin:6px 0 0">Estate of the late Peter Chanda: 3.5 hours of attendance have no narrative, and one court filing fee is not yet recorded. Fix both, then approve.</p></div>${foot}`;
+
+V.runs = () => `<h2 class="page">Registry runs</h2><p class="sub">The clerk's list for today, on the phone. A photo of the stamped copy closes the task and starts the next date.</p>
+ <div class="grid g2">
+  <div class="card"><h3>${fd(T0)} · Lusaka</h3><div class="list">
+  ${[["Commercial Registry","File: application for default judgment","GM/LSK/2026/0187","K450 fee"],["Principal Registry","Collect: grant of letters of administration","GM/LSK/2026/0201","—"],["Lands and Deeds","Lodge: consent to assign, follow up","GM/LSK/2026/0209","—"],["EFC Court registry","Collect: copy of bail ruling","GM/LSK/2026/0219","K50"]].map(([a,b,c,d],k)=>`<div class="it"><div class="when">${k+1}.</div><div style="flex:1"><div class="ttl">${a}</div><div class="small">${b}</div><div class="small muted"><span class="case">${c}</span> · ${d}</div></div><button class="btn b-line" data-act="stamp">Photo</button></div>`).join("")}
+  </div></div>
+  <div class="card"><h3>Kitwe</h3><div class="list"><div class="it"><div class="when">1.</div><div><div class="ttl">Commercial Registry, Kitwe</div><div class="small">Serve: notice of trial dates</div><div class="small muted"><span class="case">GM/KTW/2026/0061</span></div></div></div></div>
+  <p class="small muted">Cash for filing fees is issued and accounted for per run.</p></div>
+ </div>${foot}`;
+
+V.portal = () => `<h2 class="page">Client app</h2><p class="sub">What a client of the firm sees, in GM Legal's name. Your website promises a monthly status report; here it is.</p>
+ <div class="grid g2"><div>
+ <div class="phone"><div class="ph"><div class="small" style="color:rgba(255,255,255,.6)">My GM Legal</div><b>Lumbwe Holdings Ltd</b></div><div class="pb">
+  <div class="small muted">Stand 18832, Lusaka West</div><div class="ttl">Purchase of the property</div>
+  <div class="stage">${[1,1,1,0,0].map(o=>`<i class="${o?"on":""}"></i>`).join("")}</div>
+  <div class="small">Step 3 of 5: consent to assign from the Ministry of Lands</div>
+  <div class="sheet"><b>What happened this month</b><div class="small">The firm lodged the consent application and followed up on ${fdy(D(-8))}. The seller's documents are complete.</div></div>
+  <div class="sheet"><b>What we need from you</b><div class="small">Nothing this week.</div></div>
+  <div class="sheet"><b>Money</b><div class="small">Held for you in the client account: <b>K1,250,000</b><br>Invoice GM-INV-2026-0429: <b>K14,800</b></div>
+  <button class="btn b-gold" style="width:100%;margin-top:8px" data-act="pay">${S.paid?"Payment request sent ✓":"Pay with mobile money"}</button></div>
+  <div class="sheet"><b>Messages</b><div class="small">Secure messages with Bennet Banda. Notifications say only "There is an update", never the details.</div></div>
+ </div></div></div>
+ <div class="card"><h3>For banks and companies</h3><p class="small">A corporate client sees all its matters on one page: exposure in litigation, money collected and remitted, invoices, and the next court dates.</p>
+ <table><thead><tr><th>First Kafue Bank · matters</th><th>Value</th></tr></thead><tbody><tr><td>Recovery portfolio, 48 debtors</td><td class="mono">K9.8m</td></tr><tr><td>Defence of a staff claim</td><td class="mono">K420k</td></tr><tr><td>Security perfection, 6 facilities</td><td class="mono">—</td></tr></tbody></table></div></div>${foot}`;
+
+V.reports = () => `<h2 class="page">Reports</h2><p class="sub">For the partners: where the work is, where the money is, and what could go wrong.</p>
+ <div class="grid g2">
+  <div class="card"><h3>Open matters by area</h3>${[["Litigation and dispute resolution",64],["Debt recovery",58],["Conveyancing and property",31],["Corporate and company secretarial",22],["Criminal defence",14],["Immigration",11],["Probate and succession",8],["Other",6]].map(([a,n])=>`<div class="small" style="margin:8px 0 3px;display:flex;justify-content:space-between"><span>${a}</span><b>${n}</b></div><div class="bar"><i style="width:${n/64*100}%"></i></div>`).join("")}</div>
+  <div class="card"><h3>Compliance</h3><div class="list small">
+   <div class="it"><span class="tag t-good">OK</span><div>Client account reconciled to last month-end; no client ledger below zero</div></div>
+   <div class="it"><span class="tag t-warn">3</span><div>Client KYC reviews due this month</div></div>
+   <div class="it"><span class="tag t-good">OK</span><div>All Smart Invoices fiscalised; none rejected</div></div>
+   <div class="it"><span class="tag t-warn">2</span><div>Practising certificates to renew; CPD points tracked per lawyer</div></div>
+   <div class="it"><span class="tag t-good">0</span><div>Data incidents this year (24-hour notification clock ready)</div></div>
+  </div></div>
+ </div>${foot}`;
+
+/* ---------- router ---------- */
+function allowed(id){ const n = NAV.find(x=>x.id===id); return !n || n.r.includes(ROLE.id); }
+function render(){
+ let h = location.hash.replace("#","") || ROLE.home;
+ let html;
+ if(h.startsWith("m-")){ const i=+h.slice(2); html = (M[i] && !(M[i].restricted && !["partner","criminal"].includes(ROLE.id))) ? V.matter(i) : V.matters(); h="matters"; }
+ else { if(!V[h] || !allowed(h)) h = ROLE.home; html = V[h](); }
+ $("#main").innerHTML = html;
+ document.querySelectorAll("nav a").forEach(a=>a.classList.toggle("on", a.dataset.id===h));
+ if(h==="deadlines") calc();
+ window.scrollTo(0,0);
+}
+function drawNav(){
+ $("#nav").innerHTML = NAV.map(n=> n.sec ? `<div class="sec">${n.sec}</div>` : (n.r.includes(ROLE.id)?`<a href="#${n.id}" data-id="${n.id}"><span class="dot"></span>${n.t}</a>`:"")).join("");
+ $("#av").textContent = ROLE.ini; $("#whoName").textContent = ROLE.name; $("#whoRole").textContent = ROLE.role;
+ $("#roleSel").innerHTML = ROLES.map(r=>`<option value="${r.id}" ${r.id===ROLE.id?"selected":""}>View as: ${r.name}</option>`).join("");
+}
+function enter(id){ ROLE = ROLES.find(r=>r.id===id)||ROLES[0]; $("#login").hidden=true; $("#login").style.display="none"; $("#shell").hidden=false; drawNav(); if(location.hash.replace("#","")===ROLE.home) render(); else location.hash = ROLE.home; }
+
+/* ---------- interactions ---------- */
+function calc(){
+ const s = $("#srv"), dsel = $("#dist"), out = $("#calcOut"); if(!s||!out) return;
+ const base = new Date(s.value+"T00:00:00"); if(isNaN(base)) { out.textContent="Choose a date."; return; }
+ const n = +dsel.value; const due = new Date(base); due.setDate(due.getDate()+n);
+ let moved = ""; if(due.getDay()===0){ due.setDate(due.getDate()+1); moved=" (moved from Sunday)"; } else if(due.getDay()===6){ due.setDate(due.getDate()+2); moved=" (moved from Saturday)"; }
+ const rem = [14,7,3,1].map(k=>{const r=new Date(due); r.setDate(r.getDate()-k); return r;}).filter(r=>r>=base);
+ out.innerHTML = `<div class="small muted">Appearance and defence due</div><div class="ttl" style="font-size:20px">${fdy(due)}${moved}</div><div class="small">${n} days from service. Source: High Court practice as summarised in Chambers Litigation 2026, Zambia; the firm's approved rule.</div><div class="small" style="margin-top:6px">Reminders: ${rem.map(fd).join(" · ")||"none, date is close"}. Owner and backup alerted; unacknowledged after 24 hours goes to the partner.</div>`;
+}
+function tick(){ const c = $("#clock"); if(!c) return; const s = Math.floor((Date.now()-S.arrest.getTime())/1000); const h=Math.floor(s/3600), m=Math.floor(s%3600/60), x=s%60; c.textContent = `${String(h).padStart(2,"0")}:${String(m).padStart(2,"0")}:${String(x).padStart(2,"0")}`; c.style.color = h>=24 ? "var(--bad)" : h>=12 ? "var(--warn)" : "var(--text)"; }
+setInterval(tick, 1000);
+
+document.addEventListener("click", e=>{
+ const r = e.target.closest("[data-role]"); if(r){ enter(r.dataset.role); return; }
+ const tr = e.target.closest("tr[data-matter]"); if(tr){ location.hash = "m-"+tr.dataset.matter; return; }
+ const k = e.target.closest("[data-kyc]"); if(k){ S.kyc[k.dataset.kyc]=!S.kyc[k.dataset.kyc]; render(); return; }
+ const b = e.target.closest("[data-act]"); if(!b) return;
+ const a = b.dataset.act;
+ if(a==="brief"){ S.briefApproved=true; toast("Morning brief sent to the partners."); render(); }
+ if(a==="runConflict"){ S.intake=1; render(); }
+ if(a==="declineConflict"){ S.conflictDecision="Declined by Mukumba Mulele: the firm acts for the other side. Letter of regret drafted; no information about the other client disclosed."; render(); }
+ if(a==="demoClear"){ S.intake=2; render(); }
+ if(a==="toEngage"){ S.intake=3; render(); }
+ if(a==="sign"){ S.intake=4; toast("Signed by the client. Deposit request sent."); render(); }
+ if(a==="resetIntake"){ S.intake=0; S.conflictDecision=""; S.kyc={id:false,addr:false,bo:false}; render(); }
+ if(a==="bond"){ toast("Police bond request drafted from the template. Ready for the partner."); }
+ if(a==="batch"){ toast("12 letters of demand prepared for review. Each needs proof of service."); }
+ if(a==="stamp"){ b.textContent="✓ Filed"; b.disabled=true; toast("Stamped copy saved to the matter. Next date calculated."); }
+ if(a==="pay"){ S.paid=true; toast("Airtel Money request sent to the client's phone (simulated)."); render(); }
+ if(a==="transfer"){
+  const L = LEDGER[+$("#trL").value], amt = +$("#trA").value||0, bill = $("#trB").value; S.trL=$("#trL").value; S.trA=$("#trA").value; S.trB=bill;
+  if(amt<=0) S.transfer = `<div class="result no">Enter an amount.</div>`;
+  else if(amt>L.bal) S.transfer = `<div class="result no"><b>Blocked.</b> ${K(amt)} would take ${esc(L.c)} below zero (balance ${K(L.bal)}). Client money cannot pay for another client or for the firm.</div>`;
+  else if(!bill) S.transfer = `<div class="result no"><b>Blocked.</b> Money moves from the client account to the office account only against a bill already sent to the client.</div>`;
+  else S.transfer = `<div class="result wait"><b>Waiting for a second partner.</b> ${K(amt)} from ${esc(L.c)} against ${esc(bill.split(" · ")[0])}. The client will be notified when it is approved.</div><button class="btn b-gold" style="margin-top:8px" data-act="approve2">Approve as second partner</button>`;
+  render();
+ }
+ if(a==="approve2"){ S.transfer = `<div class="result ok"><b>Approved and recorded.</b> Both approvals, the bill and the time are on the ledger. The client was notified.</div>`; render(); }
+});
+document.addEventListener("input", e=>{ if(e.target.id==="srv"||e.target.id==="dist") calc(); });
+document.addEventListener("change", e=>{
+ if(e.target.id==="roleSel"){ ROLE = ROLES.find(r=>r.id===e.target.value); drawNav(); location.hash = ROLE.home; render(); }
+ if(e.target.id==="consent"){ S.consent = e.target.checked; toast(S.consent?"Consent recorded with date and time.":"Consent withdrawn. Family updates stop."); }
+ if(e.target.id==="dist") calc();
+});
+window.addEventListener("hashchange", ()=>{ if(!$("#shell").hidden) render(); });
+
+$("#roles").innerHTML = ROLES.map(r=>`<button type="button" data-role="${r.id}"><b>${esc(r.name)}</b><span>${esc(r.desc)}</span></button>`).join("");
+}
+</script>
+</body>
+</html>
