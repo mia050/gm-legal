@@ -138,6 +138,7 @@ footer.demo{color:var(--mute);font-size:12.5px;margin-top:28px;border-top:1px so
 .day:first-child{margin-top:0}
 .acc td:first-child{width:48%}
 .evf{display:grid;grid-template-columns:1fr 1fr;gap:0 10px}
+.mtabs{display:flex;gap:6px;overflow-x:auto;margin:16px 0;padding:2px 2px 6px;scrollbar-width:thin}.mtabs .chip{flex:none;font-weight:600}
 @media(max-width:1000px){.g4{grid-template-columns:repeat(2,minmax(0,1fr))}.g3{grid-template-columns:1fr 1fr}}
 @media(max-width:860px){
 .shell{grid-template-columns:1fr}
@@ -306,10 +307,63 @@ const EV = {
  7:[ev(W(19),"","dl","Annual return to PACRA","PACRA",false)]
 };
 
+/* ---------- the matter journal: calls, meetings, letters, notes ---------- */
+const jr = (d,k,who,w,sum,x={}) => Object.assign({d:D(d),k,who,w,sum},x);
+const JOURNAL = {
+ 0:[jr(-3,"letter","Freddie Tembo","Letter to Mwansa & Co., counsel for the 1st and 2nd defendants","Reminded them that the 7 days agreed for a settlement proposal end on Friday.",{wp:1}),
+    jr(-6,"client","Freddie Tembo","Call with the bank's head of recoveries","The bank will consider at least 80% of the claim, paid within 6 months, with a consent judgment as security.",{min:12,priv:1}),
+    jr(-9,"other","Freddie Tembo","Call with K. Mwansa, counsel for the 1st and 2nd defendants","They asked for 30 days to make a settlement proposal. We agreed to 7 days and said the scheduling conference goes ahead regardless.",{min:18,wp:1}),
+    jr(-12,"meet","Freddie Tembo","Meeting with the bank after the hearing for directions","Explained the directions and the next step. The bank will send an updated statement of account for the 3rd defendant.",{min:40})],
+ 1:[jr(-2,"other","Freddie Tembo","Call with counsel for Mwila Transport","They will call one more witness and want the trial dates kept.",{min:9}),
+    jr(-5,"client","Mukumba Mulele","Call with the managing director","The operations manager is free on both trial days. The client wants the case to run to judgment.",{min:15,priv:1})],
+ 2:[jr(-6,"client","Prisca Banda","Call with the eldest son of the deceased","The family agrees on the administrator. One beneficiary lives in South Africa and will sign by courier.",{min:11})],
+ 3:[jr(-4,"other","Bennet Banda","Call with the seller's advocates","The seller's signed assignment and the original certificate of title are ready for completion.",{min:7}),
+    jr(-8,"note","Bennet Banda","Follow-up at the Ministry of Lands","The consent file is with the Commissioner's office. No query raised.")],
+ 5:[jr(-1,"other","Criminal Partner","Call with the State Advocate","The State will not oppose moving the reporting day to Fridays. Statements PW9 to PW13 promised before trial.",{min:10}),
+    jr(-4,"client","Natasha Mumba","Call with the client","Reporting on Mondays clashes with his work in Kabwe. He asks to change the day.",{min:8,priv:1})]
+};
+
+/* ---------- tasks on each matter ---------- */
+const tk = (w,who,d,done=0,src="") => ({w,who,d:W(d),done,src});
+const TASKS = {
+ 0:[tk("File the scheduling conference brief","Prisca Banda",2),tk("Get the bank's written settlement authority","Freddie Tembo",6,0,"call with the bank"),tk("Serve the order for directions","Court Clerk",-10,1)],
+ 1:[tk("Write notes from today's status conference","Freddie Tembo",0),tk("Witness preparation pack for the operations manager","Freddie Tembo",8),tk("File the agreed bundle 5 days before trial","Freddie Tembo",10)],
+ 3:[tk("Follow up consent to assign","Bennet Banda",2),tk("Work out property transfer tax and send it to the client","Bennet Banda",4)],
+ 5:[tk("Apply to vary the reporting day","Natasha Mumba",1),tk("Chase statements PW9 to PW13","Natasha Mumba",3)]
+};
+
+/* ---------- the case assistant: agents that follow each matter ---------- */
+const AGENTS = [
+ ["Deadline agent","Reads the court rules and every date on the matter. Warns the owner and backup first, then the partner."],
+ ["Document agent","Reads every upload: dates, parties, amounts. Flags what changed between versions and what is missing at this stage."],
+ ["Other-side agent","Tracks what the other side's lawyers promised on calls and in letters, and tells you when it is late."],
+ ["Client agent","Tracks what the client was asked for and has not sent, meetings not confirmed, and drafts the monthly update."],
+ ["Firm-data agent","Compares the matter with the firm's own closed matters: time per stage, outcomes, costs."],
+ ["Billing agent","Turns logged calls and meetings into time on the matter for the partner to approve."]
+];
+const AI = {
+ 0:{sum:"This week: the claim is at the scheduling conference stage. The brief is drafted (version 2) and due in 2 working days. The 1st and 2nd defendants asked to settle and their 7 days end on Friday. The 3rd defendant has never entered appearance.",
+  recs:[{ag:"Deadline agent",t:"Apply for default judgment against the 3rd defendant",why:`Served on ${fdy(W(-52))}. Appearance was due within 14 days. There is still no appearance on the court file.`},
+        {ag:"Other-side agent",t:"Chase the settlement proposal",why:`On the call of ${fdy(D(-9))}, counsel for the 1st and 2nd defendants promised a proposal within 7 days. Nothing has arrived.`},
+        {ag:"Document agent",t:"Update the interest figure in the brief",why:"Interest at the contract rate has run since the writ. Version 2 of the brief still uses the figure from the statement of claim."},
+        {ag:"Firm-data agent",t:"Have the bank's settlement authority ready before the conference",why:"In 4 of the firm's last 6 bank recovery matters that reached a scheduling conference, the defendants offered to settle within 60 days (sample figures)."}]},
+ 1:{sum:"Trial starts in 3 weeks. Today's status conference needs notes and an update to the client. The agreed bundle is at version 3.",
+  recs:[{ag:"Deadline agent",t:"Write the notes from today's status conference",why:"The hearing was at 10:30. The client gets an update only once the notes are in."},
+        {ag:"Other-side agent",t:"Ask for the extra witness statement with a date",why:`On ${fdy(D(-2))} counsel for Mwila Transport said they will call one more witness. No statement has been served.`},
+        {ag:"Document agent",t:"Add 2 delivery notes to the bundle",why:"The operations manager's statement refers to 2 delivery notes that are not in the agreed bundle (version 3)."}]},
+ 3:{sum:"Waiting for consent to assign, lodged 17 days ago. Signing meeting in 5 working days. The client has not yet sent the tax clearance.",
+  recs:[{ag:"Firm-data agent",t:"Chase consent to assign this week",why:"Lodged 17 days ago. For Lusaka West the firm's files take about 30 days on average (sample figure)."},
+        {ag:"Client agent",t:"Remind the client about the tax clearance",why:"Asked for in the app and not uploaded. It is needed at the signing meeting."}]},
+ 5:{sum:"Mention on bail variation tomorrow. Disclosure: 8 of 13 statements. Trial in about 5 weeks.",
+  recs:[{ag:"Other-side agent",t:"Put the State's consent before the court tomorrow",why:`On the call of ${fdy(D(-1))} the State Advocate said they will not oppose moving the reporting day.`},
+        {ag:"Deadline agent",t:"Apply for an order on disclosure",why:`5 statements were requested on ${fdy(D(-9))}. Without them the defence cannot prepare cross-examination before trial.`}]}
+};
+
 /* ---------- state ---------- */
 let ROLE = ROLES[0];
 const S = {intake:0, conflictDecision:"", kyc:{id:false,addr:false,bo:false}, engaged:false, transfer:null, arrest: (()=>{const d=new Date(); d.setHours(d.getHours()-11, d.getMinutes()-20); return d;})(), consent:false, briefApproved:false, paid:false,
- docs:DOCS, ev:EV, req:{0:[{n:"Updated statement of account for the 3rd defendant",done:0}],3:[{n:"Copy of the ZRA property transfer tax clearance",done:0}]}, dsel:{}, conf:{}, pc:3, calF:"all", funA:"lit", hist:{}, noteOpen:null};
+ docs:DOCS, ev:EV, req:{0:[{n:"Updated statement of account for the 3rd defendant",done:0}],3:[{n:"Copy of the ZRA property transfer tax clearance",done:0}]}, dsel:{}, conf:{}, pc:3, calF:"all", funA:"lit", hist:{}, noteOpen:null,
+ journal:JOURNAL, tasks:TASKS, recDone:{}, mtab:{}, jf:{}};
 
 /* ---------- helpers ---------- */
 const $ = s => document.querySelector(s);
@@ -380,19 +434,45 @@ const docRow = (i,k,d) => `<div class="it"><div class="ficon ${ext(d.n)}">${ext(
 
 const groupDocs = (i,shown) => { let last=-1, out=""; shown.forEach(x=>{ if(x.d.st!==last){ out+=`<div class="day">${esc(FS(M[i])[x.d.st])}</div>`; last=x.d.st; } out+=docRow(i,x.k,x.d); }); return out; };
 
-V.matter = i => {
- const m = M[i]; const isBank = i===0; const F = FS(m);
- const sel = S.dsel[i]; const showAll = sel==="all"; const st = (sel===undefined||showAll) ? m.s : sel;
- const docs = (S.docs[i]||[]).map((d,k)=>({d,k}));
- const shown = showAll ? docs.slice().sort((a,b)=>a.d.st-b.d.st) : docs.filter(x=>x.d.st===st);
- const tl = isBank ? [
-  {d:W(-74), t:"Letter of demand served on all three defendants"},
-  {d:W(-52), t:"Writ and statement of claim filed and served"},
-  {d:W(-38), t:"Appearance and defence filed by the 1st and 2nd defendants"},
-  {d:W(-12), t:"Hearing for directions: scheduling conference fixed"}
- ] : [{d:W(-20), t:"Instructions received and engagement signed"}];
- const up = upcoming(i), past = held(i).slice(0,4), reqs = S.req[i]||[];
- const noteForm = key => `<div class="upl" style="margin-top:8px"><div class="row" style="justify-content:space-between"><b class="small">Notes after ${esc(S.ev[i][key].w.toLowerCase())}</b><button type="button" class="btn b-line" style="min-height:32px;padding:4px 10px;font-size:13px" data-act="voiceDraft" data-i="${i}" data-k="${key}">Draft from a voice note</button></div>
+const JK = {client:["Client","t-gold"], other:["Other side","t-blue"], meet:["Meeting","t-good"], letter:["Letter or email","t-mute"], note:["Note","t-mute"]};
+const jTag = k => `<span class="tag ${JK[k][1]}">${JK[k][0]}</span>`;
+const tasksOf = i => S.tasks[i] || (S.tasks[i] = [{w:M[i].next.w, who:M[i].lead, d:M[i].next.d, done:0, src:""}]);
+const aiOf = i => AI[i] || {sum:`Next: ${M[i].next.w}, ${fd(M[i].next.d)}. Stage ${M[i].s+1} of ${FS(M[i]).length}. No other risks found this week.`, recs:[{ag:"Deadline agent", t:M[i].next.w, why:`Due ${fd(M[i].next.d)}. Owner ${M[i].lead}, with a backup on file.`}]};
+const openRecs = i => aiOf(i).recs.map((r,k)=>({...r,k})).filter(r=>!S.recDone[i+"-"+r.k]);
+const sbtn = 'style="min-height:34px;padding:5px 12px;font-size:13px"';
+const jRow = j => `<div class="it"><div class="when">${fd(j.d).slice(0,6)}</div><div style="flex:1"><div class="ttl">${esc(j.w)}</div><div class="small">${esc(j.sum)}</div><div class="row" style="gap:5px;margin-top:5px">${jTag(j.k)}${j.wp?'<span class="tag t-warn">Without prejudice</span>':""}${j.priv?'<span class="tag t-bad">Privileged</span>':""}${j.min?`<span class="tag t-mute">${j.min} min on the matter</span>`:""}${j.isNew?'<span class="tag t-gold">New</span>':""}</div><div class="small muted" style="margin-top:3px">${esc(j.who)}</div></div></div>`;
+const tRow = (i,t,k) => `<div class="it"><input type="checkbox" data-task="${i}:${k}" ${t.done?"checked":""} aria-label="Done: ${esc(t.w)}" style="width:20px;height:20px;margin-top:2px;flex:none;accent-color:var(--gold)"><div style="flex:1;${t.done?"text-decoration:line-through;color:var(--mute)":""}"><div style="font-weight:500">${esc(t.w)}</div><div class="small muted">${esc(t.who)} · ${t.done?"done":"due "+fd(t.d)}${t.src?` · from ${esc(t.src)}`:""}</div></div>${!t.done&&t.d<T0?'<span class="tag t-bad">Late</span>':!t.done&&t.d.getTime()===T0.getTime()?'<span class="tag t-warn">Today</span>':""}</div>`;
+const recRow = (i,r) => `<div class="sheet" style="margin-top:0;margin-bottom:10px;background:#FFFDF7;border-color:var(--gold2)"><div style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#7A5A16;font-weight:700">${esc(r.ag)}</div><div class="ttl" style="margin-top:3px">${esc(r.t)}</div><div class="small" style="margin-top:3px">${esc(r.why)}</div>${canEdit()?`<div class="row" style="gap:6px;margin-top:8px"><button type="button" class="btn b-ink" ${sbtn} data-rec="${i}:${r.k}:task">Make it a task</button><button type="button" class="btn b-line" ${sbtn} data-rec="${i}:${r.k}:no">Not needed</button></div>`:""}</div>`;
+
+const tabOver = i => { const m=M[i], isBank=i===0, ai=aiOf(i), recs=openRecs(i), up=upcoming(i).slice(0,3), open=tasksOf(i).filter(t=>!t.done), jl=(S.journal[i]||[]).slice(0,3);
+ return `<div class="grid g3">
+  <div class="card"><h3>Team</h3><div class="small">Partner: <b>${esc(m.partner)}</b><br>Handling: <b>${esc(m.lead)}</b><br>Office: ${esc(m.office)}<br>Client: ${esc(m.client)}</div></div>
+  <div class="card"><h3>Value</h3><div class="kpi"><div class="v">${m.value?(m.cur==="USD"?"US$"+m.value.toLocaleString("en-US"):K(m.value)):"Fixed fee"}</div><div class="l">${isBank?"Claimed, with interest at the contract rate":"Matter value"}</div></div></div>
+  <div class="card"><h3>Money</h3><div class="small">Work in progress: <b>K38,250</b><br>Billed: <b>K68,400</b> · paid<br>Client account: <b>${K((LEDGER.find(l=>l.m===m.id)||{bal:0}).bal)}</b></div></div>
+ </div>
+ <div class="grid g2" style="margin-top:16px">
+  <div class="ai"><div class="lab">Case assistant · ${plural(recs.length,"recommendation")}</div><p class="small" style="margin:6px 0 4px">${esc(ai.sum)}</p>
+   ${recs.slice(0,2).map(r=>`<div class="small" style="margin-top:8px"><b>${esc(r.t)}</b><br><span class="muted">${esc(r.ag)}</span></div>`).join("")}
+   <button type="button" class="btn b-gold" style="margin-top:12px" data-mtab="${i}:ai">See all and act</button></div>
+  <div class="card"><h3>Coming up <small>${plural(open.length,"open task")}</small></h3><div class="list">${up.map(e=>`<div class="it"><div class="when">${fd(e.d).slice(0,6)}</div><div><div class="ttl" style="font-weight:500">${esc(e.w)}</div><div style="margin-top:3px">${evTag(e.k)}</div></div></div>`).join("")||'<p class="small muted">Nothing scheduled.</p>'}</div>
+   <div class="row" style="gap:6px;margin-top:6px"><button type="button" class="btn b-line" ${sbtn} data-mtab="${i}:dates">All dates</button><button type="button" class="btn b-line" ${sbtn} data-mtab="${i}:tasks">Tasks</button></div></div>
+ </div>
+ <div class="card" style="margin-top:16px"><h3>Latest activity <small>calls, meetings, letters</small></h3><div class="list">${jl.map(jRow).join("")||'<p class="small muted">Nothing logged yet.</p>'}</div><button type="button" class="btn b-line" ${sbtn} data-mtab="${i}:act">All activity</button></div>`; };
+
+const tabDocs = i => { const m=M[i], F=FS(m), sel=S.dsel[i], showAll=sel==="all", st=(sel===undefined||showAll)?m.s:sel, reqs=S.req[i]||[];
+ const docs=(S.docs[i]||[]).map((d,k)=>({d,k})), shown=showAll?docs.slice().sort((a,b)=>a.d.st-b.d.st):docs.filter(x=>x.d.st===st);
+ return `<div class="grid g2"><div class="card"><h3>Documents <small>${showAll?`all stages · ${docs.length}`:esc(F[st])}</small></h3>
+   <div class="chips"><button type="button" class="chip ${!showAll?"on":""}" data-fst="${i}:${st}">${esc(F[st])}</button><button type="button" class="chip ${showAll?"on":""}" data-dall="${i}">All stages · ${docs.length}</button></div>
+   <div class="list">${shown.length?(showAll?groupDocs(i,shown):shown.map(x=>docRow(i,x.k,x.d)).join("")):`<p class="small muted">No documents at this stage yet.</p>`}</div></div>
+  <div>${canEdit()?`<div class="card"><h3>Upload <small>to “${esc(F[st])}”</small></h3>
+    <div class="row"><select class="f" id="upVis" style="width:auto" aria-label="Who can see the upload"><option value="i">Lawyers only</option><option value="c">Lawyers and the client</option></select>
+    <label class="btn b-ink">Choose files<input type="file" multiple hidden data-up="${i}"></label></div>
+    <div class="small muted" style="margin-top:8px">Any stage, any time. On the phone this opens the camera too: photograph a stamped copy at the registry and it lands here. Demonstration: files stay on your device.</div></div>
+   <div class="card" style="margin-top:16px"><h3>Ask the client for a document</h3><div class="row" style="flex-wrap:nowrap"><input type="text" id="reqTxt" placeholder="e.g. Signed board resolution" aria-label="Document to ask for"><button type="button" class="btn b-line" data-act="askClient" data-i="${i}">Ask</button></div>
+    ${reqs.length?`<div class="list small" style="margin-top:6px">${reqs.map(r=>`<div class="it"><span class="tag ${r.done?"t-good":"t-warn"}">${r.done?"Received":"Waiting"}</span><div>${esc(r.n)}</div></div>`).join("")}</div>`:""}</div>`:""}</div></div>`; };
+
+const tabDates = i => { const up=upcoming(i), past=held(i).slice(0,4);
+ const noteForm = key => `<div class="upl" style="margin-top:8px"><div class="row" style="justify-content:space-between"><b class="small">Notes after the ${esc(S.ev[i][key].w.toLowerCase())}</b><button type="button" class="btn b-line" ${sbtn} data-act="voiceDraft" data-i="${i}" data-k="${key}">Draft from a voice note</button></div>
    <label class="f" for="nWhat">What happened</label><textarea id="nWhat" rows="5"></textarea>
    <label class="f" for="nOrd">Orders made and next steps</label><textarea id="nOrd" rows="3"></textarea>
    <label class="f" for="nCli">Short update for the client (plain words)</label><textarea id="nCli" rows="3"></textarea>
@@ -400,26 +480,7 @@ V.matter = i => {
    <div class="evf"><div><label class="f" for="nNext">Next date set by the court</label><input type="date" id="nNext"></div><div><label class="f" for="nNextW">For</label><input type="text" id="nNextW" placeholder="e.g. Continued hearing"></div></div>
    <label class="f">Order, ruling or updated documents</label><label class="btn b-line" style="display:inline-flex">Attach files<input type="file" multiple hidden id="nFiles"></label> <span class="small muted" id="nFilesN"></span>
    <div class="row" style="margin-top:12px"><button type="button" class="btn b-ink" data-act="saveNotes" data-i="${i}" data-k="${key}">Save notes</button><button type="button" class="btn b-line" data-act="closeNotes">Cancel</button></div></div>`;
- return `<p class="small"><a href="#matters" style="color:var(--mute)">← Matters</a></p>
- <h2 class="page" style="font-size:25px">${esc(m.t)}</h2><p class="sub">${mLink(m)} · ${esc(m.area)} · ${esc(m.court)} · <span class="case">${esc(m.cause)}</span></p>
- <div class="card"><h3>Where the matter is <small>stage ${m.s+1} of ${F.length} · ${esc(stName(m))}</small></h3>${stepper(i)}
-  <div class="row" style="justify-content:space-between;margin-top:6px"><span class="small muted">Tap a stage to see its documents. The client sees the same stages in the app, without internal notes.</span>${canEdit()&&m.s<F.length-1?`<button type="button" class="btn b-ink" data-act="nextStage" data-i="${i}">Move to “${esc(F[m.s+1])}”</button>`:""}</div></div>
- <div class="grid g3" style="margin-top:16px">
-  <div class="card"><h3>Team</h3><div class="small">Partner: <b>${esc(m.partner)}</b><br>Handling: <b>${esc(m.lead)}</b><br>Office: ${esc(m.office)}<br>Client: ${esc(m.client)}</div></div>
-  <div class="card"><h3>Value</h3><div class="kpi"><div class="v">${m.value?(m.cur==="USD"?"US$"+m.value.toLocaleString("en-US"):K(m.value)):"Fixed fee"}</div><div class="l">${isBank?"Claimed, with interest at the contract rate":"Matter value"}</div></div></div>
-  <div class="card"><h3>Money</h3><div class="small">Work in progress: <b>K38,250</b><br>Billed: <b>K68,400</b> · paid<br>Client account: <b>${K((LEDGER.find(l=>l.m===m.id)||{bal:0}).bal)}</b></div></div>
- </div>
- <div class="grid g2" style="margin-top:16px">
-  <div class="card"><h3>Documents <small>${showAll?`all stages · ${docs.length}`:esc(F[st])}</small></h3>
-   <div class="chips"><button type="button" class="chip ${!showAll?"on":""}" data-fst="${i}:${st}">${esc(F[st])}</button><button type="button" class="chip ${showAll?"on":""}" data-dall="${i}">All stages · ${docs.length}</button></div>
-   <div class="list">${shown.length?(showAll?groupDocs(i,shown):shown.map(x=>docRow(i,x.k,x.d)).join("")):`<p class="small muted">No documents at this stage yet.</p>`}</div>
-   ${canEdit()?`<div class="upl"><div class="small" style="margin-bottom:8px"><b>Upload to “${esc(F[showAll?m.s:st])}”</b></div>
-    <div class="row"><select class="f" id="upVis" style="width:auto" aria-label="Who can see the upload"><option value="i">Lawyers only</option><option value="c">Lawyers and the client</option></select>
-    <label class="btn b-ink">Choose files<input type="file" multiple hidden data-up="${i}"></label></div>
-    <div class="small muted" style="margin-top:8px">On the phone this opens the camera too: photograph a stamped copy at the registry and it lands here. Demonstration: files stay on your device.</div></div>
-   <div style="margin-top:12px"><label class="f" for="reqTxt" style="margin-top:0">Ask the client for a document</label><div class="row" style="flex-wrap:nowrap"><input type="text" id="reqTxt" placeholder="e.g. Signed board resolution"><button type="button" class="btn b-line" data-act="askClient" data-i="${i}">Ask</button></div>
-    ${reqs.length?`<div class="list small" style="margin-top:6px">${reqs.map(r=>`<div class="it"><span class="tag ${r.done?"t-good":"t-warn"}">${r.done?"Received":"Waiting"}</span><div>${esc(r.n)}</div></div>`).join("")}</div>`:""}</div>`:""}
-   <div class="ai" style="margin-top:12px"><div class="lab">Assistant</div><p class="small" style="margin:6px 0 0">${isBank?"The 3rd defendant has not entered appearance. Default judgment against the 3rd defendant can be considered. Draft application prepared for review.":"No action needed this week."}</p></div></div>
+ return `<div class="grid g2">
   <div class="card"><h3>Coming up <small>court, meetings, deadlines</small></h3>
    <div class="list">${up.length?up.map(e=>`<div class="it"><div class="when">${fd(e.d).slice(0,6)}${e.t?`<br>${e.t}`:""}</div><div style="flex:1"><div class="ttl">${esc(e.w)}</div><div class="small muted">${esc(e.where||"")}</div><div class="row" style="gap:5px;margin-top:4px">${evTag(e.k)}${e.c?'<span class="tag t-good">Client sees it</span>':'<span class="tag t-mute">Team only</span>'}${e.k==="prep"&&S.conf[i+"-"+e.k2]?'<span class="tag t-good">Client confirmed</span>':""}</div></div></div>`).join(""):`<p class="small muted">Nothing scheduled.</p>`}</div>
    ${canEdit()?`<div class="upl"><div class="small"><b>Add a date</b></div>
@@ -428,26 +489,73 @@ V.matter = i => {
     <div><label class="f" for="evD">Date</label><input type="date" id="evD" value="${iso(W(14))}"></div><div><label class="f" for="evT">Time</label><input type="text" id="evT" placeholder="09:00"></div></div>
     <label class="f" for="evP">Where</label><input type="text" id="evP" placeholder="Court and room, or the firm's office">
     <label class="row small" style="gap:8px;margin-top:8px"><input type="checkbox" id="evC" checked> Show it to the client, with reminders 3 days and 1 day before</label>
-    <div class="row" style="margin-top:10px"><button type="button" class="btn b-ink" data-act="addEv" data-i="${i}">Add date</button></div></div>`:""}
-  </div>
- </div>
- <div class="card" style="margin-top:16px"><h3>After the hearing <small>notes, orders and the update to the client</small></h3>
+    <div class="row" style="margin-top:10px"><button type="button" class="btn b-ink" data-act="addEv" data-i="${i}">Add date</button></div></div>`:""}</div>
+  <div class="card"><h3>After the hearing <small>notes, orders, the update to the client</small></h3>
   ${past.length?past.map(e=>`<div class="sheet" style="margin-top:0;margin-bottom:10px"><div class="row" style="justify-content:space-between"><div><div class="ttl">${esc(e.w)}</div><div class="small muted">${fdy(e.d)}${e.t?" · "+e.t:""} · ${esc(e.where||"")}</div></div>${e.notes?'<span class="tag t-good">Notes written</span>':'<span class="tag t-warn">Notes due today</span>'}</div>
    ${e.notes?`<div class="small" style="margin-top:8px"><b>What happened.</b> ${esc(e.notes.what)}<br><b>Orders and next steps.</b> ${esc(e.notes.orders)}</div>${e.notes.client?`<div class="result ${e.notes.shared?"ok":""} small" style="margin-top:8px"><b>${e.notes.shared?"Sent to the client":"Update for the client, not sent"}:</b> ${esc(e.notes.client)}</div>`:""}<div class="small muted" style="margin-top:6px">Written by ${esc(e.notes.by)}${e.notes.files?` · ${plural(e.notes.files,"document")} attached`:""}</div>`
    : (canEdit() ? (S.noteOpen===i+"-"+e.k2 ? noteForm(e.k2) : `<div class="row" style="margin-top:8px"><button type="button" class="btn b-gold" data-act="openNotes" data-i="${i}" data-k="${e.k2}">Write notes</button><span class="small muted">Until notes are in, the partner sees this as open.</span></div>`) : "")}</div>`).join("")
-  :`<p class="small muted">No hearing or meeting has taken place yet. After each one, the lawyer writes what happened, the orders and the next date, attaches the order, and sends the client a short update.</p>`}
- </div>
- <div class="grid g2" style="margin-top:16px">
+  :`<p class="small muted">No hearing or meeting yet. After each one the lawyer writes what happened, the orders and the next date, attaches the order, and sends the client a short update.</p>`}</div>
+ </div>`; };
+
+const tabAct = i => { const f=S.jf[i]||"all", all=S.journal[i]||[], list=all.filter(j=>f==="all"||j.k===f);
+ return `<div class="grid g2"><div class="card"><h3>Activity <small>${plural(all.length,"entry")}</small></h3>
+   <div class="chips">${[["all","All"],["client","Client"],["other","Other side"],["meet","Meetings"],["letter","Letters"],["note","Notes"]].map(([k,l])=>`<button type="button" class="chip ${f===k?"on":""}" data-jf="${i}:${k}">${l}</button>`).join("")}</div>
+   <div class="list">${list.map(jRow).join("")||'<p class="small muted">Nothing here yet.</p>'}</div></div>
+  <div>${canEdit()?`<div class="card"><h3>Log a call, meeting or note</h3>
+   <label class="f" for="jK" style="margin-top:0">Type</label><select class="f" id="jK"><option value="client">Call with the client</option><option value="other">Call with the other side's lawyers</option><option value="meet">Meeting</option><option value="letter">Letter or email</option><option value="note">Note</option></select>
+   <label class="f" for="jW">With whom, or the subject</label><input type="text" id="jW" placeholder="e.g. Call with counsel for the defendants">
+   <label class="f" for="jS">Summary</label><textarea id="jS" rows="4" placeholder="What was said or agreed"></textarea>
+   <div class="evf"><div><label class="f" for="jM">Minutes</label><input type="number" id="jM" min="0" placeholder="15"></div><div><label class="f" for="jT">Follow-up task</label><input type="text" id="jT" placeholder="Optional"></div></div>
+   <label class="row small" style="gap:8px;margin-top:10px"><input type="checkbox" id="jWP"> Without prejudice</label>
+   <label class="row small" style="gap:8px;margin-top:6px"><input type="checkbox" id="jP"> Privileged, lawyers only</label>
+   <div class="row" style="margin-top:12px"><button type="button" class="btn b-ink" data-act="logJ" data-i="${i}">Save to the matter</button></div>
+   <p class="small muted" style="margin:10px 0 0">Calls on the office line or WhatsApp Business can be logged in one tap with the time filled in. A voice note becomes a summary for you to check.</p></div>`:""}
+  <div class="card" style="margin-top:16px"><h3>Summaries</h3><div class="list small">
+   <div class="it"><span class="tag t-gold">Weekly</span><div>Matter summary for the partner, drafted by the assistant every Friday</div></div>
+   <div class="it"><span class="tag t-gold">Monthly</span><div>Status update to the client, drafted from the notes and approved by the lawyer</div></div>
+   <div class="it"><span class="tag t-gold">Each</span><div>Meeting and call summaries, in the activity list</div></div></div>
+   <button type="button" class="btn b-line" ${sbtn} data-mtab="${i}:ai">Read this week's summary</button></div></div></div>`; };
+
+const tabTasks = i => { const m=M[i], ts=tasksOf(i).map((t,k)=>({t,k})), open=ts.filter(x=>!x.t.done).sort((a,b)=>a.t.d-b.t.d), done=ts.filter(x=>x.t.done);
+ const owners=[...new Set([m.lead,m.partner,...(m.restricted?[]:["Prisca Banda","Natasha Mumba"]),"Court Clerk"])];
+ return `<div class="grid g2"><div class="card"><h3>Open tasks <small>${open.length}</small></h3><div class="list">${open.map(x=>tRow(i,x.t,x.k)).join("")||'<p class="small muted">No open tasks.</p>'}</div>${done.length?`<div class="day" style="margin-top:14px">Done</div><div class="list">${done.map(x=>tRow(i,x.t,x.k)).join("")}</div>`:""}</div>
+  ${canEdit()?`<div class="card"><h3>Add a task</h3><label class="f" for="tW" style="margin-top:0">Task</label><input type="text" id="tW" placeholder="e.g. Draft the consent order">
+   <div class="evf"><div><label class="f" for="tO">Owner</label><select class="f" id="tO">${owners.map(n=>`<option>${esc(n)}</option>`).join("")}</select></div><div><label class="f" for="tD">Due</label><input type="date" id="tD" value="${iso(W(3))}"></div></div>
+   <div class="row" style="margin-top:12px"><button type="button" class="btn b-ink" data-act="addTask" data-i="${i}">Add task</button></div>
+   <p class="small muted" style="margin:10px 0 0">Tasks also come from calls, from notes after hearings and from the assistant. The owner is reminded on the day; a late task goes to the partner.</p></div>`:""}</div>`; };
+
+const tabAI = i => { const ai=aiOf(i), recs=openRecs(i), done=aiOf(i).recs.length-recs.length;
+ return `<div class="grid g2"><div>
+  <div class="ai"><div class="lab">This week on the matter · drafted by the assistant</div><p style="margin:8px 0">${esc(ai.sum)}</p>${canEdit()?`<div class="row"><button type="button" class="btn b-ink" ${sbtn} data-act="sumPartner">Send to the partner</button><button type="button" class="btn b-line" ${sbtn} data-act="sumClient" data-i="${i}">Turn into a client update</button></div>`:""}</div>
+  <div class="card" style="margin-top:16px"><h3>Recommendations <small>${recs.length} open${done?` · ${done} handled`:""}</small></h3>${recs.map(r=>recRow(i,r)).join("")||'<p class="small muted">Nothing open. The agents check the matter again every morning and whenever something new comes in.</p>'}</div></div>
+  <div class="card"><h3>Agents following this matter <small>last run today 07:00</small></h3><div class="list small">${AGENTS.map(([n,d])=>`<div class="it"><span class="tag t-gold" style="min-width:16px">●</span><div><b>${n}</b><br><span class="muted">${d}</span></div></div>`).join("")}</div>
+   <div class="result small">Nothing goes to the client, the court or the other side without a lawyer's approval. The assistant works only on this firm's data, and the AI provider does not keep or train on it.</div></div></div>`; };
+
+const tabAcc = i => { const m=M[i], isBank=i===0;
+ const tl = isBank ? [{d:W(-74), t:"Letter of demand served on all three defendants"},{d:W(-52), t:"Writ and statement of claim filed and served"},{d:W(-38), t:"Appearance and defence filed by the 1st and 2nd defendants"},{d:W(-12), t:"Hearing for directions: scheduling conference fixed"}] : [{d:W(-20), t:"Instructions received and engagement signed"}];
+ return `<div class="grid g2">
   <div class="card" style="overflow-x:auto"><h3>Who can see this matter</h3><table class="acc"><tbody>
    <tr><td><b>${esc(m.partner)}</b><br><span class="small muted">Partner</span></td><td class="small">Everything</td></tr>
    <tr><td><b>${esc(m.lead)}</b><br><span class="small muted">Handling</span></td><td class="small">Everything</td></tr>
    <tr><td>Other lawyers in the firm</td><td class="small">${m.restricted?"Nothing. This matter is restricted.":"Name, number and next date only"}</td></tr>
    <tr><td>Court clerk</td><td class="small">Court dates and filings to run</td></tr>
    <tr><td>Accounts</td><td class="small">Money on this matter only</td></tr>
-   <tr><td><b>${esc(m.client)}</b><br><span class="small muted">Client, in the app</span></td><td class="small">The stages, the dates marked for the client, the updates after hearings, and documents marked “Client can see”. Never privileged notes.</td></tr>
+   <tr><td><b>${esc(m.client)}</b><br><span class="small muted">Client, in the app</span></td><td class="small">The stages, the dates marked for the client, the updates after hearings, and documents marked “Client can see”. Never privileged notes, calls with the other side or the assistant's work.</td></tr>
   </tbody></table><p class="small muted" style="margin:10px 0 0">Every view, download and share is recorded with the person and the time.</p></div>
   <div class="card"><h3>History</h3><div class="tl">${(S.hist[i]||[]).map(h=>`<div class="e"><div class="small muted">Today</div><div>${esc(h.t)}</div></div>`).join("")}${tl.slice().reverse().map(e=>`<div class="e"><div class="small muted">${fdy(e.d)}</div><div>${esc(e.t)}</div></div>`).join("")}</div></div>
- </div>${foot}`;
+ </div>`; };
+
+V.matter = i => {
+ const m = M[i], F = FS(m), tab = S.mtab[i] || "over";
+ const nOpen = tasksOf(i).filter(t=>!t.done).length;
+ const MT = [["over","Overview",""],["docs","Documents",(S.docs[i]||[]).length],["dates","Dates",upcoming(i).length],["act","Activity",(S.journal[i]||[]).length],["tasks","Tasks",nOpen],["ai","Assistant",openRecs(i).length],["acc","Access",""]];
+ const body = {over:tabOver, docs:tabDocs, dates:tabDates, act:tabAct, tasks:tabTasks, ai:tabAI, acc:tabAcc}[tab](i);
+ return `<p class="small"><a href="#matters" style="color:var(--mute)">← Matters</a></p>
+ <h2 class="page" style="font-size:25px">${esc(m.t)}</h2><p class="sub">${mLink(m)} · ${esc(m.area)} · ${esc(m.court)} · <span class="case">${esc(m.cause)}</span></p>
+ <div class="card"><h3>Where the matter is <small>stage ${m.s+1} of ${F.length} · ${esc(stName(m))}</small></h3>${stepper(i)}
+  <div class="row" style="justify-content:space-between;margin-top:6px"><span class="small muted">Tap a stage to see its documents. The client sees the same stages in the app.</span>${canEdit()&&m.s<F.length-1?`<button type="button" class="btn b-ink" data-act="nextStage" data-i="${i}">Move to “${esc(F[m.s+1])}”</button>`:""}</div></div>
+ <div class="mtabs" role="tablist" aria-label="Matter sections">${MT.map(([k,l,n])=>`<button type="button" role="tab" aria-selected="${tab===k}" class="chip ${tab===k?"on":""}" data-mtab="${i}:${k}">${l}${n!==""?` · ${n}`:""}</button>`).join("")}</div>
+ <div id="mtab">${body}</div>${foot}`;
 };
 
 V.intake = () => {
@@ -677,13 +785,19 @@ document.addEventListener("click", e=>{
  const r = e.target.closest("[data-role]"); if(r){ enter(r.dataset.role); return; }
  const tr = e.target.closest("tr[data-matter]"); if(tr){ location.hash = "m-"+tr.dataset.matter; return; }
  const k = e.target.closest("[data-kyc]"); if(k){ S.kyc[k.dataset.kyc]=!S.kyc[k.dataset.kyc]; render(); return; }
- const fst = e.target.closest("[data-fst]"); if(fst){ const [i,k]=fst.dataset.fst.split(":").map(Number); S.dsel[i] = (S.dsel[i]===k && !fst.classList.contains("chip")) ? undefined : k; render(1); return; }
+ const fst = e.target.closest("[data-fst]"); if(fst){ const [i,k]=fst.dataset.fst.split(":").map(Number); S.dsel[i] = (S.dsel[i]===k && !fst.classList.contains("chip")) ? undefined : k; S.mtab[i]="docs"; render(1); return; }
  const dall = e.target.closest("[data-dall]"); if(dall){ S.dsel[+dall.dataset.dall]="all"; render(1); return; }
  const op = e.target.closest("[data-open]"); if(op){ location.hash="m-"+op.dataset.open; return; }
  const sh = e.target.closest("[data-share]"); if(sh){ const [i,k]=sh.dataset.share.split(":").map(Number), d=S.docs[i][k];
   if(d.priv && d.vis!=="c"){ toast("Privileged notes stay with the lawyers. Share a clean copy instead."); return; }
   d.vis = d.vis==="c"?"i":"c"; log(i, `${d.n}: ${d.vis==="c"?"shared with the client":"made lawyers only"} by ${ROLE.name}`);
   toast(d.vis==="c"?"Shared. The client sees it in the app and gets a short notice.":"Lawyers only now. The client no longer sees it."); render(1); return; }
+ const mt = e.target.closest("[data-mtab]"); if(mt){ const [i,t]=mt.dataset.mtab.split(":"); S.mtab[+i]=t; render(1); const tb=$(".mtabs"); if(tb && tb.getBoundingClientRect().top<0) tb.scrollIntoView({block:"start"}); return; }
+ const jf = e.target.closest("[data-jf]"); if(jf){ const [i,k]=jf.dataset.jf.split(":"); S.jf[+i]=k; render(1); return; }
+ const rc = e.target.closest("[data-rec]"); if(rc){ const [i,k,how]=rc.dataset.rec.split(":"), r=aiOf(+i).recs[+k]; S.recDone[i+"-"+k]=1;
+  if(how==="task"){ tasksOf(+i).push({w:r.t, who:M[+i].lead, d:W(2), done:0, src:r.ag.toLowerCase()}); log(+i, `Task from the ${r.ag.toLowerCase()}: ${r.t}`); toast(`Task created for ${M[+i].lead}, due ${fd(W(2))}.`); }
+  else { log(+i, `Recommendation marked not needed by ${ROLE.name}: ${r.t}`); toast("Noted. The assistant will raise it again only if something changes."); }
+  render(1); return; }
  const cal = e.target.closest("[data-cal]"); if(cal){ S.calF=cal.dataset.cal; render(1); return; }
  const fa = e.target.closest("[data-fa]"); if(fa){ S.funA=fa.dataset.fa; render(1); return; }
  const pc = e.target.closest("[data-pc]"); if(pc){ S.pc=+pc.dataset.pc; render(1); return; }
@@ -708,6 +822,16 @@ document.addEventListener("click", e=>{
   const title = w || (k==="court"?"Court date":k==="prep"?"Preparation meeting with the client":"Deadline");
   (S.ev[i]=S.ev[i]||[]).push({d,t,k,w:title,where,c}); log(i, `Date added: ${title}, ${fdy(d)}${c?", shown to the client":""}`);
   toast(c?"Added. The client sees it, with reminders 3 days and 1 day before.":"Added for the team. Owner and backup alerted."); render(1); }
+ if(a==="logJ"){ const i=+b.dataset.i, k=$("#jK").value, w=$("#jW").value.trim(), sum=$("#jS").value.trim(), min=Math.max(0,+$("#jM").value||0), t=$("#jT").value.trim(), wp=$("#jWP").checked, pv=$("#jP").checked;
+  if(!w||!sum){ toast("Add who it was with and a short summary."); return; }
+  (S.journal[i]=S.journal[i]||[]).unshift({d:new Date(T0),k,who:ROLE.name,w,sum,min,wp:wp?1:0,priv:pv?1:0,isNew:1});
+  if(t) tasksOf(i).push({w:t,who:ROLE.name,d:W(3),done:0,src:w.toLowerCase()});
+  log(i, `${JK[k][0]} logged by ${ROLE.name}: ${w}`); S.jf[i]="all";
+  toast(`Saved to the matter.${min?` ${min} minutes added to work in progress.`:""}${t?" Task created.":""}`); render(1); }
+ if(a==="addTask"){ const i=+b.dataset.i, w=$("#tW").value.trim(), who=$("#tO").value, dv=$("#tD").value; if(!w){ toast("Write the task."); return; }
+  const d = dv ? new Date(dv+"T00:00:00") : W(3); tasksOf(i).push({w,who,d,done:0,src:""}); log(i, `Task added for ${who}: ${w}`); toast(`Task added. ${who} is reminded on ${fd(d)}.`); render(1); }
+ if(a==="sumPartner"){ toast("Sent to the partner's inbox in the system."); }
+ if(a==="sumClient"){ const i=+b.dataset.i; log(i, "Client update drafted from the weekly summary, waiting for approval"); toast("A plain-words draft for the client is ready. It goes out only after you approve it."); }
  if(a==="openNotes"){ S.noteOpen = b.dataset.i+"-"+b.dataset.k; S.nFiles=[]; render(1); }
  if(a==="closeNotes"){ S.noteOpen=null; render(1); }
  if(a==="voiceDraft"){ const v = VOICE[+b.dataset.i] || VOICE.def; $("#nWhat").value=v.what; $("#nOrd").value=v.orders; $("#nCli").value=v.client; toast("Drafted from a 40-second voice note (sample). Check it before saving."); }
@@ -747,6 +871,7 @@ document.addEventListener("change", e=>{
   if(ds.req!==undefined && S.req[i] && S.req[i][+ds.req]) S.req[i][+ds.req].done=1;
   log(i, `${m.client} sent ${plural(files.length,"document")} from the client app`);
   toast(`Sent to ${m.lead}. Filed in the matter under “${stName(m)}”.`); render(1); }
+ if(ds.task!==undefined){ const [i,k]=ds.task.split(":").map(Number), t=tasksOf(i)[k]; t.done=e.target.checked?1:0; log(i, `Task ${t.done?"done":"reopened"}: ${t.w}`); toast(t.done?"Done. The partner sees it closed.":"Reopened."); render(1); }
  if(e.target.id==="nFiles"){ S.nFiles=[...e.target.files].map(f=>f.name); const n=$("#nFilesN"); if(n) n.textContent = S.nFiles.length ? plural(S.nFiles.length,"file")+" ready" : ""; }
 });
 window.addEventListener("hashchange", ()=>{ if(!$("#shell").hidden) render(); });
