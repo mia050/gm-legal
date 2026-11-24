@@ -154,6 +154,12 @@ footer.demo{color:var(--mute);font-size:12.5px;margin-top:28px;border-top:1px so
 .bars .in,.lg.in{background:var(--gold)}.bars .ex,.lg.ex{background:#9A958B}
 .lg{display:inline-block;width:10px;height:10px;border-radius:2px;vertical-align:-1px}
 main{padding-bottom:96px!important}
+.gfab{position:fixed;left:18px;bottom:18px;z-index:40;background:var(--ink);color:var(--gold2);border:1px solid var(--gold);border-radius:28px;padding:12px 18px;font-weight:700;min-height:48px;box-shadow:0 10px 24px -10px rgba(0,0,0,.45)}
+.gpanel{position:fixed;left:18px;bottom:78px;z-index:41;width:350px;max-width:calc(100vw - 24px);max-height:calc(100vh - 110px);overflow:auto;background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:0 24px 60px -20px rgba(0,0,0,.45);padding:10px}
+.gpanel .sc{display:flex;gap:10px;align-items:flex-start;width:100%;text-align:left;border:none;background:none;padding:9px 8px;border-radius:10px;font-size:14px;color:var(--text)}
+.gpanel .sc:hover,.gpanel .sc:focus-visible{background:#FBF9F4;outline:none}
+.gpanel .sc .k{font-family:"Courier Prime","Courier New",monospace;width:26px;height:26px;border-radius:50%;background:var(--ink);color:var(--gold2);display:grid;place-items:center;flex:none;font-weight:700}
+@media(max-width:860px){.gfab{left:12px;bottom:12px;padding:12px 14px}.gpanel{left:12px;right:12px;width:auto;bottom:74px}}
 @media(max-width:860px){.asp{right:12px;left:12px;width:auto;bottom:74px}.fab{right:12px;bottom:12px}}
 .mtabs{display:flex;gap:6px;overflow-x:auto;margin:16px 0;padding:2px 2px 6px;scrollbar-width:thin}.mtabs .chip{flex:none;font-weight:600}
 @media(max-width:1000px){.g4{grid-template-columns:repeat(2,minmax(0,1fr))}.g3{grid-template-columns:1fr 1fr}}
@@ -184,6 +190,7 @@ table{font-size:13.5px}
 <p class="slogan">Consider it done.</p>
 <p>One system for both offices: every matter in its stages, the documents of each stage, court dates and meetings, the client account, and the clients themselves. Choose who you are for this demonstration.</p>
 <div class="roles" id="roles"></div>
+<p class="note" style="color:rgba(255,255,255,.75)">On a computer, press 0 to 9 to jump between scenes, or use the Demo guide once inside.</p>
 <p class="note">Demonstration with invented sample data. No real client, matter or case information is used. Prepared by MIA Technology.</p>
 </div>
 </div>
@@ -198,6 +205,7 @@ table{font-size:13.5px}
 <main id="main"></main>
 </div>
 </div>
+<div id="guide"></div>
 <div id="asst"></div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
@@ -218,7 +226,7 @@ const iso = d => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-$
 
 /* ---------- people (users of the system) ---------- */
 const ROLES = [
- {id:"partner", name:"Mukumba Mulele", ini:"MM", role:"Partner · both offices", home:"today", desc:"The firm at a glance"},
+ {id:"partner", name:"Mukumba Mulele", ini:"MM", role:"Partner · both offices", home:"answers", desc:"Your answers, and the firm at a glance"},
  {id:"associate", name:"Prisca Banda", ini:"PB", role:"Associate · Lusaka", home:"today", desc:"My day, my matters, my time"},
  {id:"criminal", name:"Malizani", ini:"MZ", role:"Partner · Criminal Desk", home:"criminal", desc:"Fraud, money laundering, corruption: arrest to appeal"},
  {id:"clerk", name:"Court Clerk", ini:"CC", role:"Registry runs · Lusaka", home:"runs", desc:"Today's filings and collections"},
@@ -227,6 +235,7 @@ const ROLES = [
 ];
 const NAV = [
  {sec:"Practice"},
+ {id:"answers", t:"Your answers", r:["partner"]},
  {id:"today", t:"My desk", r:["partner","associate","criminal","clerk","accounts"]},
  {id:"inbox", t:"My assistant", r:["partner","associate","criminal","clerk","accounts"]},
  {id:"team", t:"Team tasks", r:["partner","associate","criminal","clerk","accounts"]},
@@ -1063,6 +1072,48 @@ V.inbox = () => { const r=ROLE.id, box=INBOX[r]; if(!box) return V[ROLE.home]();
   <p class="small muted" style="margin:8px 0 0">On the phone, by WhatsApp and by email. If the owner does not acknowledge within 24 hours, the backup and then the partner are told.</p></div>${foot}`;
 };
 
+/* ---------- the demo guide: scenes 0 to 9 ---------- */
+const SCENES = [
+ {k:0, role:"partner", h:"answers", t:"Your answers", d:"What Mr Mulele told us, and where each answer lives"},
+ {k:1, role:"partner", h:"today", t:"Your desk", d:"The firm on one screen, and who sees the money"},
+ {k:2, role:"partner", h:"m-0", tab:"over", t:"A matter, stage by stage", d:"First Kafue Bank: the stage bar, then the tabs"},
+ {k:3, role:"partner", h:"m-0", tab:"ai", t:"The case assistant", d:"Recommendations a lawyer turns into tasks"},
+ {k:4, role:"partner", h:"deadlines", t:"Court dates and meetings", d:"Every date in one calendar, with the rules"},
+ {k:5, role:"partner", h:"inbox", t:"Your personal assistant", d:"Email and WhatsApp, read, filed and turned into work"},
+ {k:6, role:"partner", h:"team", t:"Team tasks", d:"Work passed between people, with the papers"},
+ {k:7, role:"partner", h:"account", t:"Accounts and banking", d:"Trust accounts, deposits and receipts in the matter"},
+ {k:8, role:"criminal", h:"criminal", t:"Malizani's Criminal Desk", d:"Custody clock, fees by stage, secure line"},
+ {k:9, role:"client", h:"portal", pc:0, t:"What your clients see", d:"The five questions, answered on their phone"}
+];
+function go(k){ const sc=SCENES[k]; if(!sc) return; S.guide=false;
+ if($("#shell").hidden) enter(sc.role);
+ if(ROLE.id!==sc.role){ ROLE=ROLES.find(r=>r.id===sc.role); S.tf="me"; S.as.open=false; drawNav(); }
+ if(sc.tab) S.mtab[0]=sc.tab;
+ if(sc.pc!==undefined) S.pc=sc.pc;
+ if(location.hash.replace("#","")===sc.h) render(); else location.hash=sc.h;
+ drawGuide(); }
+function drawGuide(){ const el=$("#guide"); if(!el) return;
+ if($("#shell").hidden){ el.innerHTML=""; return; }
+ el.innerHTML = `<button type="button" class="gfab" data-guide="toggle" aria-expanded="${!!S.guide}">${S.guide?"Close guide":"Demo guide"}</button>
+ ${S.guide?`<div class="gpanel" role="dialog" aria-label="Demo guide"><div class="small muted" style="padding:4px 8px 8px">Jump to any scene. On a computer, press the number key.</div>
+  ${SCENES.map(s=>`<button type="button" class="sc" data-scene="${s.k}"><span class="k">${s.k}</span><span><b>${esc(s.t)}</b><br><span class="small muted">${esc(s.d)}</span></span></button>`).join("")}</div>`:""}`; }
+
+const ANS = [
+ {t:"Your firm", a:"Five or more partners, 15 to 25 people across Lusaka and Kitwe, 600 to 1,000 open matters, 25 to 50 new ones a month.", go:[[1,"Your desk"]]},
+ {t:"Your three priorities", a:"FIC, data protection and ZRA compliance. Never missing a court date. A client account that always reconciles.", go:[[4,"Court dates"],[7,"Client account"]]},
+ {t:"How dates are kept", a:"In the office diary and each lawyer's own diary. How sure no date can slip: “less than I would like”.", go:[[4,"Calendar"],[5,"Reminders"]]},
+ {t:"Lusaka and Kitwe", a:"Kitwe mostly runs on its own.", go:[["Kitwe","Kitwe matters"]]},
+ {t:"Files and documents", a:"Paper files and email inboxes. Each lawyer keeps his own templates. Many originals in safe custody.", go:[[2,"Documents by stage"],[5,"Mail, filed"]]},
+ {t:"Fees and the client account", a:"Hourly, by seniority. Some lawyers record time. Smart Invoice: “not sure”. The client account is kept from bank statements.", go:[[7,"Accounts and banking"]]},
+ {t:"Your clients ask", a:"What is happening in my case? When is the next hearing? What do you need from me? Can I have a copy? How much do I owe?", go:[[9,"The client app"]]},
+ {t:"Criminal practice", a:"Malizani. Fraud, money laundering and corruption. DEC, ACC, NPA and the police. Called on his mobile at night.", go:[[8,"Criminal Desk"]]},
+ {t:"Who uses it, who decides", a:"All lawyers and secretaries use it. All the partners decide together.", go:[[6,"Team tasks"],[3,"Case assistant"]]}
+];
+V.answers = () => `<h2 class="page">You told us. Here is what you will see.</h2>
+ <p class="sub">Your instructions to MIA Technology, dated at Lusaka on 24 November 2026. Each answer below opens the part of GM Chambers built for it.</p>
+ <div class="grid g3">${ANS.map(x=>`<div class="card" style="display:flex;flex-direction:column"><h3>${esc(x.t)}</h3><p class="small" style="margin:0 0 12px;flex:1">${esc(x.a)}</p><div class="row" style="gap:6px">${x.go.map(([k,l])=>typeof k==="number"?`<button type="button" class="btn b-line" ${sbtn} data-scene="${k}">${esc(l)} →</button>`:`<button type="button" class="btn b-line" ${sbtn} data-office="${k}">${esc(l)} →</button>`).join("")}</div></div>`).join("")}</div>
+ <div class="row" style="margin-top:18px"><button type="button" class="btn b-gold" data-scene="1">Start the tour</button><span class="small muted">Or open the Demo guide at the bottom left, or press 1 to 9 on the keyboard.</span></div>${foot}`;
+
 /* ---------- router ---------- */
 function allowed(id){ const n = NAV.find(x=>x.id===id); return !n || n.r.includes(ROLE.id); }
 function render(keep){
@@ -1077,14 +1128,14 @@ function render(keep){
  const fs = document.querySelector(".fs.sel") || document.querySelector(".fs.cur");
  if(fs){ const f = fs.parentElement, t = fs.previousElementSibling || fs; f.scrollLeft = Math.max(0, t.offsetLeft - f.offsetLeft - 8); }
  window.scrollTo(0, keep ? y : 0);
- drawAsst();
+ drawAsst(); drawGuide();
 }
 function drawNav(){
  $("#nav").innerHTML = NAV.map(n=> n.sec ? `<div class="sec">${n.sec}</div>` : (n.r.includes(ROLE.id)?`<a href="#${n.id}" data-id="${n.id}"><span class="dot"></span>${n.t}</a>`:"")).join("");
  $("#av").textContent = ROLE.ini; $("#whoName").textContent = ROLE.name; $("#whoRole").textContent = ROLE.role;
  $("#roleSel").innerHTML = ROLES.map(r=>`<option value="${r.id}" ${r.id===ROLE.id?"selected":""}>View as: ${r.name}</option>`).join("");
 }
-function enter(id){ ROLE = ROLES.find(r=>r.id===id)||ROLES[0]; $("#login").hidden=true; $("#login").style.display="none"; $("#shell").hidden=false; drawNav(); if(location.hash.replace("#","")===ROLE.home) render(); else location.hash = ROLE.home; }
+function enter(id){ ROLE = ROLES.find(r=>r.id===id)||ROLES[0]; $("#login").hidden=true; $("#login").style.display="none"; $("#shell").hidden=false; drawNav(); drawGuide(); if(location.hash.replace("#","")===ROLE.home) render(); else location.hash = ROLE.home; }
 
 /* ---------- interactions ---------- */
 function calc(){
@@ -1109,6 +1160,9 @@ document.addEventListener("click", e=>{
   if(d.priv && d.vis!=="c"){ toast("Privileged notes stay with the lawyers. Share a clean copy instead."); return; }
   d.vis = d.vis==="c"?"i":"c"; log(i, `${d.n}: ${d.vis==="c"?"shared with the client":"made lawyers only"} by ${ROLE.name}`);
   toast(d.vis==="c"?"Shared. The client sees it in the app and gets a short notice.":"Lawyers only now. The client no longer sees it."); render(1); return; }
+ const gof = e.target.closest("[data-office]"); if(gof){ S.off=gof.dataset.office; location.hash="matters"; return; }
+ const gsc = e.target.closest("[data-scene]"); if(gsc){ go(+gsc.dataset.scene); return; }
+ const gtg = e.target.closest("[data-guide]"); if(gtg){ S.guide=!S.guide; drawGuide(); return; }
  const asb = e.target.closest("[data-as]"); if(asb){ const v=asb.dataset.as, A=S.as;
   if(v==="toggle"){ A.open=!A.open; drawAsst(); if(A.open){ const t=$("#asT"); if(t) t.focus(); } return; }
   if(v==="send"){ asSend($("#asT").value); return; }
@@ -1221,7 +1275,10 @@ document.addEventListener("change", e=>{
  if(ds.task!==undefined){ const [i,k]=ds.task.split(":").map(Number), t=tasksOf(i)[k]; t.done=e.target.checked?1:0; log(i, `Task ${t.done?"done":"reopened"}: ${t.w}`); toast(t.done?"Done. The partner sees it closed.":"Reopened."); render(1); }
  if(e.target.id==="nFiles"){ S.nFiles=[...e.target.files].map(f=>f.name); const n=$("#nFilesN"); if(n) n.textContent = S.nFiles.length ? plural(S.nFiles.length,"file")+" ready" : ""; }
 });
-document.addEventListener("keydown", e=>{ if(e.target.id==="asT" && e.key==="Enter"){ e.preventDefault(); asSend(e.target.value); } });
+document.addEventListener("keydown", e=>{ if(e.target.id==="asT" && e.key==="Enter"){ e.preventDefault(); asSend(e.target.value); return; }
+ const tag=(e.target.tagName||"").toLowerCase(); if(["input","textarea","select"].includes(tag) || e.metaKey || e.ctrlKey || e.altKey) return;
+ if(/^[0-9]$/.test(e.key)){ e.preventDefault(); go(+e.key); }
+ if(e.key==="Escape"){ if(S.guide){ S.guide=false; drawGuide(); } if(S.as.open){ S.as.open=false; drawAsst(); } } });
 window.addEventListener("hashchange", ()=>{ if(!$("#shell").hidden) render(); });
 
 $("#roles").innerHTML = ROLES.map(r=>`<button type="button" data-role="${r.id}"><b>${esc(r.name)}</b><span>${esc(r.desc)}</span></button>`).join("");
