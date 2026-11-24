@@ -105,6 +105,39 @@ label.f{display:block;font-size:12.5px;color:var(--mute);margin:10px 0 4px}
 footer.demo{color:var(--mute);font-size:12.5px;margin-top:28px;border-top:1px solid var(--line);padding-top:12px}
 .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:12px 18px;border-radius:12px;font-size:14px;z-index:60;opacity:0;transition:.2s;pointer-events:none;max-width:90vw}
 .toast.on{opacity:1}
+/* funnel, documents by stage, dates */
+.fun{display:flex;gap:6px;overflow-x:auto;padding:2px 2px 8px;scrollbar-width:thin;-webkit-overflow-scrolling:touch}
+.fs{flex:1 0 116px;display:flex;flex-direction:column;gap:2px;text-align:left;background:#fff;border:1px solid var(--line);border-radius:10px;padding:8px 10px;color:var(--mute)}
+.fs .fn{font-family:"Courier Prime","Courier New",monospace;font-size:12px}
+.fs .ft{font-size:13px;font-weight:500;line-height:1.25;color:var(--mute)}
+.fs .fc{font-size:11.5px}
+.fs.done{background:var(--gold3);border-color:var(--gold2)}.fs.done .fn{color:#7A5A16}.fs.done .ft{color:var(--text);font-weight:600}
+.fs.cur{background:var(--ink);border-color:var(--ink);color:rgba(255,255,255,.72)}.fs.cur .ft{color:#fff;font-weight:600}
+.fs.sel{outline:2px solid var(--gold);outline-offset:1px}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 10px}
+.chip{border:1px solid var(--line);background:#fff;border-radius:20px;padding:6px 12px;font-size:13px;color:var(--mute);min-height:34px}
+.chip.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.ficon{width:40px;height:46px;border-radius:7px;background:#F1EEE7;display:grid;place-items:center;font:700 10.5px "Courier Prime","Courier New",monospace;color:var(--mute);flex:none;border:1px solid var(--line)}
+.ficon.pdf{color:var(--bad)}.ficon.docx{color:var(--blue)}.ficon.xlsx{color:var(--good)}
+.upl{margin-top:12px;border:1px dashed var(--gold);border-radius:12px;padding:12px;background:#FFFDF7}
+.upl label.btn{display:inline-flex;align-items:center;gap:6px}
+.mbar{height:5px;border-radius:5px;background:#EEE8DC;overflow:hidden;margin-top:5px;max-width:160px}.mbar i{display:block;height:100%;background:var(--gold)}
+.fnl .r{display:grid;grid-template-columns:minmax(110px,210px) 1fr 34px;gap:10px;align-items:center;padding:8px 0;border-bottom:1px solid #F3EFE6}
+.fnl .r:last-child{border-bottom:none}
+.fnl .lb{font-size:13.5px}.fnl .lb b{font-family:"Courier Prime","Courier New",monospace;color:var(--mute);font-weight:400;margin-right:4px}
+.fnl .b{height:22px;border-radius:6px;background:var(--gold2);min-width:6px}
+.fnl .ct{font-family:"Libre Caslon Text",Georgia,serif;font-size:18px;text-align:right}
+.fnl .ms{grid-column:1/-1;display:flex;gap:6px;flex-wrap:wrap}
+.mchip{border:1px solid var(--ink);background:var(--ink);color:#fff;border-radius:8px;padding:5px 9px;font-size:12.5px;text-align:left}
+.vst{list-style:none;margin:8px 0 4px;padding:0}
+.vst li{display:flex;gap:8px;align-items:center;font-size:13px;padding:2px 0;color:var(--mute)}
+.vst li i{width:16px;height:16px;border-radius:50%;border:2px solid #CFC7B6;flex:none;display:grid;place-items:center;font-style:normal;font-size:9px;line-height:1}
+.vst li.d{color:var(--text)}.vst li.d i{background:var(--gold);border-color:var(--gold);color:#fff}
+.vst li.c{color:var(--text);font-weight:700}.vst li.c i{border-color:var(--ink);background:var(--ink)}
+.day{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--mute);font-weight:700;margin:14px 0 2px}
+.day:first-child{margin-top:0}
+.acc td:first-child{width:48%}
+.evf{display:grid;grid-template-columns:1fr 1fr;gap:0 10px}
 @media(max-width:1000px){.g4{grid-template-columns:repeat(2,minmax(0,1fr))}.g3{grid-template-columns:1fr 1fr}}
 @media(max-width:860px){
 .shell{grid-template-columns:1fr}
@@ -131,7 +164,7 @@ table{font-size:13.5px}
 <div class="brand">GM LEGAL PRACTITIONERS</div>
 <h1 id="lg-h">GM Chambers</h1>
 <p class="slogan">Consider it done.</p>
-<p>One system for both offices: matters, court dates, documents, the client account and the clients themselves. Choose who you are for this demonstration.</p>
+<p>One system for both offices: every matter in its stages, the documents of each stage, court dates and meetings, the client account, and the clients themselves. Choose who you are for this demonstration.</p>
 <div class="roles" id="roles"></div>
 <p class="note">Demonstration with invented sample data. No real client, matter or case information is used. Prepared by MIA Technology.</p>
 </div>
@@ -177,8 +210,9 @@ const NAV = [
  {sec:"Practice"},
  {id:"today", t:"Today", r:["partner","associate"]},
  {id:"matters", t:"Matters", r:["partner","associate","criminal"]},
+ {id:"funnel", t:"Case funnel", r:["partner","associate","criminal"]},
  {id:"intake", t:"New client", r:["partner","associate"]},
- {id:"deadlines", t:"Court dates", r:["partner","associate","criminal","clerk"]},
+ {id:"deadlines", t:"Calendar", r:["partner","associate","criminal","clerk"]},
  {id:"criminal", t:"Criminal Desk", r:["partner","criminal"]},
  {id:"recovery", t:"Debt recovery", r:["partner","associate"]},
  {sec:"Money"},
@@ -192,14 +226,14 @@ const NAV = [
 
 /* ---------- sample matters (all invented) ---------- */
 const M = [
- {id:"GM/LSK/2026/0187", t:"First Kafue Bank Ltd v Copperline Traders Ltd and 2 Others", area:"Debt recovery", court:"High Court, Commercial Registry, Lusaka", cause:`${YR}/HPC/0412`, lead:"Freddie Tembo", partner:"Chishimba Kaela", office:"Lusaka", stage:"Scheduling conference", value:4850000, cur:"ZMW", next:{d:W(9),w:"Scheduling conference"}, risk:"t-warn", client:"First Kafue Bank Ltd"},
- {id:"GM/KTW/2026/0061", t:"Zambezi Copper Haulage Ltd v Mwila Transport Ltd", area:"Commercial litigation", court:"High Court, Commercial Registry, Kitwe", cause:`${YR}/HKC/0088`, lead:"Freddie Tembo", partner:"Mukumba Mulele", office:"Kitwe", stage:"Trial", value:1120000, cur:"USD", next:{d:W(15),w:"Trial, day 1"}, risk:"t-good", client:"Zambezi Copper Haulage Ltd"},
- {id:"GM/LSK/2026/0201", t:"Estate of the late Peter Chanda", area:"Probate and succession", court:"High Court, Principal Registry, Lusaka", cause:`${YR}/HP/0977`, lead:"Prisca Banda", partner:"Mukumba Mulele", office:"Lusaka", stage:"Letters of administration", value:2400000, cur:"ZMW", next:{d:W(4),w:"Inventory to beneficiaries"}, risk:"t-good", client:"Chanda family"},
- {id:"GM/LSK/2026/0209", t:"Stand 18832, Lusaka West: sale to Lumbwe Holdings Ltd", area:"Conveyancing", court:"Ministry of Lands · ZILAS", cause:"Lands ref. pending", lead:"Bennet Banda", partner:"Gideon Kalandanya", office:"Lusaka", stage:"Consent to assign", value:1250000, cur:"ZMW", next:{d:W(2),w:"Follow up consent to assign"}, risk:"t-warn", client:"Lumbwe Holdings Ltd"},
- {id:"GM/LSK/2026/0213", t:"Kafue Agro Ltd: employment permits for five staff", area:"Immigration", court:"Department of Immigration", cause:"5 applications", lead:"Natasha Mumba", partner:"Gideon Kalandanya", office:"Lusaka", stage:"Submitted", value:0, cur:"ZMW", next:{d:W(6),w:"Two permits expire within 60 days"}, risk:"t-bad", client:"Kafue Agro Ltd"},
- {id:"GM/LSK/2026/0219", t:"The People v J. Mwale", area:"Criminal defence", court:"Economic and Financial Crimes Court, Lusaka", cause:`${YR}/SSP/EF/114`, lead:"Natasha Mumba", partner:"Criminal Partner", office:"Lusaka", stage:"Bail and disclosure", value:0, cur:"ZMW", next:{d:W(1),w:"Mention, bail variation"}, risk:"t-bad", client:"J. Mwale", restricted:true},
- {id:"GM/LSK/2026/0221", t:"Northgate Insurance Ltd: defence of fire claim", area:"Insurance", court:"Arbitration (CIArb rules)", cause:"Arb. 07/26", lead:"Prisca Banda", partner:"Chishimba Kaela", office:"Lusaka", stage:"Statements of case", value:3600000, cur:"ZMW", next:{d:W(11),w:"Statement of defence due"}, risk:"t-good", client:"Northgate Insurance Ltd"},
- {id:"GM/KTW/2026/0034", t:"Copperbelt Ventures Ltd: company secretarial", area:"Corporate", court:"PACRA", cause:"Annual return", lead:"Natasha Mumba", partner:"Mukumba Mulele", office:"Kitwe", stage:"Annual return", value:0, cur:"ZMW", next:{d:W(19),w:"Annual return to PACRA"}, risk:"t-good", client:"Copperbelt Ventures Ltd"}
+ {id:"GM/LSK/2026/0187", t:"First Kafue Bank Ltd v Copperline Traders Ltd and 2 Others", area:"Debt recovery", court:"High Court, Commercial Registry, Lusaka", cause:`${YR}/HPC/0412`, lead:"Freddie Tembo", partner:"Chishimba Kaela", office:"Lusaka", f:"lit", s:4, value:4850000, cur:"ZMW", next:{d:W(9),w:"Scheduling conference"}, risk:"t-warn", client:"First Kafue Bank Ltd"},
+ {id:"GM/KTW/2026/0061", t:"Zambezi Copper Haulage Ltd v Mwila Transport Ltd", area:"Commercial litigation", court:"High Court, Commercial Registry, Kitwe", cause:`${YR}/HKC/0088`, lead:"Freddie Tembo", partner:"Mukumba Mulele", office:"Kitwe", f:"lit", s:6, value:1120000, cur:"USD", next:{d:W(15),w:"Trial, day 1"}, risk:"t-good", client:"Zambezi Copper Haulage Ltd"},
+ {id:"GM/LSK/2026/0201", t:"Estate of the late Peter Chanda", area:"Probate and succession", court:"High Court, Principal Registry, Lusaka", cause:`${YR}/HP/0977`, lead:"Prisca Banda", partner:"Mukumba Mulele", office:"Lusaka", f:"prob", s:2, value:2400000, cur:"ZMW", next:{d:W(4),w:"Inventory to beneficiaries"}, risk:"t-good", client:"Chanda family"},
+ {id:"GM/LSK/2026/0209", t:"Stand 18832, Lusaka West: sale to Lumbwe Holdings Ltd", area:"Conveyancing", court:"Ministry of Lands · ZILAS", cause:"Lands ref. pending", lead:"Bennet Banda", partner:"Gideon Kalandanya", office:"Lusaka", f:"conv", s:3, value:1250000, cur:"ZMW", next:{d:W(2),w:"Follow up consent to assign"}, risk:"t-warn", client:"Lumbwe Holdings Ltd"},
+ {id:"GM/LSK/2026/0213", t:"Kafue Agro Ltd: employment permits for five staff", area:"Immigration", court:"Department of Immigration", cause:"5 applications", lead:"Natasha Mumba", partner:"Gideon Kalandanya", office:"Lusaka", f:"imm", s:2, value:0, cur:"ZMW", next:{d:W(6),w:"Two permits expire within 60 days"}, risk:"t-bad", client:"Kafue Agro Ltd"},
+ {id:"GM/LSK/2026/0219", t:"The People v J. Mwale", area:"Criminal defence", court:"Economic and Financial Crimes Court, Lusaka", cause:`${YR}/SSP/EF/114`, lead:"Natasha Mumba", partner:"Criminal Partner", office:"Lusaka", f:"crim", s:3, value:0, cur:"ZMW", next:{d:W(1),w:"Mention, bail variation"}, risk:"t-bad", client:"J. Mwale", restricted:true},
+ {id:"GM/LSK/2026/0221", t:"Northgate Insurance Ltd: defence of fire claim", area:"Insurance", court:"Arbitration (CIArb rules)", cause:"Arb. 07/26", lead:"Prisca Banda", partner:"Chishimba Kaela", office:"Lusaka", f:"arb", s:2, value:3600000, cur:"ZMW", next:{d:W(11),w:"Statement of defence due"}, risk:"t-good", client:"Northgate Insurance Ltd"},
+ {id:"GM/KTW/2026/0034", t:"Copperbelt Ventures Ltd: company secretarial", area:"Corporate", court:"PACRA", cause:"Annual return", lead:"Natasha Mumba", partner:"Mukumba Mulele", office:"Kitwe", f:"corp", s:1, value:0, cur:"ZMW", next:{d:W(19),w:"Annual return to PACRA"}, risk:"t-good", client:"Copperbelt Ventures Ltd"}
 ];
 const HEAR = [
  {d:W(0), time:"09:00", m:M[2], what:"Application for letters of administration", who:"Prisca Banda", where:"Lusaka High Court, Chambers"},
@@ -229,16 +263,78 @@ const INV = [
  {n:"Draft", c:"Estate of the late Peter Chanda", amt:18600, st:"Pre-bill review", zra:false, age:0}
 ];
 
+/* ---------- the funnel: the stages of each kind of matter ---------- */
+const FLOW = {
+ lit:{n:"Litigation", s:["Instructions","Letter of demand","Writ and statement of claim","Appearance and defence","Scheduling conference","Discovery and inspection","Trial","Judgment","Enforcement or appeal"], firm:[5,9,12,10,8,7,6,4,3], note:"4 matters have sat at Appearance and defence for more than 30 days. Default judgment may be open in some of them."},
+ crim:{n:"Criminal defence", s:["Arrest and police bond","First appearance and plea","Bail","Disclosure","Trial","Judgment and sentence","Appeal"], firm:[2,3,2,3,2,1,1], note:"2 clients are still waiting for full disclosure. The requests went out more than 14 days ago."},
+ conv:{n:"Conveyancing", s:["Instructions and KYC","Searches at Lands","Contract of sale","Consent to assign","Property transfer tax","Assignment lodged","Title registered"], firm:[4,5,6,7,3,4,2], note:"Consent to assign is the slowest step: 7 files, 3 of them waiting more than 30 days."},
+ prob:{n:"Probate", s:["Instructions","Petition filed","Letters of administration","Inventory and accounts","Distribution","Final accounts"], firm:[1,2,2,1,1,1], note:"One estate has its hearing for letters of administration today."},
+ arb:{n:"Arbitration", s:["Instructions","Notice of arbitration","Statements of case","Disclosure","Hearing","Award"]},
+ imm:{n:"Immigration", s:["Instructions","Documents collected","Submitted","Decision","Renewal watch"]},
+ corp:{n:"Corporate", s:["Instructions","Documents prepared","Filed with PACRA","Confirmed"]}
+};
+
+/* ---------- documents, filed under the stage they belong to ---------- */
+const dc = (st,n,by,d,vis,x={}) => Object.assign({st,n,by,d:D(d),vis,v:1},x);
+const DOCS = {
+ 0:[dc(0,"Engagement letter, signed.pdf","First Kafue Bank Ltd",-96,"c",{from:1}),dc(0,"Facility agreement and guarantees.pdf","First Kafue Bank Ltd",-95,"c",{from:1}),dc(0,"Statement of account, 3 defendants.xlsx","First Kafue Bank Ltd",-95,"c",{from:1}),
+    dc(1,"Letter of demand, signed.pdf","Freddie Tembo",-74,"c"),dc(1,"Proof of service on all 3 defendants.pdf","Court Clerk",-73,"i"),
+    dc(2,"Writ of summons and statement of claim.pdf","Freddie Tembo",-52,"c"),dc(2,"Affidavit of service.pdf","Court Clerk",-50,"i"),
+    dc(3,"Defence of the 1st and 2nd defendants.pdf","Court Clerk",-38,"c"),dc(3,"Partner notes on the defence.docx","Chishimba Kaela",-36,"i",{priv:1}),
+    dc(4,"Order for directions.pdf","Court Clerk",-12,"c"),dc(4,"Scheduling conference brief.docx","Prisca Banda",-1,"i",{draft:1,v:2})],
+ 1:[dc(2,"Writ and statement of claim.pdf","Freddie Tembo",-140,"c"),dc(3,"Defence and counterclaim.pdf","Court Clerk",-120,"c"),dc(5,"Agreed bundle of documents.pdf","Freddie Tembo",-30,"c",{v:3}),dc(5,"Witness statement, operations manager.pdf","Freddie Tembo",-25,"c"),dc(6,"Notice of trial dates.pdf","Court Clerk",-10,"c"),dc(6,"Cross-examination plan.docx","Mukumba Mulele",-2,"i",{priv:1})],
+ 2:[dc(0,"Death certificate.pdf","Chanda family",-60,"c",{from:1}),dc(1,"Petition for letters of administration.pdf","Prisca Banda",-40,"c"),dc(2,"Affidavit of the administrator.pdf","Prisca Banda",-6,"c")],
+ 3:[dc(0,"Engagement letter, signed.pdf","Lumbwe Holdings Ltd",-40,"c",{from:1}),dc(0,"Director NRCs and PACRA printout.pdf","Lumbwe Holdings Ltd",-40,"c",{from:1}),dc(1,"Search results, Lands register.pdf","Bennet Banda",-33,"c"),dc(2,"Contract of sale, signed by both.pdf","Bennet Banda",-24,"c",{v:2}),dc(3,"Consent to assign application, lodged.pdf","Court Clerk",-17,"c"),dc(3,"Lands receipt.pdf","Court Clerk",-17,"i")],
+ 4:[dc(1,"Passports and CVs, 5 staff.pdf","Kafue Agro Ltd",-30,"c",{from:1}),dc(2,"Applications as submitted.pdf","Natasha Mumba",-14,"c")],
+ 5:[dc(0,"Warn and caution statement, notes.pdf","Natasha Mumba",-30,"i",{priv:1}),dc(0,"Police bond.pdf","Natasha Mumba",-29,"c"),dc(1,"Charge sheet.pdf","Court Clerk",-25,"c"),dc(2,"Bail ruling.pdf","Court Clerk",-20,"c"),dc(3,"Prosecution statements PW1 to PW8.pdf","Natasha Mumba",-9,"i"),dc(3,"Defence case theory.docx","Criminal Partner",-3,"i",{priv:1})],
+ 6:[dc(1,"Notice of arbitration.pdf","Court Clerk",-45,"c"),dc(2,"Claimant's statement of case.pdf","Prisca Banda",-20,"c"),dc(2,"Statement of defence.docx","Prisca Banda",-2,"i",{draft:1,v:2})],
+ 7:[dc(0,"Engagement letter, signed.pdf","Copperbelt Ventures Ltd",-50,"c",{from:1}),dc(1,"Annual return.pdf","Natasha Mumba",-3,"i",{draft:1})]
+};
+
+/* ---------- dates: court, preparation meetings with the client, deadlines ---------- */
+const ev = (d,t,k,w,where,c,notes) => ({d,t,k,w,where,c,notes});
+const EV = {
+ 0:[ev(W(-12),"09:00","court","Hearing for directions","Lusaka High Court, Commercial Registry",true,{what:"The judge gave directions and fixed the scheduling conference. The 1st and 2nd defendants were represented. The 3rd defendant did not appear.",orders:"Scheduling conference fixed. Each side files a brief at least 7 days before it.",client:"The court gave directions and set the next step, a scheduling conference. We will meet your team before it to prepare.",shared:true,by:"Freddie Tembo"}),
+    ev(W(2),"17:00","dl","Scheduling conference brief to be filed","Commercial Registry, Lusaka",false),ev(W(6),"10:00","prep","Preparation meeting with the bank's recoveries team","GM Legal, Lusaka · boardroom",true),ev(W(9),"09:30","court","Scheduling conference","Lusaka High Court, Commercial Registry",true),ev(W(30),"09:00","court","Application for default judgment, 3rd defendant","Lusaka High Court, Chambers",true)],
+ 1:[ev(W(0),"10:30","court","Status conference","Kitwe High Court, Court 2",true),ev(W(10),"14:00","prep","Witness preparation with the operations manager","GM Legal, Kitwe",true),ev(W(15),"09:00","court","Trial, day 1","Kitwe High Court, Court 2",true),ev(W(16),"09:00","court","Trial, day 2","Kitwe High Court, Court 2",true)],
+ 2:[ev(W(0),"09:00","court","Application for letters of administration","Lusaka High Court, Chambers",true),ev(W(4),"","dl","Inventory to beneficiaries","",false),ev(W(7),"15:00","prep","Family meeting: the inventory and next steps","GM Legal, Lusaka",true)],
+ 3:[ev(W(2),"","dl","Follow up consent to assign","Ministry of Lands",false),ev(W(5),"11:00","prep","Signing meeting: assignment and property transfer tax forms","GM Legal, Lusaka",true),ev(W(12),"","dl","Property transfer tax payable to ZRA (estimate)","",true)],
+ 4:[ev(W(6),"","dl","Two permits expire within 60 days: tell the client","",false)],
+ 5:[ev(W(-20),"09:00","court","Bail application","Lusaka, EFC Court 1",true,{what:"Bail opposed by the State on flight risk. The court accepted two sureties and the surrender of the passport.",orders:"Bail of K50,000 with two sureties. Report to Lusaka Central every Monday. Passport surrendered.",client:"You were granted bail. You must report to Lusaka Central Police every Monday. Your passport stays with the court.",shared:true,by:"Criminal Partner"}),
+    ev(W(1),"09:00","court","Mention, bail variation","Lusaka, EFC Court 1",true),ev(W(4),"16:00","prep","Trial preparation with the client","GM Legal, Lusaka · private room",true),ev(W(24),"09:00","court","Trial, day 1","Lusaka, EFC Court 1",true)],
+ 6:[ev(W(8),"10:00","prep","Review of the draft defence with the insurer","Online",true),ev(W(11),"","dl","Statement of defence due","Tribunal",false)],
+ 7:[ev(W(19),"","dl","Annual return to PACRA","PACRA",false)]
+};
+
 /* ---------- state ---------- */
 let ROLE = ROLES[0];
-const S = {intake:0, conflictDecision:"", kyc:{id:false,addr:false,bo:false}, engaged:false, transfer:null, arrest: (()=>{const d=new Date(); d.setHours(d.getHours()-11, d.getMinutes()-20); return d;})(), consent:false, briefApproved:false, paid:false};
+const S = {intake:0, conflictDecision:"", kyc:{id:false,addr:false,bo:false}, engaged:false, transfer:null, arrest: (()=>{const d=new Date(); d.setHours(d.getHours()-11, d.getMinutes()-20); return d;})(), consent:false, briefApproved:false, paid:false,
+ docs:DOCS, ev:EV, req:{0:[{n:"Updated statement of account for the 3rd defendant",done:0}],3:[{n:"Copy of the ZRA property transfer tax clearance",done:0}]}, dsel:{}, conf:{}, pc:3, calF:"all", funA:"lit", hist:{}, noteOpen:null};
 
 /* ---------- helpers ---------- */
 const $ = s => document.querySelector(s);
 const toast = msg => { const t=$("#toast"); t.textContent=msg; t.classList.add("on"); clearTimeout(toast.h); toast.h=setTimeout(()=>t.classList.remove("on"),2600); };
 const mLink = m => `<span class="case">${esc(m.id)}</span>`;
 const tagRisk = m => `<span class="tag ${m.risk}">${m.risk==="t-bad"?"Needs attention":m.risk==="t-warn"?"Watch":"On track"}</span>`;
+const FS = m => FLOW[m.f].s;
+const stName = m => FS(m)[m.s];
+const canEdit = () => ["partner","associate","criminal"].includes(ROLE.id);
+const canSee = m => !(m.restricted && !["partner","criminal"].includes(ROLE.id));
+const ext = n => { const x=(n.split(".").pop()||"").toLowerCase(); return ["pdf","docx","xlsx","doc","xls","jpg","jpeg","png","heic"].includes(x)?x:"file"; };
+const evTag = k => k==="court"?'<span class="tag t-blue">Court</span>':k==="prep"?'<span class="tag t-gold">Prep meeting</span>':'<span class="tag t-mute">Deadline</span>';
+const evWhen = e => `${fd(e.d)}${e.t?" · "+e.t:""}`;
+const upcoming = i => (S.ev[i]||[]).map((e,k)=>({...e,k2:k})).filter(e=>e.d>=T0).sort((a,b)=>a.d-b.d||String(a.t||"99").localeCompare(String(b.t||"99")));
+const held = i => (S.ev[i]||[]).map((e,k)=>({...e,k2:k})).filter(e=>e.d<=T0 && e.k!=="dl").sort((a,b)=>b.d-a.d);
+const log = (i,t) => (S.hist[i]=S.hist[i]||[]).unshift({d:new Date(), t});
+const plural = (n,w) => `${n} ${w}${n===1?"":"s"}`;
 const foot = `<footer class="demo">Demonstration only. Every client, matter, case number and figure here is invented. Prepared by MIA Technology for GM Legal Practitioners.</footer>`;
+
+/* ---------- sample voice-note drafts for notes after a hearing ---------- */
+const VOICE = {
+ 1:{what:"Status conference before the judge in Kitwe. Both sides confirmed they are ready for trial. The defendant asked to call one more witness; we did not object, on condition the statement is served within 7 days.", orders:"Trial dates confirmed. The defendant serves the extra witness statement within 7 days. Agreed bundle to be filed 5 days before trial.", client:"The court confirmed the trial dates. The other side may call one more witness, and we will receive that statement within a week."},
+ 2:{what:"The application for letters of administration was heard in chambers. The judge was satisfied with the affidavit and the consent of the beneficiaries.", orders:"Letters of administration to issue. Inventory to the beneficiaries within 30 days.", client:"The court approved the application. The letters of administration will be issued and we will send the family the inventory."},
+ def:{what:"The matter came up as listed and both sides appeared.", orders:"Adjourned. Next date to be fixed by the registry.", client:"The court heard the matter today. We will tell you the next date as soon as it is fixed."}
+};
 
 /* ---------- views ---------- */
 const V = {};
@@ -255,7 +351,7 @@ V.today = () => {
  </div>
  <div class="grid g2" style="margin-top:16px">
   <div class="card"><h3>Today in court <small>${HEAR.filter(h=>h.d.getTime()===T0.getTime()).length} hearings</small></h3><div class="list">
-  ${HEAR.map(h=>`<div class="it"><div class="when">${h.d.getTime()===T0.getTime()?h.time:fd(h.d).slice(0,6)}</div><div><div class="ttl">${esc(h.what)}</div><div class="small muted">${esc(h.m.t)}</div><div class="small">${esc(h.where)} · ${esc(h.who)}</div></div></div>`).join("")}
+  ${HEAR.map(h=>`<div class="it"><div class="when">${h.d.getTime()===T0.getTime()?h.time:fd(h.d).slice(0,6)}</div><div><div class="ttl">${esc(h.what)}</div><div class="small muted">${canSee(h.m)?esc(h.m.t):"Restricted matter"}</div><div class="small">${esc(h.where)} · ${canSee(h.m)?esc(h.who):"criminal team"}</div></div></div>`).join("")}
   </div></div>
   <div class="card"><h3>Deadlines that matter <small>owner and backup on each</small></h3><div class="list">
   ${DL.map(x=>`<div class="it"><div class="when">${fd(x.d).slice(0,6)}</div><div style="flex:1"><div class="ttl">${esc(x.w)} <span class="tag ${x.st}">${esc(x.s)}</span></div><div class="small muted">${esc(x.m.t)}</div><div class="small">${esc(x.who)} · backup ${esc(x.back)}</div></div></div>`).join("")}
@@ -268,36 +364,89 @@ V.today = () => {
 };
 
 V.matters = () => {
- const list = ROLE.id==="criminal" ? M.filter(m=>m.area==="Criminal defence") : M;
- return `<h2 class="page">Matters</h2><p class="sub">Every matter has an owner, a backup, a stage and a next date. Restricted matters show only to their team.</p>
- <div class="card" style="overflow-x:auto"><table><thead><tr><th>Matter</th><th class="hide-sm">Area</th><th class="hide-sm">Court and number</th><th>Next</th><th>Status</th></tr></thead><tbody>
- ${list.map((m,i)=>`<tr class="click" data-matter="${M.indexOf(m)}"><td><div class="ttl">${esc(m.t)}${m.restricted?' <span class="tag t-bad">Restricted</span>':""}</div>${mLink(m)} · <span class="small">${esc(m.lead)}</span></td><td class="hide-sm">${esc(m.area)}</td><td class="hide-sm small">${esc(m.court)}<br><span class="case">${esc(m.cause)}</span></td><td class="small"><b>${fd(m.next.d)}</b><br>${esc(m.next.w)}</td><td>${tagRisk(m)}</td></tr>`).join("")}
+ const list = M.filter(m => canSee(m) && (ROLE.id==="criminal" ? m.f==="crim" : true));
+ return `<h2 class="page">Matters</h2><p class="sub">Every matter has an owner, a backup, a stage in its funnel and a next date. Restricted matters show only to their team.</p>
+ <div class="card" style="overflow-x:auto"><table><thead><tr><th>Matter</th><th class="hide-sm">Court and number</th><th>Stage</th><th>Next</th></tr></thead><tbody>
+ ${list.map(m=>{ const n=FS(m).length; return `<tr class="click" data-matter="${M.indexOf(m)}"><td><div class="ttl">${esc(m.t)}${m.restricted?' <span class="tag t-bad">Restricted</span>':""}</div>${mLink(m)} · <span class="small">${esc(m.lead)}</span><div style="margin-top:4px">${tagRisk(m)}</div></td><td class="hide-sm small">${esc(m.court)}<br><span class="case">${esc(m.cause)}</span></td><td class="small"><b>${m.s+1} of ${n}</b> · ${esc(stName(m))}<div class="mbar"><i style="width:${(m.s+1)/n*100}%"></i></div></td><td class="small"><b>${fd(m.next.d)}</b><br>${esc(m.next.w)}</td></tr>`; }).join("")}
  </tbody></table></div>${foot}`;
 };
 
+const stepper = i => { const m=M[i], sel=S.dsel[i]; return `<div class="fun">${FS(m).map((s,k)=>{ const n=(S.docs[i]||[]).filter(d=>d.st===k).length; return `<button type="button" class="fs ${k<m.s?"done":k===m.s?"cur":""}${sel===k?" sel":""}" data-fst="${i}:${k}" aria-pressed="${sel===k}" aria-label="Stage ${k+1}, ${esc(s)}${k<m.s?", done":k===m.s?", current stage":""}, ${plural(n,"document")}"><span class="fn">${k<m.s?"✓ done":k===m.s?"now":"stage "+(k+1)}</span><span class="ft">${esc(s)}</span><span class="fc">${n?plural(n,"document"):"no documents"}</span></button>`; }).join("")}</div>`; };
+
+const docRow = (i,k,d) => `<div class="it"><div class="ficon ${ext(d.n)}">${ext(d.n).toUpperCase().slice(0,4)}</div><div style="flex:1"><div style="font-weight:500;overflow-wrap:anywhere">${esc(d.n)}</div>
+ <div class="small muted">${d.from?"From the client":esc(d.by)} · ${fdy(d.d)}${d.v>1?` · version ${d.v}, earlier versions kept`:""}</div>
+ <div class="row" style="gap:5px;margin-top:5px">${d.vis==="c"?'<span class="tag t-good">Client can see</span>':'<span class="tag t-mute">Lawyers only</span>'}${d.priv?'<span class="tag t-bad">Privileged</span>':""}${d.draft?'<span class="tag t-gold">Draft</span>':""}${d.from?'<span class="tag t-blue">From the client</span>':""}${d.isNew?'<span class="tag t-gold">New</span>':""}</div>
+ ${canEdit()?`<div class="row" style="gap:6px;margin-top:7px"><button type="button" class="btn b-line" style="min-height:34px;padding:5px 10px;font-size:13px" data-share="${i}:${k}">${d.vis==="c"?"Make internal":"Share with client"}</button><label class="btn b-line" style="min-height:34px;padding:5px 10px;font-size:13px">Upload new version<input type="file" hidden data-ver="${i}:${k}"></label></div>`:""}</div></div>`;
+
+const groupDocs = (i,shown) => { let last=-1, out=""; shown.forEach(x=>{ if(x.d.st!==last){ out+=`<div class="day">${esc(FS(M[i])[x.d.st])}</div>`; last=x.d.st; } out+=docRow(i,x.k,x.d); }); return out; };
+
 V.matter = i => {
- const m = M[i]; const isBank = i===0;
+ const m = M[i]; const isBank = i===0; const F = FS(m);
+ const sel = S.dsel[i]; const showAll = sel==="all"; const st = (sel===undefined||showAll) ? m.s : sel;
+ const docs = (S.docs[i]||[]).map((d,k)=>({d,k}));
+ const shown = showAll ? docs.slice().sort((a,b)=>a.d.st-b.d.st) : docs.filter(x=>x.d.st===st);
  const tl = isBank ? [
-  {d:W(-74), t:"Letter of demand served on all three defendants", f:false},
-  {d:W(-52), t:"Writ and statement of claim filed and served", f:false},
-  {d:W(-38), t:"Appearance and defence filed by the 1st and 2nd defendants", f:false},
-  {d:W(-12), t:"Order for directions: scheduling conference fixed", f:false},
-  {d:W(2), t:"Scheduling conference brief due (7 days before)", f:true},
-  {d:W(9), t:"Scheduling conference", f:true}
- ] : [{d:W(-20), t:"Instructions received and engagement signed", f:false},{d:m.next.d, t:m.next.w, f:true}];
+  {d:W(-74), t:"Letter of demand served on all three defendants"},
+  {d:W(-52), t:"Writ and statement of claim filed and served"},
+  {d:W(-38), t:"Appearance and defence filed by the 1st and 2nd defendants"},
+  {d:W(-12), t:"Hearing for directions: scheduling conference fixed"}
+ ] : [{d:W(-20), t:"Instructions received and engagement signed"}];
+ const up = upcoming(i), past = held(i).slice(0,4), reqs = S.req[i]||[];
+ const noteForm = key => `<div class="upl" style="margin-top:8px"><div class="row" style="justify-content:space-between"><b class="small">Notes after ${esc(S.ev[i][key].w.toLowerCase())}</b><button type="button" class="btn b-line" style="min-height:32px;padding:4px 10px;font-size:13px" data-act="voiceDraft" data-i="${i}" data-k="${key}">Draft from a voice note</button></div>
+   <label class="f" for="nWhat">What happened</label><textarea id="nWhat" rows="5"></textarea>
+   <label class="f" for="nOrd">Orders made and next steps</label><textarea id="nOrd" rows="3"></textarea>
+   <label class="f" for="nCli">Short update for the client (plain words)</label><textarea id="nCli" rows="3"></textarea>
+   <label class="row small" style="gap:8px;margin-top:8px"><input type="checkbox" id="nShare" checked> Send the update to the client's app</label>
+   <div class="evf"><div><label class="f" for="nNext">Next date set by the court</label><input type="date" id="nNext"></div><div><label class="f" for="nNextW">For</label><input type="text" id="nNextW" placeholder="e.g. Continued hearing"></div></div>
+   <label class="f">Order, ruling or updated documents</label><label class="btn b-line" style="display:inline-flex">Attach files<input type="file" multiple hidden id="nFiles"></label> <span class="small muted" id="nFilesN"></span>
+   <div class="row" style="margin-top:12px"><button type="button" class="btn b-ink" data-act="saveNotes" data-i="${i}" data-k="${key}">Save notes</button><button type="button" class="btn b-line" data-act="closeNotes">Cancel</button></div></div>`;
  return `<p class="small"><a href="#matters" style="color:var(--mute)">← Matters</a></p>
  <h2 class="page" style="font-size:25px">${esc(m.t)}</h2><p class="sub">${mLink(m)} · ${esc(m.area)} · ${esc(m.court)} · <span class="case">${esc(m.cause)}</span></p>
- <div class="grid g3">
+ <div class="card"><h3>Where the matter is <small>stage ${m.s+1} of ${F.length} · ${esc(stName(m))}</small></h3>${stepper(i)}
+  <div class="row" style="justify-content:space-between;margin-top:6px"><span class="small muted">Tap a stage to see its documents. The client sees the same stages in the app, without internal notes.</span>${canEdit()&&m.s<F.length-1?`<button type="button" class="btn b-ink" data-act="nextStage" data-i="${i}">Move to “${esc(F[m.s+1])}”</button>`:""}</div></div>
+ <div class="grid g3" style="margin-top:16px">
   <div class="card"><h3>Team</h3><div class="small">Partner: <b>${esc(m.partner)}</b><br>Handling: <b>${esc(m.lead)}</b><br>Office: ${esc(m.office)}<br>Client: ${esc(m.client)}</div></div>
   <div class="card"><h3>Value</h3><div class="kpi"><div class="v">${m.value?(m.cur==="USD"?"US$"+m.value.toLocaleString("en-US"):K(m.value)):"Fixed fee"}</div><div class="l">${isBank?"Claimed, with interest at the contract rate":"Matter value"}</div></div></div>
   <div class="card"><h3>Money</h3><div class="small">Work in progress: <b>K38,250</b><br>Billed: <b>K68,400</b> · paid<br>Client account: <b>${K((LEDGER.find(l=>l.m===m.id)||{bal:0}).bal)}</b></div></div>
  </div>
  <div class="grid g2" style="margin-top:16px">
-  <div class="card"><h3>Timeline <small>past and next steps</small></h3><div class="tl">${tl.map(e=>`<div class="e ${e.f?"fut":""}"><div class="small muted">${fdy(e.d)}</div><div>${esc(e.t)}</div></div>`).join("")}</div></div>
-  <div class="card"><h3>Documents <small>${isBank?"14 files":"3 files"}</small></h3><div class="list">
-   ${(isBank?["Letter of demand, signed and served.pdf","Writ and statement of claim.pdf","Defence of 1st and 2nd defendants.pdf","Order for directions.pdf","Scheduling conference brief, draft 2.docx"]:["Engagement letter, signed.pdf","Client instructions.docx","KYC pack.pdf"]).map((f,k)=>`<div class="it"><div class="when">${k===4?"Draft":"Final"}</div><div>${esc(f)}</div></div>`).join("")}
+  <div class="card"><h3>Documents <small>${showAll?`all stages · ${docs.length}`:esc(F[st])}</small></h3>
+   <div class="chips"><button type="button" class="chip ${!showAll?"on":""}" data-fst="${i}:${st}">${esc(F[st])}</button><button type="button" class="chip ${showAll?"on":""}" data-dall="${i}">All stages · ${docs.length}</button></div>
+   <div class="list">${shown.length?(showAll?groupDocs(i,shown):shown.map(x=>docRow(i,x.k,x.d)).join("")):`<p class="small muted">No documents at this stage yet.</p>`}</div>
+   ${canEdit()?`<div class="upl"><div class="small" style="margin-bottom:8px"><b>Upload to “${esc(F[showAll?m.s:st])}”</b></div>
+    <div class="row"><select class="f" id="upVis" style="width:auto" aria-label="Who can see the upload"><option value="i">Lawyers only</option><option value="c">Lawyers and the client</option></select>
+    <label class="btn b-ink">Choose files<input type="file" multiple hidden data-up="${i}"></label></div>
+    <div class="small muted" style="margin-top:8px">On the phone this opens the camera too: photograph a stamped copy at the registry and it lands here. Demonstration: files stay on your device.</div></div>
+   <div style="margin-top:12px"><label class="f" for="reqTxt" style="margin-top:0">Ask the client for a document</label><div class="row" style="flex-wrap:nowrap"><input type="text" id="reqTxt" placeholder="e.g. Signed board resolution"><button type="button" class="btn b-line" data-act="askClient" data-i="${i}">Ask</button></div>
+    ${reqs.length?`<div class="list small" style="margin-top:6px">${reqs.map(r=>`<div class="it"><span class="tag ${r.done?"t-good":"t-warn"}">${r.done?"Received":"Waiting"}</span><div>${esc(r.n)}</div></div>`).join("")}</div>`:""}</div>`:""}
+   <div class="ai" style="margin-top:12px"><div class="lab">Assistant</div><p class="small" style="margin:6px 0 0">${isBank?"The 3rd defendant has not entered appearance. Default judgment against the 3rd defendant can be considered. Draft application prepared for review.":"No action needed this week."}</p></div></div>
+  <div class="card"><h3>Coming up <small>court, meetings, deadlines</small></h3>
+   <div class="list">${up.length?up.map(e=>`<div class="it"><div class="when">${fd(e.d).slice(0,6)}${e.t?`<br>${e.t}`:""}</div><div style="flex:1"><div class="ttl">${esc(e.w)}</div><div class="small muted">${esc(e.where||"")}</div><div class="row" style="gap:5px;margin-top:4px">${evTag(e.k)}${e.c?'<span class="tag t-good">Client sees it</span>':'<span class="tag t-mute">Team only</span>'}${e.k==="prep"&&S.conf[i+"-"+e.k2]?'<span class="tag t-good">Client confirmed</span>':""}</div></div></div>`).join(""):`<p class="small muted">Nothing scheduled.</p>`}</div>
+   ${canEdit()?`<div class="upl"><div class="small"><b>Add a date</b></div>
+    <div class="evf"><div><label class="f" for="evK">Type</label><select class="f" id="evK"><option value="court">Court date</option><option value="prep">Preparation meeting with the client</option><option value="dl">Deadline</option></select></div>
+    <div><label class="f" for="evW">What</label><input type="text" id="evW" placeholder="e.g. Hearing of the application"></div>
+    <div><label class="f" for="evD">Date</label><input type="date" id="evD" value="${iso(W(14))}"></div><div><label class="f" for="evT">Time</label><input type="text" id="evT" placeholder="09:00"></div></div>
+    <label class="f" for="evP">Where</label><input type="text" id="evP" placeholder="Court and room, or the firm's office">
+    <label class="row small" style="gap:8px;margin-top:8px"><input type="checkbox" id="evC" checked> Show it to the client, with reminders 3 days and 1 day before</label>
+    <div class="row" style="margin-top:10px"><button type="button" class="btn b-ink" data-act="addEv" data-i="${i}">Add date</button></div></div>`:""}
   </div>
-  <div class="ai" style="margin-top:10px"><div class="lab">Assistant</div><p class="small" style="margin:6px 0 0">${isBank?"The 3rd defendant has not entered appearance. Default judgment against the 3rd defendant can be considered. Draft application prepared for review.":"No action needed this week."}</p></div></div>
+ </div>
+ <div class="card" style="margin-top:16px"><h3>After the hearing <small>notes, orders and the update to the client</small></h3>
+  ${past.length?past.map(e=>`<div class="sheet" style="margin-top:0;margin-bottom:10px"><div class="row" style="justify-content:space-between"><div><div class="ttl">${esc(e.w)}</div><div class="small muted">${fdy(e.d)}${e.t?" · "+e.t:""} · ${esc(e.where||"")}</div></div>${e.notes?'<span class="tag t-good">Notes written</span>':'<span class="tag t-warn">Notes due today</span>'}</div>
+   ${e.notes?`<div class="small" style="margin-top:8px"><b>What happened.</b> ${esc(e.notes.what)}<br><b>Orders and next steps.</b> ${esc(e.notes.orders)}</div>${e.notes.client?`<div class="result ${e.notes.shared?"ok":""} small" style="margin-top:8px"><b>${e.notes.shared?"Sent to the client":"Update for the client, not sent"}:</b> ${esc(e.notes.client)}</div>`:""}<div class="small muted" style="margin-top:6px">Written by ${esc(e.notes.by)}${e.notes.files?` · ${plural(e.notes.files,"document")} attached`:""}</div>`
+   : (canEdit() ? (S.noteOpen===i+"-"+e.k2 ? noteForm(e.k2) : `<div class="row" style="margin-top:8px"><button type="button" class="btn b-gold" data-act="openNotes" data-i="${i}" data-k="${e.k2}">Write notes</button><span class="small muted">Until notes are in, the partner sees this as open.</span></div>`) : "")}</div>`).join("")
+  :`<p class="small muted">No hearing or meeting has taken place yet. After each one, the lawyer writes what happened, the orders and the next date, attaches the order, and sends the client a short update.</p>`}
+ </div>
+ <div class="grid g2" style="margin-top:16px">
+  <div class="card" style="overflow-x:auto"><h3>Who can see this matter</h3><table class="acc"><tbody>
+   <tr><td><b>${esc(m.partner)}</b><br><span class="small muted">Partner</span></td><td class="small">Everything</td></tr>
+   <tr><td><b>${esc(m.lead)}</b><br><span class="small muted">Handling</span></td><td class="small">Everything</td></tr>
+   <tr><td>Other lawyers in the firm</td><td class="small">${m.restricted?"Nothing. This matter is restricted.":"Name, number and next date only"}</td></tr>
+   <tr><td>Court clerk</td><td class="small">Court dates and filings to run</td></tr>
+   <tr><td>Accounts</td><td class="small">Money on this matter only</td></tr>
+   <tr><td><b>${esc(m.client)}</b><br><span class="small muted">Client, in the app</span></td><td class="small">The stages, the dates marked for the client, the updates after hearings, and documents marked “Client can see”. Never privileged notes.</td></tr>
+  </tbody></table><p class="small muted" style="margin:10px 0 0">Every view, download and share is recorded with the person and the time.</p></div>
+  <div class="card"><h3>History</h3><div class="tl">${(S.hist[i]||[]).map(h=>`<div class="e"><div class="small muted">Today</div><div>${esc(h.t)}</div></div>`).join("")}${tl.slice().reverse().map(e=>`<div class="e"><div class="small muted">${fdy(e.d)}</div><div>${esc(e.t)}</div></div>`).join("")}</div></div>
  </div>${foot}`;
 };
 
@@ -331,18 +480,51 @@ V.intake = () => {
  <div class="steps">${steps.map((s,k)=>`<span class="${k<st?"done":k===st?"cur":""}">${k<st?"✓ ":""}${s}</span>`).join("")}</div>${body}${foot}`;
 };
 
-V.deadlines = () => `<h2 class="page">Court dates</h2><p class="sub">Dates are calculated from rules the partners approve. Nothing is deleted; a date is closed with a reason.</p>
+const calItems = () => { const lim=new Date(T0); lim.setDate(lim.getDate()+35); const out=[];
+ M.forEach((m,i)=>{ if(ROLE.id==="associate" && m.restricted) return; if(ROLE.id==="criminal" && m.f!=="crim") return;
+  (S.ev[i]||[]).forEach(e=>{ if(e.d<T0||e.d>lim) return; if(ROLE.id==="clerk" && e.k==="prep") return; out.push({...e,i,m}); }); });
+ return out.sort((a,b)=>a.d-b.d||String(a.t||"99").localeCompare(String(b.t||"99"))); };
+
+V.deadlines = () => {
+ const all = calItems(), f = S.calF, items = all.filter(e=>f==="all"||e.k===f);
+ const masked = e => e.m.restricted && ROLE.id==="clerk";
+ let last = "", list = "";
+ items.forEach(e=>{ const day = fd(e.d); if(day!==last){ list += `<div class="day">${e.d.getTime()===T0.getTime()?"Today · ":""}${day}</div>`; last = day; }
+  list += `<div class="it"><div class="when">${e.t||"—"}</div><div style="flex:1"><div class="ttl">${esc(e.w)}</div><div class="small">${masked(e)?"Restricted matter":(canEdit()?`<a href="#m-${e.i}" style="color:inherit">${esc(e.m.t)}</a>`:esc(e.m.t))}</div><div class="small muted">${esc(e.where||"")}${e.where?" · ":""}${esc(e.m.lead)}</div><div class="row" style="gap:5px;margin-top:4px">${evTag(e.k)}${e.c&&!masked(e)?'<span class="tag t-good">Client reminded</span>':""}</div></div></div>`; });
+ const cnt = k => all.filter(e=>k==="all"||e.k===k).length;
+ const chips = [["all","All"],["court","Court"],["prep","Prep meetings"],["dl","Deadlines"]].filter(([k])=>!(ROLE.id==="clerk"&&k==="prep"));
+ return `<h2 class="page">Calendar</h2><p class="sub">Court dates, preparation meetings with clients and deadlines for every matter, in one place. Each lawyer also gets their own dates in the phone calendar.</p>
+ <div class="chips">${chips.map(([k,l])=>`<button type="button" class="chip ${f===k?"on":""}" data-cal="${k}">${l} · ${cnt(k)}</button>`).join("")}</div>
  <div class="grid g2">
+  <div class="card"><h3>Next 5 weeks <small>${plural(items.length,"item")}</small></h3><div class="list">${list||'<p class="small muted">Nothing in this view.</p>'}</div></div>
+  <div>
   <div class="card"><h3>Try the rule engine <small>appearance and defence</small></h3>
    <label class="f" for="srv">Writ and statement of claim served on</label><input type="date" id="srv" value="${iso(T0)}">
    <label class="f" for="dist">Where the defendant is</label>
    <select class="f" id="dist"><option value="14">Within 100 km of the registry</option><option value="21">100 to 500 km away</option><option value="30">500 km or more</option><option value="42">Outside Zambia</option></select>
    <div class="result" id="calcOut"></div>
    <p class="small muted" style="margin-top:10px">Rule source shown with every date. If the date falls on a weekend or public holiday, the firm's rule moves it.</p></div>
-  <div class="card"><h3>Next 14 days</h3><div class="list">
-  ${[...HEAR.map(h=>({d:h.d,w:h.what,m:h.m,k:"Hearing"})),...DL.map(x=>({d:x.d,w:x.w,m:x.m,k:"Deadline"}))].sort((a,b)=>a.d-b.d).map(x=>`<div class="it"><div class="when">${fd(x.d).slice(0,6)}</div><div><div class="ttl">${esc(x.w)} <span class="tag ${x.k==="Hearing"?"t-blue":"t-gold"}">${x.k}</span></div><div class="small muted">${esc(x.m.t)}</div></div></div>`).join("")}
+  <div class="card" style="margin-top:16px"><h3>How dates reach people</h3><div class="list small">
+   <div class="it"><span class="tag t-blue">Court</span><div>Dates come from the court's notice, the clerk's run or e-filing. A lawyer checks each one before it goes live, with an owner and a backup.</div></div>
+   <div class="it"><span class="tag t-gold">Prep</span><div>Preparation meetings are booked with the client in the app. The client confirms, and the papers for the meeting are attached to it.</div></div>
+   <div class="it"><span class="tag t-good">Client</span><div>Dates marked for the client show in the client's app, with a reminder 3 days and 1 day before by WhatsApp or SMS that says only “There is an update”.</div></div>
+   <div class="it"><span class="tag t-warn">After</span><div>When a hearing ends, notes are due the same day: what happened, the orders, the next date and a short update for the client.</div></div>
   </div></div>
+  </div>
  </div>${foot}`;
+};
+
+V.funnel = () => {
+ const tabs = ROLE.id==="criminal" ? ["crim"] : ["lit","crim","conv","prob"];
+ const a = tabs.includes(S.funA) ? S.funA : tabs[0], F = FLOW[a], max = Math.max(...F.firm), total = F.firm.reduce((x,y)=>x+y,0);
+ return `<h2 class="page">Case funnel</h2><p class="sub">Where every matter stands, stage by stage. The numbers are for the whole firm; the dark tags are sample matters you can open.</p>
+ <div class="chips">${tabs.map(k=>`<button type="button" class="chip ${a===k?"on":""}" data-fa="${k}">${FLOW[k].n} · ${FLOW[k].firm.reduce((x,y)=>x+y,0)}</button>`).join("")}</div>
+ <div class="card fnl"><h3>${esc(F.n)} <small>${total} open matters</small></h3>
+ ${F.s.map((s,k)=>{ const ms = M.map((m,i)=>({m,i})).filter(x=>x.m.f===a && x.m.s===k && canSee(x.m));
+  return `<div class="r"><div class="lb"><b>${k+1}</b>${esc(s)}</div><div><div class="b" style="width:${F.firm[k]/max*100}%"></div></div><div class="ct">${F.firm[k]}</div>${ms.length?`<div class="ms">${ms.map(x=>`<button type="button" class="mchip" data-open="${x.i}">${esc(x.m.t)}</button>`).join("")}</div>`:""}</div>`; }).join("")}
+ </div>
+ <div class="ai" style="margin-top:16px"><div class="lab">Assistant · where matters get stuck</div><p class="small" style="margin:6px 0 0">${esc(F.note)}</p></div>${foot}`;
+};
 
 V.criminal = () => `<h2 class="page">Criminal Desk</h2><p class="sub">Built around the criminal partner's day: the call at night, the custody clock, bail and trial. Restricted to the criminal team.</p>
  <div class="grid g3">
@@ -411,20 +593,39 @@ V.runs = () => `<h2 class="page">Registry runs</h2><p class="sub">The clerk's li
   <p class="small muted">Cash for filing fees is issued and accounted for per run.</p></div>
  </div>${foot}`;
 
-V.portal = () => `<h2 class="page">Client app</h2><p class="sub">What a client of the firm sees, in GM Legal's name. Your website promises a monthly status report; here it is.</p>
+V.portal = () => {
+ const pi = S.pc, m = M[pi], F = FS(m);
+ const up = upcoming(pi).filter(e=>e.c);
+ const docs = (S.docs[pi]||[]).filter(d=>d.vis==="c").slice().sort((a,b)=>(b.d-a.d)||(b.st-a.st));
+ const reqs = (S.req[pi]||[]).map((r,k)=>({...r,k}));
+ const last = held(pi).find(e=>e.notes && e.notes.shared && e.notes.client);
+ const money = pi===3 ? `Held for you in the client account: <b>K1,250,000</b><br>Invoice GM-INV-2026-0429: <b>K14,800</b>` : `Collected from debtors and held for you: <b>K312,400</b><br>Next remittance to the bank: <b>${fd(W(3))}</b>`;
+ return `<h2 class="page">Client app</h2><p class="sub">What a client of the firm sees, in GM Legal's name: where the case stands, the next dates, the update after each hearing, and documents in both directions.</p>
+ <div class="chips"><button type="button" class="chip ${pi===3?"on":""}" data-pc="3">Lumbwe Holdings · property purchase</button><button type="button" class="chip ${pi===0?"on":""}" data-pc="0">First Kafue Bank · court case</button></div>
  <div class="grid g2"><div>
- <div class="phone"><div class="ph"><div class="small" style="color:rgba(255,255,255,.6)">My GM Legal</div><b>Lumbwe Holdings Ltd</b></div><div class="pb">
-  <div class="small muted">Stand 18832, Lusaka West</div><div class="ttl">Purchase of the property</div>
-  <div class="stage">${[1,1,1,0,0].map(o=>`<i class="${o?"on":""}"></i>`).join("")}</div>
-  <div class="small">Step 3 of 5: consent to assign from the Ministry of Lands</div>
-  <div class="sheet"><b>What happened this month</b><div class="small">The firm lodged the consent application and followed up on ${fdy(D(-8))}. The seller's documents are complete.</div></div>
-  <div class="sheet"><b>What we need from you</b><div class="small">Nothing this week.</div></div>
-  <div class="sheet"><b>Money</b><div class="small">Held for you in the client account: <b>K1,250,000</b><br>Invoice GM-INV-2026-0429: <b>K14,800</b></div>
-  <button class="btn b-gold" style="width:100%;margin-top:8px" data-act="pay">${S.paid?"Payment request sent ✓":"Pay with mobile money"}</button></div>
-  <div class="sheet"><b>Messages</b><div class="small">Secure messages with Bennet Banda. Notifications say only "There is an update", never the details.</div></div>
+ <div class="phone"><div class="ph"><div class="small" style="color:rgba(255,255,255,.6)">My GM Legal</div><b>${esc(m.client)}</b></div><div class="pb">
+  <div class="small muted">${pi===3?"Stand 18832, Lusaka West":esc(m.cause)}</div><div class="ttl">${pi===3?"Purchase of the property":"Claim against Copperline Traders Ltd and 2 others"}</div>
+  <div class="small" style="margin-top:6px">Step ${m.s+1} of ${F.length}: <b>${esc(stName(m))}</b></div>
+  <ul class="vst">${F.map((s,k)=>`<li class="${k<m.s?"d":k===m.s?"c":""}"><i>${k<m.s?"✓":""}</i>${esc(s)}</li>`).join("")}</ul>
+  ${last?`<div class="sheet"><b>Latest from your lawyer</b><div class="small muted">${fdy(last.d)} · after the ${esc(last.w.toLowerCase())}</div><div class="small" style="margin-top:4px">${esc(last.notes.client)}</div></div>`:""}
+  <div class="sheet"><b>Coming up</b>${up.length?up.map(e=>`<div class="small" style="margin-top:8px"><b>${evWhen(e)}</b> ${evTag(e.k)}<br>${esc(e.w)}${e.where?`<br><span class="muted">${esc(e.where)}</span>`:""}${e.k==="prep"?`<br>${S.conf[pi+"-"+e.k2]?'<span class="tag t-good">You confirmed ✓</span>':`<button type="button" class="btn b-line" style="min-height:32px;padding:4px 10px;font-size:13px;margin-top:4px" data-conf="${pi}-${e.k2}">I will attend</button>`}`:""}</div>`).join(""):'<div class="small">Nothing scheduled yet.</div>'}<div class="small muted" style="margin-top:8px">You get a reminder 3 days and 1 day before.</div></div>
+  <div class="sheet"><b>Documents</b> <span class="small muted">${docs.length}</span>${docs.slice(0,6).map(d=>`<div class="small" style="margin-top:7px;display:flex;gap:8px"><span class="ficon ${ext(d.n)}" style="width:30px;height:34px;font-size:9px">${ext(d.n).toUpperCase().slice(0,4)}</span><span><span style="overflow-wrap:anywhere">${esc(d.n)}</span><br><span class="muted">${esc(F[d.st])}${d.from?" · from you":""}${d.isNew?" · new":""}</span></span></div>`).join("")}${docs.length>6?`<div class="small muted" style="margin-top:6px">and ${docs.length-6} more, by stage</div>`:""}</div>
+  <div class="sheet"><b>What we need from you</b>${reqs.filter(r=>!r.done).map(r=>`<div class="small" style="margin-top:6px">${esc(r.n)}<br><label class="btn b-gold" style="display:inline-flex;min-height:34px;padding:5px 12px;font-size:13px;margin-top:4px">Upload<input type="file" hidden data-cup="${pi}" data-req="${r.k}"></label></div>`).join("")||'<div class="small">Nothing right now.</div>'}${reqs.filter(r=>r.done).map(r=>`<div class="small muted" style="margin-top:6px">✓ ${esc(r.n)}: received</div>`).join("")}
+   <label class="btn b-line" style="display:flex;justify-content:center;width:100%;margin-top:10px">Send a document to your lawyer<input type="file" multiple hidden data-cup="${pi}"></label></div>
+  <div class="sheet"><b>Money</b><div class="small">${money}</div>${pi===3?`<button type="button" class="btn b-gold" style="width:100%;margin-top:8px" data-act="pay">${S.paid?"Payment request sent ✓":"Pay with mobile money"}</button>`:""}</div>
+  <div class="sheet"><b>Messages</b><div class="small">Secure messages with ${esc(m.lead)}. Notifications say only "There is an update", never the details.</div></div>
  </div></div></div>
- <div class="card"><h3>For banks and companies</h3><p class="small">A corporate client sees all its matters on one page: exposure in litigation, money collected and remitted, invoices, and the next court dates.</p>
- <table><thead><tr><th>First Kafue Bank · matters</th><th>Value</th></tr></thead><tbody><tr><td>Recovery portfolio, 48 debtors</td><td class="mono">K9.8m</td></tr><tr><td>Defence of a staff claim</td><td class="mono">K420k</td></tr><tr><td>Security perfection, 6 facilities</td><td class="mono">—</td></tr></tbody></table></div></div>${foot}`;
+ <div><div class="card"><h3>What the client can do</h3><div class="list small">
+  <div class="it"><span class="tag t-gold">1</span><div>See every stage of the matter and where it is now</div></div>
+  <div class="it"><span class="tag t-gold">2</span><div>See court dates and preparation meetings, get a reminder 3 days and 1 day before, and confirm attendance</div></div>
+  <div class="it"><span class="tag t-gold">3</span><div>Read the short update the lawyer writes after each hearing</div></div>
+  <div class="it"><span class="tag t-gold">4</span><div>Open the documents the lawyer has shared, stage by stage</div></div>
+  <div class="it"><span class="tag t-gold">5</span><div>Upload what the lawyer asks for, from the phone camera or files. It is filed in the matter under the current stage and the lawyer is told</div></div>
+  <div class="it"><span class="tag t-gold">6</span><div>Pay invoices by mobile money or card, and message the lawyer securely</div></div>
+ </div><p class="small muted" style="margin:10px 0 0">Try it: upload a file here, then switch to Mukumba Mulele and open the matter. It is there, under the current stage.</p></div>
+ <div class="card" style="margin-top:16px"><h3>For banks and companies</h3><p class="small">A corporate client sees all its matters on one page: exposure in litigation, money collected and remitted, invoices, and the next court dates.</p>
+ <table><thead><tr><th>First Kafue Bank · matters</th><th>Value</th></tr></thead><tbody><tr><td>Recovery portfolio, 48 debtors</td><td class="mono">K9.8m</td></tr><tr><td>Defence of a staff claim</td><td class="mono">K420k</td></tr><tr><td>Security perfection, 6 facilities</td><td class="mono">—</td></tr></tbody></table></div></div></div>${foot}`;
+};
 
 V.reports = () => `<h2 class="page">Reports</h2><p class="sub">For the partners: where the work is, where the money is, and what could go wrong.</p>
  <div class="grid g2">
@@ -440,15 +641,18 @@ V.reports = () => `<h2 class="page">Reports</h2><p class="sub">For the partners:
 
 /* ---------- router ---------- */
 function allowed(id){ const n = NAV.find(x=>x.id===id); return !n || n.r.includes(ROLE.id); }
-function render(){
+function render(keep){
+ const y = window.scrollY;
  let h = location.hash.replace("#","") || ROLE.home;
  let html;
- if(h.startsWith("m-")){ const i=+h.slice(2); html = (M[i] && !(M[i].restricted && !["partner","criminal"].includes(ROLE.id))) ? V.matter(i) : V.matters(); h="matters"; }
+ if(h.startsWith("m-")){ const i=+h.slice(2); if(M[i] && canSee(M[i]) && allowed("matters") && (ROLE.id!=="criminal"||M[i].f==="crim")){ html = V.matter(i); h="matters"; } else { h = allowed("matters") ? "matters" : ROLE.home; html = V[h](); } }
  else { if(!V[h] || !allowed(h)) h = ROLE.home; html = V[h](); }
  $("#main").innerHTML = html;
  document.querySelectorAll("nav a").forEach(a=>a.classList.toggle("on", a.dataset.id===h));
  if(h==="deadlines") calc();
- window.scrollTo(0,0);
+ const fs = document.querySelector(".fs.sel") || document.querySelector(".fs.cur");
+ if(fs){ const f = fs.parentElement, t = fs.previousElementSibling || fs; f.scrollLeft = Math.max(0, t.offsetLeft - f.offsetLeft - 8); }
+ window.scrollTo(0, keep ? y : 0);
 }
 function drawNav(){
  $("#nav").innerHTML = NAV.map(n=> n.sec ? `<div class="sec">${n.sec}</div>` : (n.r.includes(ROLE.id)?`<a href="#${n.id}" data-id="${n.id}"><span class="dot"></span>${n.t}</a>`:"")).join("");
@@ -473,6 +677,17 @@ document.addEventListener("click", e=>{
  const r = e.target.closest("[data-role]"); if(r){ enter(r.dataset.role); return; }
  const tr = e.target.closest("tr[data-matter]"); if(tr){ location.hash = "m-"+tr.dataset.matter; return; }
  const k = e.target.closest("[data-kyc]"); if(k){ S.kyc[k.dataset.kyc]=!S.kyc[k.dataset.kyc]; render(); return; }
+ const fst = e.target.closest("[data-fst]"); if(fst){ const [i,k]=fst.dataset.fst.split(":").map(Number); S.dsel[i] = (S.dsel[i]===k && !fst.classList.contains("chip")) ? undefined : k; render(1); return; }
+ const dall = e.target.closest("[data-dall]"); if(dall){ S.dsel[+dall.dataset.dall]="all"; render(1); return; }
+ const op = e.target.closest("[data-open]"); if(op){ location.hash="m-"+op.dataset.open; return; }
+ const sh = e.target.closest("[data-share]"); if(sh){ const [i,k]=sh.dataset.share.split(":").map(Number), d=S.docs[i][k];
+  if(d.priv && d.vis!=="c"){ toast("Privileged notes stay with the lawyers. Share a clean copy instead."); return; }
+  d.vis = d.vis==="c"?"i":"c"; log(i, `${d.n}: ${d.vis==="c"?"shared with the client":"made lawyers only"} by ${ROLE.name}`);
+  toast(d.vis==="c"?"Shared. The client sees it in the app and gets a short notice.":"Lawyers only now. The client no longer sees it."); render(1); return; }
+ const cal = e.target.closest("[data-cal]"); if(cal){ S.calF=cal.dataset.cal; render(1); return; }
+ const fa = e.target.closest("[data-fa]"); if(fa){ S.funA=fa.dataset.fa; render(1); return; }
+ const pc = e.target.closest("[data-pc]"); if(pc){ S.pc=+pc.dataset.pc; render(1); return; }
+ const cf = e.target.closest("[data-conf]"); if(cf){ S.conf[cf.dataset.conf]=1; const [i]=cf.dataset.conf.split("-").map(Number); log(i, `${M[i].client} confirmed attendance at a preparation meeting`); toast("Thank you. Your lawyer can see you will attend."); render(1); return; }
  const b = e.target.closest("[data-act]"); if(!b) return;
  const a = b.dataset.act;
  if(a==="brief"){ S.briefApproved=true; toast("Morning brief sent to the partners."); render(); }
@@ -485,22 +700,54 @@ document.addEventListener("click", e=>{
  if(a==="bond"){ toast("Police bond request drafted from the template. Ready for the partner."); }
  if(a==="batch"){ toast("12 letters of demand prepared for review. Each needs proof of service."); }
  if(a==="stamp"){ b.textContent="✓ Filed"; b.disabled=true; toast("Stamped copy saved to the matter. Next date calculated."); }
- if(a==="pay"){ S.paid=true; toast("Airtel Money request sent to the client's phone (simulated)."); render(); }
+ if(a==="pay"){ S.paid=true; toast("Airtel Money request sent to the client's phone (simulated)."); render(1); }
+ if(a==="nextStage"){ const i=+b.dataset.i, m=M[i]; if(m.s>=FS(m).length-1) return; m.s++; S.dsel[i]=undefined; log(i, `Moved to “${stName(m)}” by ${ROLE.name}`); toast(`Now at “${stName(m)}”. The client app shows the new stage.`); render(1); }
+ if(a==="askClient"){ const i=+b.dataset.i, v=($("#reqTxt").value||"").trim(); if(!v){ toast("Write what the client should send."); return; } (S.req[i]=S.req[i]||[]).push({n:v,done:0}); log(i, `Asked the client for: ${v}`); toast("Request sent. It shows in the client's app with an upload button."); render(1); }
+ if(a==="addEv"){ const i=+b.dataset.i, k=$("#evK").value, dv=$("#evD").value, t=$("#evT").value.trim(), w=$("#evW").value.trim(), where=$("#evP").value.trim(), c=$("#evC").checked;
+  if(!dv){ toast("Choose a date."); return; } const d=new Date(dv+"T00:00:00"); if(d<T0){ toast("Choose today or a later date."); return; }
+  const title = w || (k==="court"?"Court date":k==="prep"?"Preparation meeting with the client":"Deadline");
+  (S.ev[i]=S.ev[i]||[]).push({d,t,k,w:title,where,c}); log(i, `Date added: ${title}, ${fdy(d)}${c?", shown to the client":""}`);
+  toast(c?"Added. The client sees it, with reminders 3 days and 1 day before.":"Added for the team. Owner and backup alerted."); render(1); }
+ if(a==="openNotes"){ S.noteOpen = b.dataset.i+"-"+b.dataset.k; S.nFiles=[]; render(1); }
+ if(a==="closeNotes"){ S.noteOpen=null; render(1); }
+ if(a==="voiceDraft"){ const v = VOICE[+b.dataset.i] || VOICE.def; $("#nWhat").value=v.what; $("#nOrd").value=v.orders; $("#nCli").value=v.client; toast("Drafted from a 40-second voice note (sample). Check it before saving."); }
+ if(a==="saveNotes"){ const i=+b.dataset.i, k=+b.dataset.k, e=S.ev[i][k];
+  const what=$("#nWhat").value.trim(), orders=$("#nOrd").value.trim(), cl=$("#nCli").value.trim(), share=$("#nShare").checked, nd=$("#nNext").value, nw=$("#nNextW").value.trim();
+  if(!what){ toast("Write what happened first."); return; }
+  const files = S.nFiles||[]; files.forEach(n=>S.docs[i].push({st:M[i].s,n,by:ROLE.name,d:new Date(T0),vis:share?"c":"i",v:1,isNew:1}));
+  e.notes = {what, orders:orders||"None recorded.", client:cl, shared:share&&!!cl, by:ROLE.name, files:files.length};
+  if(nd){ const d=new Date(nd+"T00:00:00"); S.ev[i].push({d,t:"",k:"court",w:nw||"Next hearing",where:e.where,c:true}); }
+  log(i, `Notes written after the ${e.w.toLowerCase()}${files.length?`, ${plural(files.length,"document")} attached`:""}${nd?`, next date ${fdy(new Date(nd+"T00:00:00"))}`:""}`);
+  S.noteOpen=null; S.nFiles=[]; toast(share&&cl?"Saved. The client got the short update in the app.":"Saved for the team."); render(1); }
  if(a==="transfer"){
   const L = LEDGER[+$("#trL").value], amt = +$("#trA").value||0, bill = $("#trB").value; S.trL=$("#trL").value; S.trA=$("#trA").value; S.trB=bill;
   if(amt<=0) S.transfer = `<div class="result no">Enter an amount.</div>`;
   else if(amt>L.bal) S.transfer = `<div class="result no"><b>Blocked.</b> ${K(amt)} would take ${esc(L.c)} below zero (balance ${K(L.bal)}). Client money cannot pay for another client or for the firm.</div>`;
   else if(!bill) S.transfer = `<div class="result no"><b>Blocked.</b> Money moves from the client account to the office account only against a bill already sent to the client.</div>`;
   else S.transfer = `<div class="result wait"><b>Waiting for a second partner.</b> ${K(amt)} from ${esc(L.c)} against ${esc(bill.split(" · ")[0])}. The client will be notified when it is approved.</div><button class="btn b-gold" style="margin-top:8px" data-act="approve2">Approve as second partner</button>`;
-  render();
+  render(1);
  }
- if(a==="approve2"){ S.transfer = `<div class="result ok"><b>Approved and recorded.</b> Both approvals, the bill and the time are on the ledger. The client was notified.</div>`; render(); }
+ if(a==="approve2"){ S.transfer = `<div class="result ok"><b>Approved and recorded.</b> Both approvals, the bill and the time are on the ledger. The client was notified.</div>`; render(1); }
 });
 document.addEventListener("input", e=>{ if(e.target.id==="srv"||e.target.id==="dist") calc(); });
 document.addEventListener("change", e=>{
  if(e.target.id==="roleSel"){ ROLE = ROLES.find(r=>r.id===e.target.value); drawNav(); location.hash = ROLE.home; render(); }
  if(e.target.id==="consent"){ S.consent = e.target.checked; toast(S.consent?"Consent recorded with date and time.":"Consent withdrawn. Family updates stop."); }
  if(e.target.id==="dist") calc();
+ const ds = e.target.dataset || {};
+ if(ds.up!==undefined){ const i=+ds.up, m=M[i], sel=S.dsel[i], st=(sel===undefined||sel==="all")?m.s:sel, vis=($("#upVis")||{}).value||"i", files=[...e.target.files]; if(!files.length) return;
+  files.forEach(f=>S.docs[i].push({st,n:f.name,by:ROLE.name,d:new Date(T0),vis,v:1,isNew:1}));
+  log(i, `${plural(files.length,"document")} uploaded to “${FS(m)[st]}” by ${ROLE.name}${vis==="c"?", shared with the client":""}`);
+  toast(`Saved under “${FS(m)[st]}”. ${vis==="c"?"The client sees it in the app.":"Lawyers only."}`); render(1); }
+ if(ds.ver!==undefined){ const [i,k]=ds.ver.split(":").map(Number), d=S.docs[i][k], f=e.target.files[0]; if(!f) return;
+  d.v=(d.v||1)+1; d.d=new Date(T0); d.by=ROLE.name; d.isNew=1; log(i, `${d.n}: version ${d.v} uploaded by ${ROLE.name}`);
+  toast(`Version ${d.v} saved. Earlier versions are kept and can be compared.`); render(1); }
+ if(ds.cup!==undefined){ const i=+ds.cup, m=M[i], files=[...e.target.files]; if(!files.length) return;
+  files.forEach(f=>S.docs[i].push({st:m.s,n:f.name,by:m.client,d:new Date(T0),vis:"c",v:1,from:1,isNew:1}));
+  if(ds.req!==undefined && S.req[i] && S.req[i][+ds.req]) S.req[i][+ds.req].done=1;
+  log(i, `${m.client} sent ${plural(files.length,"document")} from the client app`);
+  toast(`Sent to ${m.lead}. Filed in the matter under “${stName(m)}”.`); render(1); }
+ if(e.target.id==="nFiles"){ S.nFiles=[...e.target.files].map(f=>f.name); const n=$("#nFilesN"); if(n) n.textContent = S.nFiles.length ? plural(S.nFiles.length,"file")+" ready" : ""; }
 });
 window.addEventListener("hashchange", ()=>{ if(!$("#shell").hidden) render(); });
 
