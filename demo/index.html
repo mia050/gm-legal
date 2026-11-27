@@ -188,6 +188,8 @@ a.mlink{color:inherit;text-decoration:none}a.mlink:hover{text-decoration:underli
 .top .lang-pick{font:inherit;font-size:14px;border:1px solid var(--line);border-radius:9px;padding:7px 10px;background:#fff;color:var(--text);cursor:pointer}
 .phone .ph{position:relative}.phone .plang{position:absolute;right:12px;top:14px;font:inherit;font-size:12px;padding:3px 6px;border-radius:8px;border:1px solid #444;background:var(--ink2);color:#fff;cursor:pointer}
 .lang-pick:focus-visible{outline:2px solid var(--gold);outline-offset:1px}
+.list .it>.tag{flex:none}
+@media(max-width:640px){.ibstats{grid-template-columns:repeat(3,minmax(0,1fr))!important}}
 </style>
 </head>
 <body>
@@ -1171,7 +1173,7 @@ V.inbox = () => { const r=ROLE.id, box=INBOX[r]; if(!box) return V[ROLE.home]();
  const open=needsYou(r).length;
  return `<h2 class="page">My assistant</h2><p class="sub">Your own assistant. It reads your email and WhatsApp as messages arrive, files what it is sure about, and asks you about the rest. It never sends anything for you.</p>
  <div class="card" style="margin-bottom:16px"><div class="row" style="justify-content:space-between"><div class="row" style="gap:10px"><span class="tag t-good">Connected</span><span class="small">Your Outlook mailbox and your WhatsApp Business number · checked every 5 minutes · your consent recorded</span></div><span class="small muted">${open} need you</span></div>
-  <div class="grid g4" style="margin-top:12px;grid-template-columns:repeat(5,minmax(0,1fr))">${box.stats.map(([l,v])=>`<div class="kpi"><div class="v" style="font-size:24px">${v}</div><div class="l">${l}</div></div>`).join("")}</div></div>
+  <div class="grid g4 ibstats" style="margin-top:12px;grid-template-columns:repeat(5,minmax(0,1fr))">${box.stats.map(([l,v])=>`<div class="kpi"><div class="v" style="font-size:24px">${v}</div><div class="l">${l}</div></div>`).join("")}</div></div>
  <div class="grid g2"><div>${box.items.map((it,k)=>ibCard(r,k,it)).join("")}</div>
   <div class="card"><h3>What it does with your mail</h3><div class="list small">
    <div class="it"><span class="tag t-gold">Files</span><div>Matches each email and attachment to the matter and stage, by case number, names and the thread. When it is not sure, it asks.</div></div>
