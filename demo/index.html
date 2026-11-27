@@ -8,12 +8,16 @@
 <meta name="description" content="A demonstration of GM Chambers, the practice system for GM Legal Practitioners. Sample data only.">
 <meta property="og:title" content="GM Chambers · Demonstration">
 <meta property="og:description" content="The practice system for GM Legal Practitioners. Sample data only.">
-<meta property="og:image" content="https://mia050.github.io/gm-legal/og.jpg">
+<meta property="og:image" content="https://mia050.github.io/gm-legal/demo/og.jpg">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="GM Chambers demonstration: the partner's desk, with invented sample data">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://mia050.github.io/gm-legal/demo/">
 <meta name="theme-color" content="#141414">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Courier+Prime:wght@400;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-:root{--ink:#141414;--ink2:#1f1f1f;--ink3:#2b2b2b;--gold:#B8913A;--gold2:#E7D6AE;--gold3:#F7F0DF;--paper:#F8F6F1;--card:#fff;--text:#1C1B19;--mute:#6B675F;--line:#E6E0D3;--good:#2F7D4F;--good2:#E4F2E9;--warn:#B26A00;--warn2:#FBEFD9;--bad:#B3261E;--bad2:#FBE7E5;--blue:#2F5D8A;--blue2:#E6EEF7}
+:root{--ink:#141414;--ink2:#1f1f1f;--ink3:#2b2b2b;--gold:#B8913A;--gold2:#E7D6AE;--gold3:#F7F0DF;--paper:#F8F6F1;--card:#fff;--text:#1C1B19;--mute:#6B675F;--line:#E6E0D3;--good:#2A7348;--good2:#E4F2E9;--warn:#9A5C00;--warn2:#FBEFD9;--bad:#B3261E;--bad2:#FBE7E5;--blue:#2F5D8A;--blue2:#E6EEF7}
 *{box-sizing:border-box;min-width:0}
 html,body{margin:0;height:100%}
 body{background:var(--paper);color:var(--text);font:15px/1.5 Inter,system-ui,-apple-system,"Segoe UI",sans-serif}
@@ -180,6 +184,10 @@ main{padding:16px 14px 50px}
 table{font-size:13.5px}
 }
 @media(max-width:520px){.g4{grid-template-columns:1fr 1fr}.kpi .v{font-size:23px}}
+a.mlink{color:inherit;text-decoration:none}a.mlink:hover{text-decoration:underline}a.mlink:focus-visible{outline:2px solid var(--gold);outline-offset:2px;border-radius:3px}
+.top .lang-pick{font:inherit;font-size:14px;border:1px solid var(--line);border-radius:9px;padding:7px 10px;background:#fff;color:var(--text);cursor:pointer}
+.phone .ph{position:relative}.phone .plang{position:absolute;right:12px;top:14px;font:inherit;font-size:12px;padding:3px 6px;border-radius:8px;border:1px solid #444;background:var(--ink2);color:#fff;cursor:pointer}
+.lang-pick:focus-visible{outline:2px solid var(--gold);outline-offset:1px}
 </style>
 </head>
 <body>
@@ -199,8 +207,8 @@ table{font-size:13.5px}
 <aside><div class="logo"><b>GM Chambers</b><i>Consider it done.</i></div><nav id="nav" aria-label="Sections"></nav></aside>
 <div>
 <div class="top">
-<div class="who"><div class="av" id="av">MM</div><div><div id="whoName" style="font-weight:600">Mukumba Mulele</div><div class="small muted" id="whoRole">Partner · both offices</div></div></div>
-<div class="row"><span class="sample">Sample data</span><select id="roleSel" aria-label="Switch role"></select></div>
+<div class="who"><div class="av" id="av">KH</div><div><div id="whoName" style="font-weight:600">Kelvin Hamoonga</div><div class="small muted" id="whoRole">Partner · both offices</div></div></div>
+<div class="row"><span class="sample">Sample data</span><select id="roleSel" aria-label="Switch role"></select><select id="langSel" class="lang-pick" data-for="me" aria-label="Language"><option value="en">English</option><option value="ny">Chinyanja</option></select></div>
 </div>
 <main id="main"></main>
 </div>
@@ -209,6 +217,113 @@ table{font-size:13.5px}
 <div id="asst"></div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
+<script>
+/* Language choice. Every demo user picks a language for themselves; the choice is saved per user on
+   this device. Interface words (menus, buttons, headings, tabs, status labels, short help) come from
+   the dictionary below. Names, money, dates, legal and accounting terms and sample records stay as written. */
+(function(){
+"use strict";
+var APP="gm-legal", CLIENT="client";
+var NY={"Language":"Chinenelo","Sample data":"Zitsanzo chabe","Switch role":"Sinthani udindo","Sections":"Magawo","Practice":"Kampani","Money":"Ndalama","Office":"Ofesi","Priorities":"Zofunika","My desk":"Desiki langa","My assistant":"Wothandiza wanga","Team tasks":"Nchito za gulu","Matters":"Milandu","Case funnel":"Mmene milandu ikuyendela","New client":"Kasitomala watsopano","Calendar":"Kalendala","Debt recovery":"Kubweza ngongole","Accounts and banking":"Maakaunti ndi banki","Billing":"Ma invoice","Registry runs":"Maulendo a ku registry","Client app":"App ya makasitomala","Reports":"Malipoti","Client view":"Zimene kasitomala amaona","Partner · both offices":"Partner · maofesi onse awili","Registry runs · Lusaka":"Maulendo a ku registry · Lusaka","Client account and billing":"Akaunti ya makasitomala ndi ma invoice","My GM Legal · client app":"My GM Legal · app ya makasitomala","Demo guide":"Chitsogozo","Close guide":"Tsekani chitsogozo","Jump to any scene. On a computer, press the number key.":"Pitani ku chiwonetselo chilichonse. Pa kompyuta, dinani nambala.","Sample priorities, and where each one lives":"Zitsanzo za zofunika, ndi kumene chilichonse chili","Your desk":"Desiki lanu","The firm on one screen, and who sees the money":"Kampani pa chiwonetselo chimodzi, ndi ndani amaona ndalama","A matter, stage by stage":"Mlandu, gawo ndi gawo","First Kafue Bank: the stage bar, then the tabs":"First Kafue Bank: mzere wa magawo, kenako ma tab","The case assistant":"Wothandiza pa mlandu","Recommendations a lawyer turns into tasks":"Malingaliro amene loya amasandutsa nchito","Court dates and meetings":"Masiku a khoti ndi misonkhano","Every date in one calendar, with the rules":"Tsiku lililonse pa kalendala imodzi, ndi malamulo","Your personal assistant":"Wothandiza wanu","Email and WhatsApp, read, filed and turned into work":"Email ndi WhatsApp, zawelengedwa, zasungidwa ndi kusandulika nchito","Work passed between people, with the papers":"Nchito zopatsana pakati pa anthu, ndi mapepala ake","Trust accounts, deposits and receipts in the matter":"Ma trust account, ma deposit ndi ma risiti mu mlandu","The Criminal Desk":"Criminal Desk","Custody clock, fees by stage, secure line":"Nthawi ya m'ndende, malipilo pa gawo lililonse, njira yotetezeka","What your clients see":"Zimene makasitomala anu amaona","The five questions, answered on their phone":"Mafunso asanu, ayankhidwa pa foni yawo","Demonstration only. Every person, client, matter, case number and figure here is invented. Prepared by MIA Technology for GM Legal Practitioners.":"Chiwonetselo chabe. Munthu aliyense, kasitomala, mlandu, nambala ya mlandu ndi nambala iliyonse pano ndi zopeka. Chakonzedwa ndi MIA Technology kwa GM Legal Practitioners.","Assistant":"Wothandiza","Close":"Tsekani","Your assistant":"Wothandiza wanu","Notes, files and updates. You confirm each one.":"Zolemba, mafayilo ndi zosintha. Inu mumatsimikiza chilichonse.","Try:":"Yesani:","Attach":"Phatikizani","Send":"Tumizani","Confirm":"Tsimikizani","Cancel":"Lekani","Tell the assistant":"Uzani wothandiza","File, note, remind, add a date…":"Sungani, lembani, kumbutsani, onjezani tsiku…","What a busy practice needs. Here is where you will see it.":"Zimene kampani yotangwanika imafuna. Apa ndi pomwe mudzaziona.","Sample priorities, invented for this demonstration. Each one opens the part of GM Chambers built for it.":"Zitsanzo za zofunika, zopeka za chiwonetselo ichi. Chilichonse chimatsegula gawo la GM Chambers lopangidwila icho.","Every date kept":"Tsiku lililonse losungidwa","Court dates, filing deadlines and preparation meetings in one calendar, each with an owner, a backup and reminders.":"Masiku a khoti, masiku omaliza opeleka ndi misonkhano yokonzekela pa kalendala imodzi, iliyonse ndi mwini wake, wothandizila ndi zikumbutso.","Files in one place":"Mafayilo pamalo amodzi","Every document filed under its matter and stage, whether it came by email, WhatsApp, the registry or the client.":"Chikalata chilichonse chimasungidwa pa mlandu wake ndi gawo lake, kaya chabwela pa email, WhatsApp, ku registry kapena kuchokela kwa kasitomala.","Client money kept apart":"Ndalama za makasitomala zosungidwa padela","Trust, designated and office accounts on one screen, with a three-way reconciliation every month.":"Ma trust, designated ndi office account pa chiwonetselo chimodzi, ndi three-way reconciliation mwezi uliwonse.","The next step, suggested":"Gawo lotsatila, ngati malingaliro","A case assistant reads each matter and suggests what to do next. A lawyer decides.":"Wothandiza pa mlandu amawelenga mlandu uliwonse ndi kupeleka malingaliro a zochita. Loya ndiye amasankha.","Work passed with its papers":"Nchito yopatsana ndi mapepala ake","Tasks between lawyers, the clerk and accounts, with the files attached and delivered back.":"Nchito pakati pa maloya, clerk ndi accounts, ndi mafayilo ophatikizidwa ndi kubwezedwa.","Clients kept informed":"Makasitomala odziwitsidwa","Clients see the stage, the next dates and a short update after each hearing, on their phone.":"Makasitomala amaona gawo, masiku otsatila ndi uthenga waufupi pambuyo pa hearing iliyonse, pa foni yawo.","A desk for criminal defence":"Desiki la criminal defence","Custody clock, bail conditions, disclosure and fees by stage, restricted to the criminal team.":"Nthawi ya m'ndende, malamulo a bail, disclosure ndi malipilo pa gawo lililonse, kwa gulu la criminal lokha.","Both offices, one view":"Maofesi onse awili, pamodzi","Lusaka and Kitwe on the same screens, or one office at a time.":"Lusaka ndi Kitwe pa chiwonetselo chimodzi, kapena ofesi imodzi pa nthawi.","The firm at a glance":"Kampani mwachidule","Open matters, court dates, billing and the client account for the partners, every morning.":"Milandu yotsegula, masiku a khoti, ma invoice ndi akaunti ya makasitomala kwa ma partner, m'mawa uliwonse.","Court dates":"Masiku a khoti","Reminders":"Zikumbutso","Documents by stage":"Zikalata pa gawo lililonse","Mail, filed":"Ma email, osungidwa","Case assistant":"Wothandiza pa mlandu","The client app":"App ya makasitomala","Kitwe matters":"Milandu ya Kitwe","Start the tour":"Yambani ulendo","Or open the Demo guide at the bottom left, or press 1 to 9 on the keyboard.":"Kapena tsegulani Chitsogozo pansi kumanzele, kapena dinani 1 mpaka 9 pa kiyibodi.","Good morning":"Mwauka bwanji","Good afternoon":"Mwaswela bwanji","Open matters":"Milandu yotsegula","Court dates, 7 days":"Masiku a khoti, masiku 7","Billed this month":"Ma invoice a mwezi uno","Client account":"Akaunti ya makasitomala","My matters":"Milandu yanga","My court dates, 7 days":"Masiku anga a khoti, masiku 7","Hours this week":"Maola sabata ino","My open tasks":"Nchito zanga zotsala","Criminal matters":"Milandu ya criminal","In custody now":"Ali m'ndende pano","Runs today":"Maulendo lelo","Filings this week":"Zopelekedwa sabata ino","Collections waiting":"Zotenga zikudikila","Invoices over 60 days":"Ma invoice opitilila masiku 60","To fiscalise":"Zoti zifiscalizidwe","Reconciled to last month-end":"Zafananizidwa mpaka kumapeto kwa mwezi watha","None late":"Palibe zochedwa","Clock running":"Nthawi ikuyenda","All stamped copies saved":"Makope onse osindikizidwa asungidwa","My tasks":"Nchito zanga","Today in court":"Lelo ku khoti","My court dates":"Masiku anga a khoti","Today's runs":"Maulendo a lelo","Invoices to chase":"Ma invoice oti tikumbutse","Income and expenses":"Ndalama zolowa ndi zotuluka","Who sees income and expenses":"Ndani amaona ndalama zolowa ndi zotuluka","The team's tasks":"Nchito za gulu","open, by person":"zotsala, munthu ndi munthu","Filed by the assistant today":"Zosungidwa ndi wothandiza lelo","Morning brief · draft by the assistant":"Lipoti la m'mawa · lolembedwa ndi wothandiza","Approve and send to partners":"Vomelezani ndi kutumiza kwa ma partner","Sent to partners ✓":"Latumizidwa kwa ma partner ✓","Nothing goes out until a person approves it.":"Palibe chimatuluka mpaka munthu avomeleze.","Not part of your desk. A partner can give you access.":"Si mbali ya desiki lanu. Partner angakupatseni mwayi.","Partners always see it. Every change is recorded. Try it: allow Ruth, then switch to her desk.":"Ma partner amaziona nthawi zonse. Kusintha kulikonse kumalembedwa. Yesani: lolani Ruth, kenako sinthani ku desiki lake.","Income":"Zolowa","Expenses":"Zotuluka","Net":"Zotsala","last 6 months, K thousands":"miyezi 6 yapitayi, K zikwi","Income and expenses for the last 6 months, in thousands of kwacha":"Ndalama zolowa ndi zotuluka za miyezi 6 yapitayi, mu zikwi za kwacha","Client money is never counted as income. This card shows only to users a partner has approved.":"Ndalama za makasitomala siziwelengedwa ngati zolowa. Khadi ili limaonekela kokha kwa anthu amene partner wavomeleza.","Open team tasks":"Tsegulani nchito za gulu","All team tasks":"Nchito zonse za gulu","Open the run list":"Tsegulani mndandanda wa maulendo","Nothing open.":"Palibe zotsala.","Nothing yet.":"Palibe pakali pano.","Mail to a matter's address, photos from the registry and uploads are filed to the right matter and stage. Wrong place? Move it, and the assistant learns.":"Ma email opita ku adilesi ya mlandu, zithunzi zochokela ku registry ndi zotumizidwa zimasungidwa pa mlandu ndi gawo loyenela. Malo olakwika? Sunthani, ndipo wothandiza amaphunzila.","Needs attention":"Zikufunika chidwi","Watch":"Yang'anani","On track":"Zili bwino","Restricted":"Zoletsedwa","Late":"Zachedwa","Today":"Lelo","Yesterday":"Dzulo","Urgent":"Mwamsanga","Done":"Zachitika","In progress":"Zikuchitika","To do":"Zoti zichitike","New":"Chatsopano","Client can see":"Kasitomala amaona","Lawyers only":"Maloya okha","From the client":"Kuchokela kwa kasitomala","Court":"Khoti","Prep meeting":"Msonkhano wokonzekela","Deadline":"Tsiku lomaliza","Client sees it":"Kasitomala amaona","Team only":"Gulu lokha","Client confirmed":"Kasitomala watsimikiza","Client reminded":"Kasitomala wakumbutsidwa","Notes written":"Zolemba zalembedwa","Notes due today":"Zolemba zikufunika lelo","Received":"Zalandilidwa","Waiting":"Tikudikila","Paid":"Zalipidwa","Sent":"Zatumizidwa","Overdue":"Zachedwa","Not yet":"Osati pano","Approved":"Zavomelezedwa","Requested":"Zapemphedwa","Later":"Pambuyo pake","In custody":"M'ndende","Alert":"Chenjezo","Ready to update":"Zakonzeka kusinthidwa","Question":"Funso","For your information":"Kuti mudziwe","Connected":"Zalumikizidwa","Meeting":"Msonkhano","Letter or email":"Kalata kapena email","Note":"Zolemba","Client":"Kasitomala","Other side":"Mbali ina","Collections":"Zotengedwa","Updated":"Zasinthidwa","All three gates passed":"Zipata zonse zitatu zadutsidwa","Weekly":"Sabata iliyonse","Monthly":"Mwezi uliwonse","Each":"Iliyonse","Files":"Mafayilo","Dates":"Masiku","Alerts":"Machenjezo","Tasks":"Nchito","Asks":"Imafunsa","Processes":"Ndondomeko","Prep":"Kukonzekela","After":"Pambuyo","Consent":"Chilolezo","Night":"Usiku","Every matter has an owner, a backup, a stage in its funnel and a next date. Restricted matters show only to their team.":"Mlandu uliwonse uli ndi mwini wake, wothandizila, gawo lake ndi tsiku lotsatila. Milandu yoletsedwa imaonekela kwa gulu lake lokha.","Both offices":"Maofesi onse awili","All":"Zonse","Matter":"Mlandu","Court and number":"Khoti ndi nambala","Stage":"Gawo","Next":"Chotsatila","← Matters":"← Milandu","Where the matter is":"Pomwe mlandu ulili","Tap a stage to see its documents. The client sees the same stages in the app.":"Dinani gawo kuti muone zikalata zake. Kasitomala amaona magawo omwewo mu app.","✓ done":"✓ zachitika","now":"pano","no documents":"palibe zikalata","Matter sections":"Magawo a mlandu","Overview":"Chidule","Access":"Olowa","Team":"Gulu","Partner:":"Partner:","Handling:":"Wogwila nchito:","Value":"Mtengo","Matter value":"Mtengo wa mlandu","Fixed fee":"Malipilo okhazikika","Client account:":"Akaunti ya makasitomala:","Money and receipts":"Ndalama ndi ma risiti","See all and act":"Onani zonse ndi kuchitapo kanthu","Coming up":"Zikubwela","Nothing scheduled.":"Palibe chakonzedwa.","All dates":"Masiku onse","Latest activity":"Zochitika zaposachedwa","calls, meetings, letters":"mafoni, misonkhano, makalata","Nothing logged yet.":"Palibe cholembedwa pakali pano.","All activity":"Zochitika zonse","Documents":"Zikalata","No documents at this stage yet.":"Palibe zikalata pa gawo ili pakali pano.","Make internal":"Pangani kuti ikhale ya mkati","Share with client":"Gawanani ndi kasitomala","Upload new version":"Tumizani mtundu watsopano","Upload":"Tumizani","Who can see the upload":"Ndani angaone zotumizidwa","Lawyers and the client":"Maloya ndi kasitomala","Choose files":"Sankhani mafayilo","Any stage, any time. On the phone this opens the camera too: photograph a stamped copy at the registry and it lands here. Demonstration: files stay on your device.":"Gawo lililonse, nthawi iliyonse. Pa foni imatsegulanso kamela: jambulani kope losindikizidwa ku registry ndipo limafika pano. Chiwonetselo: mafayilo amakhala pa chipangizo chanu.","Ask the client for a document":"Funsani kasitomala chikalata","Document to ask for":"Chikalata chofunsila","e.g. Signed board resolution":"mwachitsanzo, board resolution yosainidwa","Ask":"Funsani","court, meetings, deadlines":"khoti, misonkhano, masiku omaliza","Add a date":"Onjezani tsiku","Type":"Mtundu","Court date":"Tsiku la khoti","Preparation meeting with the client":"Msonkhano wokonzekela ndi kasitomala","What":"Chiyani","e.g. Hearing of the application":"mwachitsanzo, hearing ya application","Date":"Tsiku","Time":"Nthawi","Where":"Kuti","Court and room, or the firm's office":"Khoti ndi chipinda, kapena ofesi ya kampani","Show it to the client, with reminders 3 days and 1 day before":"Onetsani kasitomala, ndi zikumbutso masiku 3 ndi tsiku 1 lisanafike","Add date":"Onjezani tsiku","After the hearing":"Pambuyo pa hearing","notes, orders, the update to the client":"zolemba, ma order, uthenga kwa kasitomala","What happened.":"Zimene zinachitika.","Orders and next steps.":"Ma order ndi zotsatila.","Sent to the client:":"Zatumizidwa kwa kasitomala:","Update for the client, not sent:":"Uthenga kwa kasitomala, osatumizidwa:","Write notes":"Lembani zolemba","Until notes are in, the partner sees this as open.":"Mpaka zolemba zilowe, partner amaona kuti izi sizinathe.","Draft from a voice note":"Lembani kuchokela pa voice note","What happened":"Zimene zinachitika","Orders made and next steps":"Ma order opangidwa ndi zotsatila","Short update for the client (plain words)":"Uthenga waufupi kwa kasitomala (mawu osavuta)","Send the update to the client's app":"Tumizani uthenga ku app ya kasitomala","Next date set by the court":"Tsiku lotsatila loikidwa ndi khoti","For":"Cha","e.g. Continued hearing":"mwachitsanzo, hearing yopitiliza","Order, ruling or updated documents":"Order, ruling kapena zikalata zosinthidwa","Attach files":"Phatikizani mafayilo","Save notes":"Sungani zolemba","Activity":"Zochitika","Meetings":"Misonkhano","Letters":"Makalata","Notes":"Zolemba","Nothing here yet.":"Palibe pano pakali pano.","Log a call, meeting or note":"Lembani foni, msonkhano kapena zolemba","Call with the client":"Kuyimbila kasitomala foni","Call with the other side's lawyers":"Kuyimbila maloya a mbali ina","With whom, or the subject":"Ndi ndani, kapena nkhani","e.g. Call with counsel for the defendants":"mwachitsanzo, foni ndi loya wa ma defendant","Summary":"Chidule","What was said or agreed":"Zimene zinanenedwa kapena kugwilizana","Minutes":"Mphindi","Follow-up task":"Nchito yotsatila","Optional":"Ngati mukufuna","Privileged, lawyers only":"Privileged, maloya okha","Save to the matter":"Sungani ku mlandu","Summaries":"Zidule","Read this week's summary":"Welengani chidule cha sabata ino","Open tasks":"Nchito zotsala","No open tasks.":"Palibe nchito zotsala.","Team tasks on this matter":"Nchito za gulu pa mlandu uwu","Add a task":"Onjezani nchito","Task":"Nchito","Owner":"Mwini","Due":"Tsiku lomaliza","e.g. Draft the consent order":"mwachitsanzo, lembani consent order","Add task":"Onjezani nchito","This week on the matter · drafted by the assistant":"Sabata ino pa mlandu · zolembedwa ndi wothandiza","Send to the partner":"Tumizani kwa partner","Turn into a client update":"Sinthani kukhala uthenga kwa kasitomala","Recommendations":"Malingaliro","Make it a task":"Ipangeni nchito","Not needed":"Sizikufunika","Nothing open. The agents check the matter again every morning and whenever something new comes in.":"Palibe zotsala. Ma agent amayang'ananso mlandu m'mawa uliwonse ndi nthawi iliyonse chinthu chatsopano chikafika.","Agents following this matter":"Ma agent otsatila mlandu uwu","Nothing goes to the client, the court or the other side without a lawyer's approval. The assistant works only on this firm's data, and the AI provider does not keep or train on it.":"Palibe chimapita kwa kasitomala, ku khoti kapena ku mbali ina popanda chivomelezo cha loya. Wothandiza amagwila nchito pa zambili za kampani iyi zokha, ndipo kampani ya AI siisunga kapena kuphunzitsila nazo.","Who can see this matter":"Ndani angaone mlandu uwu","Handling":"Wogwila nchito","Everything":"Zonse","Other lawyers in the firm":"Maloya ena mu kampani","Name, number and next date only":"Dzina, nambala ndi tsiku lotsatila lokha","Nothing. This matter is restricted.":"Palibe. Mlandu uwu ndi woletsedwa.","Court clerk":"Clerk wa khoti","Court dates and filings to run":"Masiku a khoti ndi zopeleka","Money on this matter only":"Ndalama za mlandu uwu zokha","Client, in the app":"Kasitomala, mu app","Every view, download and share is recorded with the person and the time.":"Kuona, kutsitsa ndi kugawana kulikonse kumalembedwa ndi munthu ndi nthawi.","History":"Mbili","Client account for this matter":"Akaunti ya makasitomala ya mlandu uwu","no money held":"palibe ndalama zosungidwa","Nothing held for this client":"Palibe ndalama zosungidwa za kasitomala uyu","Movement and proof":"Kayendedwe ndi umboni","No movements yet.":"Palibe kayendedwe pakali pano.","Every movement carries its proof, filed in the matter. The client sees money received and paid out with the receipt.":"Kayendedwe kalikonse kali ndi umboni wake, wosungidwa mu mlandu. Kasitomala amaona ndalama zolandilidwa ndi zolipidwa ndi risiti.","Fees on this matter":"Malipilo a mlandu uwu","No invoices yet.":"Palibe ma invoice pakali pano.","A matter opens only after three gates: conflict check, KYC and a signed engagement letter.":"Mlandu umatsegulidwa pokhapokha zipata zitatu zadutsidwa: conflict check, KYC ndi engagement letter yosainidwa.","Inquiry":"Pempho","Matter open":"Mlandu watsegulidwa","New inquiry":"Pempho latsopano","from the website form":"kuchokela pa fomu ya pa website","Matter type":"Mtundu wa mlandu","Run conflict check":"Yambitsani conflict check","Searches clients, opposing parties, directors and closed matters.":"Imafufuza makasitomala, mbali zotsutsana, ma director ndi milandu yotsekedwa.","Conflict found.":"Conflict yapezeka.","A partner records the decision and the reason. The record stays on file.":"Partner amalemba chisankho ndi chifukwa chake. Zolembedwa zimakhala mu fayilo.","Decline and send a polite letter":"Kanani ndi kutumiza kalata yaulemu","Show a clear result instead":"Onetsani zotsatila zopanda vuto","KYC and risk":"KYC ndi chiopsezo","Conflict check clear.":"Conflict check ilibe vuto.","Documents uploaded by the client through the client app:":"Zikalata zotumizidwa ndi kasitomala kudzela mu app ya makasitomala:","Risk rating:":"Mlingo wa chiopsezo:","Standard":"Wamba","Incomplete":"Sizinathe","Continue to engagement letter":"Pitilizani ku engagement letter","drafted from the firm's template":"cholembedwa kuchokela pa template ya kampani","Send for e-signature and request the deposit":"Tumizani kuti asaine ndi kupempha deposit","Matter opened":"Mlandu watsegulidwa","Go to matters":"Pitani ku milandu","Run the demo again":"Yambitsaninso chiwonetselo","Court dates, preparation meetings with clients and deadlines for every matter, in one place. Each lawyer also gets their own dates in the phone calendar.":"Masiku a khoti, misonkhano yokonzekela ndi makasitomala ndi masiku omaliza a mlandu uliwonse, pamalo amodzi. Loya aliyense amalandilanso masiku ake pa kalendala ya foni.","Next 5 weeks":"Masabata 5 otsatila","Restricted matter":"Mlandu woletsedwa","Nothing in this view.":"Palibe chilichonse pano.","Try the rule engine":"Yesani makina a malamulo","Where the defendant is":"Kumene defendant ali","Within 100 km of the registry":"Pasanathe 100 km kuchokela ku registry","100 to 500 km away":"100 mpaka 500 km kutali","500 km or more":"500 km kapena kupitilila","Outside Zambia":"Kunja kwa Zambia","Rule source shown with every date. If the date falls on a weekend or public holiday, the firm's rule moves it.":"Kumene lamulo lachokela kumaonetsedwa pa tsiku lililonse. Tsiku likagwela pa weekend kapena tchuthi, lamulo la kampani limalisuntha.","How dates reach people":"Mmene masiku amafikila anthu","Where every matter stands, stage by stage. The numbers are for the whole firm; the dark tags are sample matters you can open.":"Pomwe mlandu uliwonse uli, gawo ndi gawo. Manambala ndi a kampani yonse; ma tag akuda ndi milandu ya zitsanzo imene mungatsegule.","Assistant · where matters get stuck":"Wothandiza · kumene milandu imakakamila","Built for criminal defence: the custody clock, bail, disclosure and trial. Restricted to the criminal team.":"Lopangidwila criminal defence: nthawi ya m'ndende, bail, disclosure ndi trial. Kwa gulu la criminal lokha.","Agencies":"Mabungwe","Arrest card":"Khadi la kumangidwa","Time in custody":"Nthawi m'ndende","Draft police bond request":"Lembani pempho la police bond","Client consents to updates to his wife":"Kasitomala walola kuti mkazi wake adziwitsidwe","Bail tracker":"Kutsatila bail","Bail granted:":"Bail yapatsidwa:","Next reporting:":"Kudzionetsa kotsatila:","Next in court":"Kukhoti kotsatila","Trial preparation":"Kukonzekela trial","Witness sheets":"Mapepala a mboni","Fees by stage, paid up front":"Malipilo pa gawo lililonse, olipila patsogolo","Fee":"Malipilo","Request":"Pemphani","Secure line with clients and families":"Njira yotetezeka ndi makasitomala ndi mabanja","Assistant · comparison of witness statements":"Wothandiza · kuyelekeza zonena za mboni","Debtors in portfolio":"A ngongole mu portfolio","Amount claimed":"Ndalama zofunidwa","Collected this year":"Zasonkhanitsidwa chaka chino","Remitted to bank":"Zatumizidwa ku banki","Paid or settled":"Zalipidwa kapena kugwilizana","Prepare 12 letters of demand":"Konzani ma letter of demand 12","Time becomes a bill, the partner reviews it, ZRA Smart Invoice fiscalises it, and the client can pay by mobile money or card.":"Nthawi imasanduka bilu, partner amaiyang'ana, ZRA Smart Invoice imaifiscaliza, ndipo kasitomala angalipile ndi mobile money kapena khadi.","Work in progress":"Work in progress","Billed, this month":"Ma invoice a mwezi uno","Collected":"Zasonkhanitsidwa","Over 60 days":"Kupitilila masiku 60","Invoice":"Invoice","Amount":"Ndalama","Status":"Mmene zilili","Pre-bill check":"Kuyang'ana bilu isanatumizidwe","The clerk's list for today, on the phone. A photo of the stamped copy closes the task and starts the next date.":"Mndandanda wa clerk wa lelo, pa foni. Chithunzi cha kope losindikizidwa chimatseka nchito ndi kuyambitsa tsiku lotsatila.","Photo":"Chithunzi","✓ Filed":"✓ Zasungidwa","For the partners: where the work is, where the money is, and what could go wrong.":"Kwa ma partner: kumene kuli nchito, kumene kuli ndalama, ndi zimene zingalakwike.","Open matters by area":"Milandu yotsegula pa gawo lililonse","Client trust account":"Trust account ya makasitomala","Office account":"Akaunti ya ofesi","No difference":"Palibe kusiyana","New deposits":"Ma deposit atsopano","Accounting tasks":"Nchito za akaunti","Client ledgers":"Ma leja a makasitomala","money held for each client":"ndalama zosungidwa za kasitomala aliyense","Account":"Akaunti","Balance":"Zotsala","Transfer to office account":"Kusamutsa ku akaunti ya ofesi","try it":"yesani","Client ledger":"Leja ya kasitomala","Amount (K)":"Ndalama (K)","Against bill":"Pa bilu","No bill":"Palibe bilu","Request transfer":"Pemphani kusamutsa ndalama","Blocked.":"Zaletsedwa.","Waiting for a second partner.":"Tikudikila partner wachiwili.","Approved and recorded.":"Zavomelezedwa ndi kulembedwa.","Approve as second partner":"Vomelezani ngati partner wachiwili","Bills to pay from the office account":"Ma bilu olipila kuchokela ku akaunti ya ofesi","approve, then the bank's second signatory releases":"vomelezani, kenako wosaina wachiwili wa banki amatulutsa","Bill":"Bilu","Approve":"Vomelezani","Another client":"Kasitomala wina","Hold and ask for source of funds":"Sungani ndi kufunsa kumene ndalama zachokela","Match to the invoice":"Fananizani ndi invoice","Office bills never touch client money. The system will not let a client ledger pay a firm expense.":"Ma bilu a ofesi sakhudza ndalama za makasitomala. Sistimu siilola leja ya kasitomala kulipila ndalama za kampani.","Your own assistant. It reads your email and WhatsApp as messages arrive, files what it is sure about, and asks you about the rest. It never sends anything for you.":"Wothandiza wanu. Amawelenga email ndi WhatsApp yanu mauthenga akafika, amasunga zimene ali wotsimikiza, ndi kukufunsani za zina. Satumiza chilichonse m'malo mwanu.","Read today":"Zawelengedwa lelo","Filed":"Zasungidwa","Dates found":"Masiku apezeka","Tasks made":"Nchito zapangidwa","Questions":"Mafunso","Matter:":"Mlandu:","Ignore":"Siyani","What it does with your mail":"Zimene imachita ndi ma email anu","Your next reminders":"Zikumbutso zanu zotsatila","Make a task for me":"Ndipangileni nchito","Open an inquiry":"Tsegulani pempho","Not a client":"Si kasitomala","Start the defence process":"Yambani ndondomeko ya defence","Approve and send":"Vomelezani ndi kutumiza","Add to the calendar":"Onjezani pa kalendala","File it and close the request":"Sungani ndi kutseka pempho","Do all four":"Chitani zonse zinayi","Attach and make the task":"Phatikizani ndi kupanga nchito","Show it to the family":"Onetsani banja","Open the Criminal Desk":"Tsegulani Criminal Desk","File and update the task":"Sungani ndi kusintha nchito","Open the client account":"Tsegulani akaunti ya makasitomala","For me":"Zanga","I asked for":"Zimene ndinapempha","Whole team":"Gulu lonse","Nothing open here.":"Palibe zotsala pano.","Give a task":"Patsani nchito","What needs doing":"Zoyenela kuchitika","e.g. File the affidavit of service":"mwachitsanzo, pelekani affidavit of service","To":"Kwa","No matter, office work":"Palibe mlandu, nchito ya ofesi","Priority":"Kufunika","Normal":"Mwachizolowezi","Papers for the task":"Mapepala a nchito","Give the task":"Patsani nchito","Start":"Yambani","Upload and complete":"Tumizani ndi kumaliza","Mark done":"Lembani kuti zachitika","Send a reminder":"Tumizani chikumbutso","Delivered:":"Zapelekedwa:","What a client of the firm sees, in GM Legal's name: where the case stands, the next dates, the update after each hearing, and documents in both directions.":"Zimene kasitomala wa kampani amaona, mu dzina la GM Legal: pomwe mlandu uli, masiku otsatila, uthenga pambuyo pa hearing iliyonse, ndi zikalata kubwela ndi kupita.","Lumbwe Holdings · property purchase":"Lumbwe Holdings · kugula malo","First Kafue Bank · court case":"First Kafue Bank · mlandu wa khoti","What the client can do":"Zimene kasitomala angachite","answers the five questions clients ask most":"imayankha mafunso asanu amene makasitomala amafunsa kwambili","See every stage of the matter and where it is now":"Onani gawo lililonse la mlandu ndi pomwe ulili pano","See court dates and preparation meetings, get a reminder 3 days and 1 day before, and confirm attendance":"Onani masiku a khoti ndi misonkhano yokonzekela, landilani chikumbutso masiku 3 ndi tsiku 1 lisanafike, ndi kutsimikiza kuti mudzabwela","Read the short update the lawyer writes after each hearing":"Welengani uthenga waufupi umene loya amalemba pambuyo pa hearing iliyonse","Open the documents the lawyer has shared, stage by stage":"Tsegulani zikalata zimene loya wagawana, gawo ndi gawo","Upload what the lawyer asks for, from the phone camera or files. It is filed in the matter under the current stage and the lawyer is told":"Tumizani zimene loya wapempha, kuchokela pa kamela ya foni kapena mafayilo. Zimasungidwa mu mlandu pa gawo la pano ndipo loya amadziwitsidwa","Pay invoices by mobile money or card, and message the lawyer securely":"Lipilani ma invoice ndi mobile money kapena khadi, ndi kutumizila loya uthenga motetezeka","Try it: upload a file here, then switch to Kelvin Hamoonga and open the matter. It is there, under the current stage.":"Yesani: tumizani fayilo pano, kenako sinthani kukhala Kelvin Hamoonga ndi kutsegula mlandu. Lilipo, pa gawo la pano.","For banks and companies":"Kwa mabanki ndi makampani","Purchase of the property":"Kugula malo","Latest from your lawyer":"Zatsopano kuchokela kwa loya wanu","Nothing scheduled yet.":"Palibe chakonzedwa pakali pano.","You get a reminder 3 days and 1 day before.":"Mudzalandila chikumbutso masiku 3 ndi tsiku 1 lisanafike.","I will attend":"Ndidzabwela","You confirmed ✓":"Mwatsimikiza ✓","What we need from you":"Zimene tikufuna kuchokela kwa inu","Nothing right now.":"Palibe pakali pano.","Send a document to your lawyer":"Tumizani chikalata kwa loya wanu","Held for you in the client account:":"Zosungidwa m'malo mwanu mu akaunti ya makasitomala:","· paid, receipt in your documents":"· zalipidwa, risiti ili mu zikalata zanu","Collected from debtors and held for you:":"Zasonkhanitsidwa kuchokela kwa a ngongole ndi kusungidwa m'malo mwanu:","Next remittance to the bank:":"Kutumiza kotsatila ku banki:","Pay with mobile money":"Lipilani ndi mobile money","Payment request sent ✓":"Pempho la malipilo latumizidwa ✓","Messages":"Mauthenga","Every bank account in one place, updated from the bank. Client money in trust is kept apart from the firm's money, sits on a client ledger, and leaves only against a bill with a second partner's approval.":"Akaunti iliyonse ya banki pamalo amodzi, yosinthidwa kuchokela ku banki. Ndalama za makasitomala mu trust zimasungidwa padela ndi ndalama za kampani, zili pa leja ya kasitomala, ndipo zimatuluka pokhapokha pa bilu yovomelezedwa ndi partner wachiwili.","Work passed between people in the office, with the papers attached. Done means delivered: the file goes back to whoever asked, and into the matter.":"Nchito zopatsana pakati pa anthu mu ofesi, ndi mapepala ophatikizidwa. Zachitika zikutanthauza zapelekedwa: fayilo limabwelela kwa amene anapempha, ndi kulowa mu mlandu.","First Kafue Bank portfolio (sample). Each debtor carries an asset and director search, the demand served, and every kwacha collected.":"Portfolio ya First Kafue Bank (zitsanzo). Wangongole aliyense ali ndi kufufuza katundu ndi ma director, demand yopelekedwa, ndi kwacha iliyonse yosonkhanitsidwa.","Writ and statement of claim served on":"Writ and statement of claim zinapelekedwa pa","Yes, Kafue Agro":"Inde, Kafue Agro","WhatsApp from the court clerk":"WhatsApp kuchokela kwa clerk wa khoti","Documents collected":"Zikalata zasonkhanitsidwa","Documents prepared":"Zikalata zakonzedwa","Submitted":"Zapelekedwa","Decision":"Chigamulo","Confirmed":"Zatsimikizidwa","Renewal watch":"Kuyang'anila kukonzanso"};
+var NYP=[
+[/^Upload by (.+)$/, "Zatumizidwa ndi $1"],
+[/^You, via the assistant$/, "Inu, kudzela mwa wothandiza"],
+[/^Good (morning|afternoon), (.+)$/, function(m,a,b){ return (a==="morning"?"Mwauka bwanji, ":"Mwaswela bwanji, ")+b; }],
+[/^View as: (.+)$/, function(m,a){ return "Onani ngati: "+W(a); }],
+[/^(\w{3} \d+ \w{3}) · (.+) · your desk$/, function(m,a,b){ return a+" · "+W(b)+" · desiki lanu"; }],
+[/^\+(\d+) this month$/, "+$1 mwezi uno"],
+[/^(\d+)% collected$/, "$1% zasonkhanitsidwa"],
+[/^(\d+) need attention$/, "$1 zikufunika chidwi"],
+[/^Target (\d+)$/, "Cholinga $1"],
+[/^(\d+) late$/, "$1 zachedwa"],
+[/^(\d+) today$/, "$1 lelo"],
+[/^(\d+) open$/, "$1 zotsala"],
+[/^(\d+) open task(s?)$/, "nchito $1 zotsala"],
+[/^(\d+) open · (\d+) handled$/, "$1 zotsala · $2 zachitika"],
+[/^(\d+) need you$/, "$1 zikufuna inu"],
+[/^(\d+) to match$/, "$1 zoti zifananizidwe"],
+[/^(\d+) items?$/, "zinthu $1"],
+[/^(\d+) entr(y|ys|ies)$/, "zolembedwa $1"],
+[/^(\d+) open matters$/, "milandu yotsegula $1"],
+[/^(\d+) new$/, "$1 zatsopano"],
+[/^(\d+) days$/, "masiku $1"],
+[/^(\d+) min on the matter$/, "mphindi $1 pa mlandu"],
+[/^(Sent|Overdue|Paid|Pre-bill review) · (\d+) days$/, function(m,a,b){ return W(a)+" · masiku "+b; }],
+[/^(\d+) of (\d+)$/, "$1 mwa $2"],
+[/^stage (\d+)$/, "gawo $1"],
+[/^stage (\d+) of (\d+) · (.+)$/, "gawo $1 mwa $2 · $3"],
+[/^Step (\d+) of (\d+):$/, "Gawo $1 mwa $2:"],
+[/^1 document$/, "chikalata 1"],
+[/^(\d+) documents$/, "zikalata $1"],
+[/^Stage (\d+), (.+?)(, done|, current stage)?, (\d+) documents?$/, function(m,a,b,c,d){ return "Gawo "+a+", "+b+(c===", done"?", zachitika":c?", gawo la pano":"")+", zikalata "+d; }],
+[/^(Overview|Documents|Dates|Activity|Tasks|Money|Assistant|Access) · (\d+)$/, function(m,a,b){ return W(a)+" · "+b; }],
+[/^(All|Court|Prep meetings|Deadlines|For me|I asked for|Whole team) · (\d+)$/, function(m,a,b){ return (({All:"Zonse",Court:"Khoti","Prep meetings":"Misonkhano yokonzekela",Deadlines:"Masiku omaliza"})[a]||W(a))+" · "+b; }],
+[/^All stages · (\d+)$/, "Magawo onse · $1"],
+[/^all stages · (\d+)$/, "magawo onse · $1"],
+[/^Move to “(.+)”$/, "Sunthilani ku “$1”"],
+[/^to “(.+)”$/, "ku “$1”"],
+[/^(.+) →$/, function(m,a){ return W(a)+" →"; }],
+[/^Case assistant · (\d+) recommendations?$/, "Wothandiza pa mlandu · malingaliro $1"],
+[/^Office: (.+)$/, "Ofesi: $1"],
+[/^Client: (.+)$/, "Kasitomala: $1"],
+[/^Proof: (.+)$/, "Umboni: $1"],
+[/^Done: (.+)$/, "Zachitika: $1"],
+[/^Attached: (.+)$/, "Zophatikizidwa: $1"],
+[/^Written by (.+)$/, "Zalembedwa ndi $1"],
+[/^Notes after the (.+)$/, "Zolemba pambuyo pa $1"],
+[/^Today · (.+)$/, "Lelo · $1"],
+[/^updated (\d\d:\d\d)$/, "zasinthidwa $1"],
+[/^(\d+) names searched in ([\d.]+) seconds$/, "mayina $1 afufuzidwa mu masekondi $2"],
+[/^✓ (Inquiry|Conflict check|KYC|Engagement)$/, function(m,a){ return "✓ "+W(a); }],
+[/^\. Tap each document to mark it received\.$/, ". Dinani chikalata chilichonse kuti mulembe kuti chalandilidwa."],
+[/^\. Reminder by SMS to the client the evening before\.$/, ". Chikumbutso cha SMS kwa kasitomala madzulo a tsiku lapitalo."],
+[/^(\w{3}) (\d{4}) · office account$/, "$1 $2 · akaunti ya ofesi"],
+[/^Make a task: advise the bank by (.+)$/, "Pangani nchito: langizani banki pofika $1"],
+[/^(.+) · due (\w{3} \d+ \w{3})( · from (.+))?$/, function(m,a,b,c,d){ return a+" · pofika "+b+(d?" · kuchokela ku "+d:""); }],
+[/^(.+) · done( · from (.+))?$/, function(m,a,b,c){ return a+" · zachitika"+(c?" · kuchokela ku "+c:""); }],
+[/^· due (\w{3} \d+ \w{3})( ·)?$/, "· pofika $1$2"],
+[/^· done( ·)?$/, "· zachitika$1"],
+[/^(.+) · from you · new$/, "$1 · kuchokela kwa inu · chatsopano"],
+[/^(.+) · from you$/, "$1 · kuchokela kwa inu"],
+[/^(.+) · new$/, "$1 · chatsopano"],
+[/^and (\d+) more, by stage$/, "ndi zina $1, pa gawo lililonse"],
+[/^✓ (.+): received$/, "✓ $1: zalandilidwa"],
+[/^Last: (.+) · receipt in your documents$/, "Zomaliza: $1 · risiti ili mu zikalata zanu"],
+[/^Secure messages with (.+)\. Notifications say only "There is an update", never the details\.$/, "Mauthenga otetezeka ndi $1. Zidziwitso zimangonena kuti \"Pali zatsopano\", osati zambili."],
+[/^(.+) · after the (.+)$/, "$1 · pambuyo pa $2"],
+[/^(\d+) files? attached\. Where does it go\?$/, "Mafayilo $1 aphatikizidwa. Apite kuti?"]
+];
+var NYC=[];
+var user=null, cache={}, ATTRS=["placeholder","aria-label","title"], oT=new WeakMap(), oA=new WeakMap();
+function get(u){ if(!u) return "en"; if(!(u in cache)){ var v=null; try{ v=localStorage.getItem("mia-demo-lang:"+APP+":"+u); }catch(e){} cache[u]=v==="ny"?"ny":"en"; } return cache[u]; }
+function put(u,l){ cache[u]=l; try{ localStorage.setItem("mia-demo-lang:"+APP+":"+u,l); }catch(e){} }
+function T(c){ var v=NY[c]; if(v!==undefined) return v; for(var i=0;i<NYP.length;i++){ var m=c.match(NYP[i][0]); if(m){ var r=NYP[i][1]; return typeof r==="function"?r.apply(null,m):c.replace(NYP[i][0],r); } } return undefined; }
+function W(c){ var v=T(c); return v===undefined?c:v; }
+function tr(s,lang){ if(lang!=="ny") return s; var m=/^(\s*)([\s\S]*?)(\s*)$/.exec(s), c=m[2].replace(/\s+/g," "); if(!c) return s; var v=T(c); return v===undefined?s:m[1]+v+m[3]; }
+function ctx(s,p){ if(!NYC.length) return null; var m=/^(\s*)([\s\S]*?)(\s*)$/.exec(s), c=m[2].replace(/\s+/g," "); for(var i=0;i<NYC.length;i++){ if(NYC[i][1]===c&&p.closest(NYC[i][0])) return m[1]+NYC[i][2]+m[3]; } return null; }
+function langOf(el){ if(!user) return "en"; return el.closest&&el.closest(".phone")?get(CLIENT):get(user); }
+function doText(n){ var p=n.parentNode; if(!p||p.nodeType!==1) return; var g=p.nodeName; if(g==="SCRIPT"||g==="STYLE"||g==="TEXTAREA") return;
+ if(g==="OPTION"&&p.parentNode&&p.parentNode.classList&&p.parentNode.classList.contains("lang-pick")) return;
+ var o=oT.get(n); if(!o||n.data!==o.w) o={s:n.data}; var L=langOf(p), t=L==="ny"?ctx(o.s,p):null; if(t===null) t=tr(o.s,L); o.w=t; oT.set(n,o); if(n.data!==t) n.data=t; }
+function doEl(el){ var rec=null;
+ for(var i=0;i<ATTRS.length;i++){ var a=ATTRS[i]; if(!el.hasAttribute(a)) continue; rec=rec||oA.get(el)||{}; var cur=el.getAttribute(a), r=rec[a]; if(!r||cur!==r.w) r={s:cur}; var t=tr(r.s,langOf(el)); r.w=t; rec[a]=r; if(cur!==t) el.setAttribute(a,t); }
+ if(rec) oA.set(el,rec);
+ var cl=el.classList; if(!cl) return;
+ if(cl.contains("lang-pick")) el.value=el.getAttribute("data-for")==="client"?get(CLIENT):get(user);
+ if(cl.contains("phone")&&user) el.setAttribute("lang",get(CLIENT)); }
+function walk(root){ if(root.nodeType===3){ doText(root); return; } if(root.nodeType!==1) return; doEl(root);
+ var w=document.createTreeWalker(root,5), n; while((n=w.nextNode())){ if(n.nodeType===3) doText(n); else doEl(n); } }
+var mo=new MutationObserver(function(rs){ for(var i=0;i<rs.length;i++){ var r=rs[i];
+ if(r.type==="childList"){ for(var j=0;j<r.addedNodes.length;j++) walk(r.addedNodes[j]); } else if(r.type==="characterData") doText(r.target); else doEl(r.target); }
+ mo.takeRecords(); });
+function apply(){ document.documentElement.lang=get(user); walk(document.body); mo.takeRecords(); }
+mo.observe(document.body,{subtree:true,childList:true,characterData:true,attributes:true,attributeFilter:ATTRS});
+document.addEventListener("change",function(e){ var t=e.target; if(!t.classList||!t.classList.contains("lang-pick")) return;
+ var l=t.value==="ny"?"ny":"en"; if(t.getAttribute("data-for")==="client") put(CLIENT,l); else if(user) put(user,l); apply(); });
+window.miaLang={setUser:function(u){ user=u||null; apply(); }, t:function(s){ return tr(s,get(user)); }};
+
+})();
+</script>
 <script>
 {
 /* ---------- dates relative to today, so the demo never looks stale ---------- */
@@ -226,16 +341,16 @@ const iso = d => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-$
 
 /* ---------- people (users of the system) ---------- */
 const ROLES = [
- {id:"partner", name:"Mukumba Mulele", ini:"MM", role:"Partner · both offices", home:"answers", desc:"Your answers, and the firm at a glance"},
- {id:"associate", name:"Prisca Banda", ini:"PB", role:"Associate · Lusaka", home:"today", desc:"My day, my matters, my time"},
- {id:"criminal", name:"Malizani", ini:"MZ", role:"Partner · Criminal Desk", home:"criminal", desc:"Fraud, money laundering, corruption: arrest to appeal"},
+ {id:"partner", name:"Kelvin Hamoonga", ini:"KH", role:"Partner · both offices", home:"answers", desc:"Sample priorities, and the firm at a glance"},
+ {id:"associate", name:"Ruth Simukonda", ini:"RS", role:"Associate · Lusaka", home:"today", desc:"My day, my matters, my time"},
+ {id:"criminal", name:"Daliso Ngoma", ini:"DN", role:"Partner · Criminal Desk", home:"criminal", desc:"Criminal defence, from arrest to appeal"},
  {id:"clerk", name:"Court Clerk", ini:"CC", role:"Registry runs · Lusaka", home:"runs", desc:"Today's filings and collections"},
  {id:"accounts", name:"Accounts", ini:"AC", role:"Client account and billing", home:"account", desc:"Ledgers, reconciliation, Smart Invoice"},
  {id:"client", name:"Client view", ini:"CL", role:"My GM Legal · client app", home:"portal", desc:"What the firm's clients see"}
 ];
 const NAV = [
  {sec:"Practice"},
- {id:"answers", t:"Your answers", r:["partner"]},
+ {id:"answers", t:"Priorities", r:["partner"]},
  {id:"today", t:"My desk", r:["partner","associate","criminal","clerk","accounts"]},
  {id:"inbox", t:"My assistant", r:["partner","associate","criminal","clerk","accounts"]},
  {id:"team", t:"Team tasks", r:["partner","associate","criminal","clerk","accounts"]},
@@ -256,27 +371,27 @@ const NAV = [
 
 /* ---------- sample matters (all invented) ---------- */
 const M = [
- {id:"GM/LSK/2026/0187", t:"First Kafue Bank Ltd v Copperline Traders Ltd and 2 Others", area:"Debt recovery", court:"High Court, Commercial Registry, Lusaka", cause:`${YR}/HPC/0412`, lead:"Freddie Tembo", partner:"Chishimba Kaela", office:"Lusaka", f:"lit", s:4, value:4850000, cur:"ZMW", next:{d:W(9),w:"Scheduling conference"}, risk:"t-warn", client:"First Kafue Bank Ltd"},
- {id:"GM/KTW/2026/0061", t:"Zambezi Copper Haulage Ltd v Mwila Transport Ltd", area:"Commercial litigation", court:"High Court, Commercial Registry, Kitwe", cause:`${YR}/HKC/0088`, lead:"Freddie Tembo", partner:"Mukumba Mulele", office:"Kitwe", f:"lit", s:6, value:1120000, cur:"USD", next:{d:W(15),w:"Trial, day 1"}, risk:"t-good", client:"Zambezi Copper Haulage Ltd"},
- {id:"GM/LSK/2026/0201", t:"Estate of the late Peter Chanda", area:"Probate and succession", court:"High Court, Principal Registry, Lusaka", cause:`${YR}/HP/0977`, lead:"Prisca Banda", partner:"Mukumba Mulele", office:"Lusaka", f:"prob", s:2, value:2400000, cur:"ZMW", next:{d:W(4),w:"Inventory to beneficiaries"}, risk:"t-good", client:"Chanda family"},
- {id:"GM/LSK/2026/0209", t:"Stand 18832, Lusaka West: sale to Lumbwe Holdings Ltd", area:"Conveyancing", court:"Ministry of Lands · ZILAS", cause:"Lands ref. pending", lead:"Bennet Banda", partner:"Gideon Kalandanya", office:"Lusaka", f:"conv", s:3, value:1250000, cur:"ZMW", next:{d:W(2),w:"Follow up consent to assign"}, risk:"t-warn", client:"Lumbwe Holdings Ltd"},
- {id:"GM/LSK/2026/0213", t:"Kafue Agro Ltd: employment permits for five staff", area:"Immigration", court:"Department of Immigration", cause:"5 applications", lead:"Natasha Mumba", partner:"Gideon Kalandanya", office:"Lusaka", f:"imm", s:2, value:0, cur:"ZMW", next:{d:W(6),w:"Two permits expire within 60 days"}, risk:"t-bad", client:"Kafue Agro Ltd"},
- {id:"GM/LSK/2026/0219", t:"The People v J. Mwale", area:"Criminal defence", court:"Economic and Financial Crimes Court, Lusaka", cause:`${YR}/SSP/EF/114`, lead:"Natasha Mumba", partner:"Malizani", office:"Lusaka", f:"crim", s:3, value:0, cur:"ZMW", next:{d:W(1),w:"Mention, bail variation"}, risk:"t-bad", client:"J. Mwale", restricted:true},
- {id:"GM/LSK/2026/0221", t:"Northgate Insurance Ltd: defence of fire claim", area:"Insurance", court:"Arbitration (CIArb rules)", cause:"Arb. 07/26", lead:"Prisca Banda", partner:"Chishimba Kaela", office:"Lusaka", f:"arb", s:2, value:3600000, cur:"ZMW", next:{d:W(11),w:"Statement of defence due"}, risk:"t-good", client:"Northgate Insurance Ltd"},
- {id:"GM/KTW/2026/0034", t:"Copperbelt Ventures Ltd: company secretarial", area:"Corporate", court:"PACRA", cause:"Annual return", lead:"Natasha Mumba", partner:"Mukumba Mulele", office:"Kitwe", f:"corp", s:1, value:0, cur:"ZMW", next:{d:W(19),w:"Annual return to PACRA"}, risk:"t-good", client:"Copperbelt Ventures Ltd"}
+ {id:"GM/LSK/2026/0187", t:"First Kafue Bank Ltd v Copperline Traders Ltd and 2 Others", area:"Debt recovery", court:"High Court, Commercial Registry, Lusaka", cause:`${YR}/HPC/0412`, lead:"Brian Kangwa", partner:"Bwalya Sikazwe", office:"Lusaka", f:"lit", s:4, value:4850000, cur:"ZMW", next:{d:W(9),w:"Scheduling conference"}, risk:"t-warn", client:"First Kafue Bank Ltd"},
+ {id:"GM/KTW/2026/0061", t:"Zambezi Copper Haulage Ltd v Mwila Transport Ltd", area:"Commercial litigation", court:"High Court, Commercial Registry, Kitwe", cause:`${YR}/HKC/0088`, lead:"Brian Kangwa", partner:"Kelvin Hamoonga", office:"Kitwe", f:"lit", s:6, value:1120000, cur:"USD", next:{d:W(15),w:"Trial, day 1"}, risk:"t-good", client:"Zambezi Copper Haulage Ltd"},
+ {id:"GM/LSK/2026/0201", t:"Estate of the late Peter Chanda", area:"Probate and succession", court:"High Court, Principal Registry, Lusaka", cause:`${YR}/HP/0977`, lead:"Ruth Simukonda", partner:"Kelvin Hamoonga", office:"Lusaka", f:"prob", s:2, value:2400000, cur:"ZMW", next:{d:W(4),w:"Inventory to beneficiaries"}, risk:"t-good", client:"Chanda family"},
+ {id:"GM/LSK/2026/0209", t:"Stand 18832, Lusaka West: sale to Lumbwe Holdings Ltd", area:"Conveyancing", court:"Ministry of Lands · ZILAS", cause:"Lands ref. pending", lead:"Felix Mwiinga", partner:"Victor Siwale", office:"Lusaka", f:"conv", s:3, value:1250000, cur:"ZMW", next:{d:W(2),w:"Follow up consent to assign"}, risk:"t-warn", client:"Lumbwe Holdings Ltd"},
+ {id:"GM/LSK/2026/0213", t:"Kafue Agro Ltd: employment permits for five staff", area:"Immigration", court:"Department of Immigration", cause:"5 applications", lead:"Linda Sinkala", partner:"Victor Siwale", office:"Lusaka", f:"imm", s:2, value:0, cur:"ZMW", next:{d:W(6),w:"Two permits expire within 60 days"}, risk:"t-bad", client:"Kafue Agro Ltd"},
+ {id:"GM/LSK/2026/0219", t:"The People v J. Mwale", area:"Criminal defence", court:"Economic and Financial Crimes Court, Lusaka", cause:`${YR}/SSP/EF/114`, lead:"Linda Sinkala", partner:"Daliso Ngoma", office:"Lusaka", f:"crim", s:3, value:0, cur:"ZMW", next:{d:W(1),w:"Mention, bail variation"}, risk:"t-bad", client:"J. Mwale", restricted:true},
+ {id:"GM/LSK/2026/0221", t:"Northgate Insurance Ltd: defence of fire claim", area:"Insurance", court:"Arbitration (CIArb rules)", cause:"Arb. 07/26", lead:"Ruth Simukonda", partner:"Bwalya Sikazwe", office:"Lusaka", f:"arb", s:2, value:3600000, cur:"ZMW", next:{d:W(11),w:"Statement of defence due"}, risk:"t-good", client:"Northgate Insurance Ltd"},
+ {id:"GM/KTW/2026/0034", t:"Copperbelt Ventures Ltd: company secretarial", area:"Corporate", court:"PACRA", cause:"Annual return", lead:"Linda Sinkala", partner:"Kelvin Hamoonga", office:"Kitwe", f:"corp", s:1, value:0, cur:"ZMW", next:{d:W(19),w:"Annual return to PACRA"}, risk:"t-good", client:"Copperbelt Ventures Ltd"}
 ];
 const HEAR = [
- {d:W(0), time:"09:00", m:M[2], what:"Application for letters of administration", who:"Prisca Banda", where:"Lusaka High Court, Chambers"},
- {d:W(0), time:"10:30", m:M[1], what:"Status conference", who:"Freddie Tembo", where:"Kitwe High Court, Court 2"},
- {d:W(1), time:"09:00", m:M[5], what:"Mention, bail variation", who:"Malizani", where:"Lusaka, EFC Court 1"},
- {d:W(9), time:"09:30", m:M[0], what:"Scheduling conference", who:"Freddie Tembo", where:"Lusaka High Court, Commercial"}
+ {d:W(0), time:"09:00", m:M[2], what:"Application for letters of administration", who:"Ruth Simukonda", where:"Lusaka High Court, Chambers"},
+ {d:W(0), time:"10:30", m:M[1], what:"Status conference", who:"Brian Kangwa", where:"Kitwe High Court, Court 2"},
+ {d:W(1), time:"09:00", m:M[5], what:"Mention, bail variation", who:"Daliso Ngoma", where:"Lusaka, EFC Court 1"},
+ {d:W(9), time:"09:30", m:M[0], what:"Scheduling conference", who:"Brian Kangwa", where:"Lusaka High Court, Commercial"}
 ];
 const DL = [
- {d:W(2), m:M[0], w:"Scheduling conference brief", rule:"At least 7 days before the scheduling conference", who:"Freddie Tembo", back:"Prisca Banda", st:"t-warn", s:"Draft ready"},
- {d:W(2), m:M[3], w:"Follow up consent to assign", rule:"Firm rule: every 10 days while pending", who:"Bennet Banda", back:"Natasha Mumba", st:"t-mute", s:"Open"},
- {d:W(4), m:M[2], w:"Inventory to beneficiaries", rule:"Firm rule after grant", who:"Prisca Banda", back:"Natasha Mumba", st:"t-mute", s:"Open"},
- {d:W(6), m:M[4], w:"Two permits expire within 60 days", rule:"Renewal alert", who:"Natasha Mumba", back:"Bennet Banda", st:"t-bad", s:"Client not yet told"},
- {d:W(11), m:M[6], w:"Statement of defence", rule:"Tribunal's directions", who:"Prisca Banda", back:"Chishimba Kaela", st:"t-mute", s:"Open"}
+ {d:W(2), m:M[0], w:"Scheduling conference brief", rule:"At least 7 days before the scheduling conference", who:"Brian Kangwa", back:"Ruth Simukonda", st:"t-warn", s:"Draft ready"},
+ {d:W(2), m:M[3], w:"Follow up consent to assign", rule:"Firm rule: every 10 days while pending", who:"Felix Mwiinga", back:"Linda Sinkala", st:"t-mute", s:"Open"},
+ {d:W(4), m:M[2], w:"Inventory to beneficiaries", rule:"Firm rule after grant", who:"Ruth Simukonda", back:"Linda Sinkala", st:"t-mute", s:"Open"},
+ {d:W(6), m:M[4], w:"Two permits expire within 60 days", rule:"Renewal alert", who:"Linda Sinkala", back:"Felix Mwiinga", st:"t-bad", s:"Client not yet told"},
+ {d:W(11), m:M[6], w:"Statement of defence", rule:"Tribunal's directions", who:"Ruth Simukonda", back:"Bwalya Sikazwe", st:"t-mute", s:"Open"}
 ];
 const LEDGER = [
  {c:"First Kafue Bank Ltd", m:"GM/LSK/2026/0187", bal:312400, note:"Collections from debtors, to remit"},
@@ -310,29 +425,29 @@ const FLOW = {
 const dc = (st,n,by,d,vis,x={}) => Object.assign({st,n,by,d:D(d),vis,v:1},x);
 const DOCS = {
  0:[dc(0,"Engagement letter, signed.pdf","First Kafue Bank Ltd",-96,"c",{from:1}),dc(0,"Facility agreement and guarantees.pdf","First Kafue Bank Ltd",-95,"c",{from:1}),dc(0,"Statement of account, 3 defendants.xlsx","First Kafue Bank Ltd",-95,"c",{from:1}),
-    dc(1,"Letter of demand, signed.pdf","Freddie Tembo",-74,"c"),dc(1,"Proof of service on all 3 defendants.pdf","Court Clerk",-73,"i"),
-    dc(2,"Writ of summons and statement of claim.pdf","Freddie Tembo",-52,"c"),dc(2,"Affidavit of service.pdf","Court Clerk",-50,"i"),
-    dc(3,"Defence of the 1st and 2nd defendants.pdf","Court Clerk",-38,"c"),dc(3,"Partner notes on the defence.docx","Chishimba Kaela",-36,"i",{priv:1}),
-    dc(4,"Order for directions.pdf","Court Clerk",-12,"c"),dc(4,"Scheduling conference brief.docx","Prisca Banda",-1,"i",{draft:1,v:2})],
- 1:[dc(2,"Writ and statement of claim.pdf","Freddie Tembo",-140,"c"),dc(3,"Defence and counterclaim.pdf","Court Clerk",-120,"c"),dc(5,"Agreed bundle of documents.pdf","Freddie Tembo",-30,"c",{v:3}),dc(5,"Witness statement, operations manager.pdf","Freddie Tembo",-25,"c"),dc(6,"Notice of trial dates.pdf","Court Clerk",-10,"c"),dc(6,"Cross-examination plan.docx","Mukumba Mulele",-2,"i",{priv:1})],
- 2:[dc(0,"Death certificate.pdf","Chanda family",-60,"c",{from:1}),dc(1,"Petition for letters of administration.pdf","Prisca Banda",-40,"c"),dc(2,"Affidavit of the administrator.pdf","Prisca Banda",-6,"c")],
- 3:[dc(0,"Engagement letter, signed.pdf","Lumbwe Holdings Ltd",-40,"c",{from:1}),dc(0,"Director NRCs and PACRA printout.pdf","Lumbwe Holdings Ltd",-40,"c",{from:1}),dc(1,"Search results, Lands register.pdf","Bennet Banda",-33,"c"),dc(2,"Contract of sale, signed by both.pdf","Bennet Banda",-24,"c",{v:2}),dc(3,"Consent to assign application, lodged.pdf","Court Clerk",-17,"c"),dc(3,"Lands receipt.pdf","Court Clerk",-17,"i")],
- 4:[dc(1,"Passports and CVs, 5 staff.pdf","Kafue Agro Ltd",-30,"c",{from:1}),dc(2,"Applications as submitted.pdf","Natasha Mumba",-14,"c")],
- 5:[dc(0,"Warn and caution statement, notes.pdf","Natasha Mumba",-30,"i",{priv:1}),dc(0,"Police bond.pdf","Natasha Mumba",-29,"c"),dc(1,"Charge sheet.pdf","Court Clerk",-25,"c"),dc(2,"Bail ruling.pdf","Court Clerk",-20,"c"),dc(3,"Prosecution statements PW1 to PW8.pdf","Natasha Mumba",-9,"i"),dc(3,"Defence case theory.docx","Malizani",-3,"i",{priv:1})],
- 6:[dc(1,"Notice of arbitration.pdf","Court Clerk",-45,"c"),dc(2,"Claimant's statement of case.pdf","Prisca Banda",-20,"c"),dc(2,"Statement of defence.docx","Prisca Banda",-2,"i",{draft:1,v:2})],
- 7:[dc(0,"Engagement letter, signed.pdf","Copperbelt Ventures Ltd",-50,"c",{from:1}),dc(1,"Annual return.pdf","Natasha Mumba",-3,"i",{draft:1})]
+    dc(1,"Letter of demand, signed.pdf","Brian Kangwa",-74,"c"),dc(1,"Proof of service on all 3 defendants.pdf","Court Clerk",-73,"i"),
+    dc(2,"Writ of summons and statement of claim.pdf","Brian Kangwa",-52,"c"),dc(2,"Affidavit of service.pdf","Court Clerk",-50,"i"),
+    dc(3,"Defence of the 1st and 2nd defendants.pdf","Court Clerk",-38,"c"),dc(3,"Partner notes on the defence.docx","Bwalya Sikazwe",-36,"i",{priv:1}),
+    dc(4,"Order for directions.pdf","Court Clerk",-12,"c"),dc(4,"Scheduling conference brief.docx","Ruth Simukonda",-1,"i",{draft:1,v:2})],
+ 1:[dc(2,"Writ and statement of claim.pdf","Brian Kangwa",-140,"c"),dc(3,"Defence and counterclaim.pdf","Court Clerk",-120,"c"),dc(5,"Agreed bundle of documents.pdf","Brian Kangwa",-30,"c",{v:3}),dc(5,"Witness statement, operations manager.pdf","Brian Kangwa",-25,"c"),dc(6,"Notice of trial dates.pdf","Court Clerk",-10,"c"),dc(6,"Cross-examination plan.docx","Kelvin Hamoonga",-2,"i",{priv:1})],
+ 2:[dc(0,"Death certificate.pdf","Chanda family",-60,"c",{from:1}),dc(1,"Petition for letters of administration.pdf","Ruth Simukonda",-40,"c"),dc(2,"Affidavit of the administrator.pdf","Ruth Simukonda",-6,"c")],
+ 3:[dc(0,"Engagement letter, signed.pdf","Lumbwe Holdings Ltd",-40,"c",{from:1}),dc(0,"Director NRCs and PACRA printout.pdf","Lumbwe Holdings Ltd",-40,"c",{from:1}),dc(1,"Search results, Lands register.pdf","Felix Mwiinga",-33,"c"),dc(2,"Contract of sale, signed by both.pdf","Felix Mwiinga",-24,"c",{v:2}),dc(3,"Consent to assign application, lodged.pdf","Court Clerk",-17,"c"),dc(3,"Lands receipt.pdf","Court Clerk",-17,"i")],
+ 4:[dc(1,"Passports and CVs, 5 staff.pdf","Kafue Agro Ltd",-30,"c",{from:1}),dc(2,"Applications as submitted.pdf","Linda Sinkala",-14,"c")],
+ 5:[dc(0,"Warn and caution statement, notes.pdf","Linda Sinkala",-30,"i",{priv:1}),dc(0,"Police bond.pdf","Linda Sinkala",-29,"c"),dc(1,"Charge sheet.pdf","Court Clerk",-25,"c"),dc(2,"Bail ruling.pdf","Court Clerk",-20,"c"),dc(3,"Prosecution statements PW1 to PW8.pdf","Linda Sinkala",-9,"i"),dc(3,"Defence case theory.docx","Daliso Ngoma",-3,"i",{priv:1})],
+ 6:[dc(1,"Notice of arbitration.pdf","Court Clerk",-45,"c"),dc(2,"Claimant's statement of case.pdf","Ruth Simukonda",-20,"c"),dc(2,"Statement of defence.docx","Ruth Simukonda",-2,"i",{draft:1,v:2})],
+ 7:[dc(0,"Engagement letter, signed.pdf","Copperbelt Ventures Ltd",-50,"c",{from:1}),dc(1,"Annual return.pdf","Linda Sinkala",-3,"i",{draft:1})]
 };
 
 /* ---------- dates: court, preparation meetings with the client, deadlines ---------- */
 const ev = (d,t,k,w,where,c,notes) => ({d,t,k,w,where,c,notes});
 const EV = {
- 0:[ev(W(-12),"09:00","court","Hearing for directions","Lusaka High Court, Commercial Registry",true,{what:"The judge gave directions and fixed the scheduling conference. The 1st and 2nd defendants were represented. The 3rd defendant did not appear.",orders:"Scheduling conference fixed. Each side files a brief at least 7 days before it.",client:"The court gave directions and set the next step, a scheduling conference. We will meet your team before it to prepare.",shared:true,by:"Freddie Tembo"}),
+ 0:[ev(W(-12),"09:00","court","Hearing for directions","Lusaka High Court, Commercial Registry",true,{what:"The judge gave directions and fixed the scheduling conference. The 1st and 2nd defendants were represented. The 3rd defendant did not appear.",orders:"Scheduling conference fixed. Each side files a brief at least 7 days before it.",client:"The court gave directions and set the next step, a scheduling conference. We will meet your team before it to prepare.",shared:true,by:"Brian Kangwa"}),
     ev(W(2),"17:00","dl","Scheduling conference brief to be filed","Commercial Registry, Lusaka",false),ev(W(6),"10:00","prep","Preparation meeting with the bank's recoveries team","GM Legal, Lusaka · boardroom",true),ev(W(9),"09:30","court","Scheduling conference","Lusaka High Court, Commercial Registry",true),ev(W(30),"09:00","court","Application for default judgment, 3rd defendant","Lusaka High Court, Chambers",true)],
  1:[ev(W(0),"10:30","court","Status conference","Kitwe High Court, Court 2",true),ev(W(10),"14:00","prep","Witness preparation with the operations manager","GM Legal, Kitwe",true),ev(W(15),"09:00","court","Trial, day 1","Kitwe High Court, Court 2",true),ev(W(16),"09:00","court","Trial, day 2","Kitwe High Court, Court 2",true)],
  2:[ev(W(0),"09:00","court","Application for letters of administration","Lusaka High Court, Chambers",true),ev(W(4),"","dl","Inventory to beneficiaries","",false),ev(W(7),"15:00","prep","Family meeting: the inventory and next steps","GM Legal, Lusaka",true)],
  3:[ev(W(2),"","dl","Follow up consent to assign","Ministry of Lands",false),ev(W(5),"11:00","prep","Signing meeting: assignment and property transfer tax forms","GM Legal, Lusaka",true),ev(W(12),"","dl","Property transfer tax payable to ZRA (estimate)","",true)],
  4:[ev(W(6),"","dl","Two permits expire within 60 days: tell the client","",false)],
- 5:[ev(W(-20),"09:00","court","Bail application","Lusaka, EFC Court 1",true,{what:"Bail opposed by the State on flight risk. The court accepted two sureties and the surrender of the passport.",orders:"Bail of K50,000 with two sureties. Report to Lusaka Central every Monday. Passport surrendered.",client:"You were granted bail. You must report to Lusaka Central Police every Monday. Your passport stays with the court.",shared:true,by:"Malizani"}),
+ 5:[ev(W(-20),"09:00","court","Bail application","Lusaka, EFC Court 1",true,{what:"Bail opposed by the State on flight risk. The court accepted two sureties and the surrender of the passport.",orders:"Bail of K50,000 with two sureties. Report to Lusaka Central every Monday. Passport surrendered.",client:"You were granted bail. You must report to Lusaka Central Police every Monday. Your passport stays with the court.",shared:true,by:"Daliso Ngoma"}),
     ev(W(1),"09:00","court","Mention, bail variation","Lusaka, EFC Court 1",true),ev(W(4),"16:00","prep","Trial preparation with the client","GM Legal, Lusaka · private room",true),ev(W(24),"09:00","court","Trial, day 1","Lusaka, EFC Court 1",true)],
  6:[ev(W(8),"10:00","prep","Review of the draft defence with the insurer","Online",true),ev(W(11),"","dl","Statement of defence due","Tribunal",false)],
  7:[ev(W(19),"","dl","Annual return to PACRA","PACRA",false)]
@@ -341,26 +456,26 @@ const EV = {
 /* ---------- the matter journal: calls, meetings, letters, notes ---------- */
 const jr = (d,k,who,w,sum,x={}) => Object.assign({d:D(d),k,who,w,sum},x);
 const JOURNAL = {
- 0:[jr(-3,"letter","Freddie Tembo","Letter to Mwansa & Co., counsel for the 1st and 2nd defendants","Reminded them that the 7 days agreed for a settlement proposal end on Friday.",{wp:1}),
-    jr(-6,"client","Freddie Tembo","Call with the bank's head of recoveries","The bank will consider at least 80% of the claim, paid within 6 months, with a consent judgment as security.",{min:12,priv:1}),
-    jr(-9,"other","Freddie Tembo","Call with K. Mwansa, counsel for the 1st and 2nd defendants","They asked for 30 days to make a settlement proposal. We agreed to 7 days and said the scheduling conference goes ahead regardless.",{min:18,wp:1}),
-    jr(-12,"meet","Freddie Tembo","Meeting with the bank after the hearing for directions","Explained the directions and the next step. The bank will send an updated statement of account for the 3rd defendant.",{min:40})],
- 1:[jr(-2,"other","Freddie Tembo","Call with counsel for Mwila Transport","They will call one more witness and want the trial dates kept.",{min:9}),
-    jr(-5,"client","Mukumba Mulele","Call with the managing director","The operations manager is free on both trial days. The client wants the case to run to judgment.",{min:15,priv:1})],
- 2:[jr(-6,"client","Prisca Banda","Call with the eldest son of the deceased","The family agrees on the administrator. One beneficiary lives in South Africa and will sign by courier.",{min:11})],
- 3:[jr(-4,"other","Bennet Banda","Call with the seller's advocates","The seller's signed assignment and the original certificate of title are ready for completion.",{min:7}),
-    jr(-8,"note","Bennet Banda","Follow-up at the Ministry of Lands","The consent file is with the Commissioner's office. No query raised.")],
- 5:[jr(-1,"other","Malizani","Call with the State Advocate","The State will not oppose moving the reporting day to Fridays. Statements PW9 to PW13 promised before trial.",{min:10}),
-    jr(-4,"client","Natasha Mumba","Call with the client","Reporting on Mondays clashes with his work in Kabwe. He asks to change the day.",{min:8,priv:1})]
+ 0:[jr(-3,"letter","Brian Kangwa","Letter to Mwansa & Co., counsel for the 1st and 2nd defendants","Reminded them that the 7 days agreed for a settlement proposal end on Friday.",{wp:1}),
+    jr(-6,"client","Brian Kangwa","Call with the bank's head of recoveries","The bank will consider at least 80% of the claim, paid within 6 months, with a consent judgment as security.",{min:12,priv:1}),
+    jr(-9,"other","Brian Kangwa","Call with K. Mwansa, counsel for the 1st and 2nd defendants","They asked for 30 days to make a settlement proposal. We agreed to 7 days and said the scheduling conference goes ahead regardless.",{min:18,wp:1}),
+    jr(-12,"meet","Brian Kangwa","Meeting with the bank after the hearing for directions","Explained the directions and the next step. The bank will send an updated statement of account for the 3rd defendant.",{min:40})],
+ 1:[jr(-2,"other","Brian Kangwa","Call with counsel for Mwila Transport","They will call one more witness and want the trial dates kept.",{min:9}),
+    jr(-5,"client","Kelvin Hamoonga","Call with the managing director","The operations manager is free on both trial days. The client wants the case to run to judgment.",{min:15,priv:1})],
+ 2:[jr(-6,"client","Ruth Simukonda","Call with the eldest son of the deceased","The family agrees on the administrator. One beneficiary lives in South Africa and will sign by courier.",{min:11})],
+ 3:[jr(-4,"other","Felix Mwiinga","Call with the seller's advocates","The seller's signed assignment and the original certificate of title are ready for completion.",{min:7}),
+    jr(-8,"note","Felix Mwiinga","Follow-up at the Ministry of Lands","The consent file is with the Commissioner's office. No query raised.")],
+ 5:[jr(-1,"other","Daliso Ngoma","Call with the State Advocate","The State will not oppose moving the reporting day to Fridays. Statements PW9 to PW13 promised before trial.",{min:10}),
+    jr(-4,"client","Linda Sinkala","Call with the client","Reporting on Mondays clashes with his work in Kabwe. He asks to change the day.",{min:8,priv:1})]
 };
 
 /* ---------- tasks on each matter ---------- */
 const tk = (w,who,d,done=0,src="") => ({w,who,d:W(d),done,src});
 const TASKS = {
- 0:[tk("File the scheduling conference brief","Prisca Banda",2),tk("Get the bank's written settlement authority","Freddie Tembo",6,0,"call with the bank"),tk("Serve the order for directions","Court Clerk",-10,1)],
- 1:[tk("Write notes from today's status conference","Freddie Tembo",0),tk("Witness preparation pack for the operations manager","Freddie Tembo",8),tk("File the agreed bundle 5 days before trial","Freddie Tembo",10)],
- 3:[tk("Follow up consent to assign","Bennet Banda",2),tk("Work out property transfer tax and send it to the client","Bennet Banda",4)],
- 5:[tk("Apply to vary the reporting day","Natasha Mumba",1),tk("Chase statements PW9 to PW13","Natasha Mumba",3)]
+ 0:[tk("File the scheduling conference brief","Ruth Simukonda",2),tk("Get the bank's written settlement authority","Brian Kangwa",6,0,"call with the bank"),tk("Serve the order for directions","Court Clerk",-10,1)],
+ 1:[tk("Write notes from today's status conference","Brian Kangwa",0),tk("Witness preparation pack for the operations manager","Brian Kangwa",8),tk("File the agreed bundle 5 days before trial","Brian Kangwa",10)],
+ 3:[tk("Follow up consent to assign","Felix Mwiinga",2),tk("Work out property transfer tax and send it to the client","Felix Mwiinga",4)],
+ 5:[tk("Apply to vary the reporting day","Linda Sinkala",1),tk("Chase statements PW9 to PW13","Linda Sinkala",3)]
 };
 
 /* ---------- the case assistant: agents that follow each matter ---------- */
@@ -391,33 +506,33 @@ const AI = {
 };
 
 /* ---------- people, team tasks, money ---------- */
-const ME = {partner:"Mukumba Mulele", associate:"Prisca Banda", criminal:"Malizani", clerk:"Court Clerk", accounts:"Accounts"};
-const PEOPLE = ["Mukumba Mulele","Chishimba Kaela","Gideon Kalandanya","Malizani","Freddie Tembo","Prisca Banda","Natasha Mumba","Bennet Banda","Court Clerk","Accounts","Reception"];
+const ME = {partner:"Kelvin Hamoonga", associate:"Ruth Simukonda", criminal:"Daliso Ngoma", clerk:"Court Clerk", accounts:"Accounts"};
+const PEOPLE = ["Kelvin Hamoonga","Bwalya Sikazwe","Victor Siwale","Daliso Ngoma","Brian Kangwa","Ruth Simukonda","Linda Sinkala","Felix Mwiinga","Court Clerk","Accounts","Reception"];
 const tt = (w,to,by,d,m,st,x={}) => Object.assign({w,to,by,d:W(d),m,st,pr:"normal",files:[],out:[]},x);
 const TEAMTASKS = [
- tt("Research: High Court rulings on default judgment where only some defendants appeared","Prisca Banda","Freddie Tembo",2,0,"todo",{pr:"high"}),
- tt("Draft the reply to Mwansa & Co.","Prisca Banda","Freddie Tembo",1,0,"doing",{files:["Letter from Mwansa & Co.pdf"]}),
- tt("Collect the grant of letters of administration","Court Clerk","Prisca Banda",0,2,"todo"),
- tt("Copy and bind the trial bundle, 3 sets","Court Clerk","Freddie Tembo",6,1,"todo",{files:["Agreed bundle, index.pdf"]}),
- tt("November reconciliation of the client account","Accounts","Mukumba Mulele",3,null,"doing"),
- tt("Renew two practising certificates before 31 December","Accounts","Mukumba Mulele",10,null,"todo"),
- tt("Book the boardroom and send the agenda for the bank meeting","Reception","Freddie Tembo",4,0,"todo"),
- tt("Review the draft defence before it goes to the insurer","Mukumba Mulele","Prisca Banda",5,6,"todo",{files:["Statement of defence, version 2.docx"]}),
- tt("Sign the engagement letter for Kafue Agro's new permits","Mukumba Mulele","Natasha Mumba",1,4,"todo",{pr:"high"}),
- tt("Prepare the bail variation application","Malizani","Natasha Mumba",0,5,"doing"),
- tt("File the defence at the Commercial Registry","Court Clerk","Freddie Tembo",-6,1,"done",{out:["Stamped defence.pdf"]})
+ tt("Research: High Court rulings on default judgment where only some defendants appeared","Ruth Simukonda","Brian Kangwa",2,0,"todo",{pr:"high"}),
+ tt("Draft the reply to Mwansa & Co.","Ruth Simukonda","Brian Kangwa",1,0,"doing",{files:["Letter from Mwansa & Co.pdf"]}),
+ tt("Collect the grant of letters of administration","Court Clerk","Ruth Simukonda",0,2,"todo"),
+ tt("Copy and bind the trial bundle, 3 sets","Court Clerk","Brian Kangwa",6,1,"todo",{files:["Agreed bundle, index.pdf"]}),
+ tt("November reconciliation of the client account","Accounts","Kelvin Hamoonga",3,null,"doing"),
+ tt("Renew two practising certificates before 31 December","Accounts","Kelvin Hamoonga",10,null,"todo"),
+ tt("Book the boardroom and send the agenda for the bank meeting","Reception","Brian Kangwa",4,0,"todo"),
+ tt("Review the draft defence before it goes to the insurer","Kelvin Hamoonga","Ruth Simukonda",5,6,"todo",{files:["Statement of defence, version 2.docx"]}),
+ tt("Sign the engagement letter for Kafue Agro's new permits","Kelvin Hamoonga","Linda Sinkala",1,4,"todo",{pr:"high"}),
+ tt("Prepare the bail variation application","Daliso Ngoma","Linda Sinkala",0,5,"doing"),
+ tt("File the defence at the Commercial Registry","Court Clerk","Brian Kangwa",-6,1,"done",{out:["Stamped defence.pdf"]})
 ];
 const FILED = [
  {what:"Letter from Mwansa & Co., received by email at the matter address",to:0,st:4,how:"Email"},
  {what:"Notice of trial dates from the Kitwe High Court, dates checked against the calendar",to:1,st:6,how:"Email"},
  {what:"Photo of the Lands receipt for consent to assign",to:3,st:3,how:"WhatsApp from the court clerk"},
- {what:"Signed bail reporting slip",to:5,st:2,how:"Upload by Natasha Mumba"}
+ {what:"Signed bail reporting slip",to:5,st:2,how:"Upload by Linda Sinkala"}
 ];
 const MO6 = [...Array(6)].map((_,k)=>{ const d=new Date(T0); d.setDate(1); d.setMonth(d.getMonth()-5+k); return MON[d.getMonth()]; });
 const MONEY = {inc:[455,470,430,498,505,517], exp:[352,360,349,371,368,376],
  incRows:[["Fees collected",478400],["Disbursements recovered",36200],["Interest, office account",2100]],
  expRows:[["Salaries",241000],["Rent, Lusaka and Kitwe",58000],["Transport and travel",22300],["Court filing fees",19450],["Utilities, internet, phones",14800],["Insurance and professional fees",11200],["Software and subscriptions",9600]]};
-const SAMPLES = ["File the attached in Kafue Bank, scheduling conference","Remind Prisca to send the reply to Mwansa tomorrow","Hearing in Zambezi on 10 Feb at 09:00","Note: called the Lands office about Lumbwe, consent expected next week"];
+const SAMPLES = ["File the attached in Kafue Bank, scheduling conference","Remind Ruth to send the reply to Mwansa tomorrow","Hearing in Zambezi on 10 Feb at 09:00","Note: called the Lands office about Lumbwe, consent expected next week"];
 
 /* ---------- banking: new deposits, accounting tasks, bills ---------- */
 const DEPS = [
@@ -455,8 +570,8 @@ function depAct(k,j){ const d=S.deps[k];
  if(k===1){ const L=ledgerOf(0); L.bal+=120000; L.up=1; addMove(0,"Collected from Copperline Traders (part payment)",120000,"Bank advice, Copperline part payment K120,000.pdf"); log(0,"K120,000 collected from Copperline matched to the bank's ledger; bank advice filed");
   S.acT.unshift({w:"Remit K120,000 to First Kafue Bank",who:"Accounts",d:W(5),done:0,src:"from today's Copperline deposit",isNew:1});
   d.st="ok"; d.res="On First Kafue Bank's ledger. The bank advice is filed in the matter, the bank sees it in its app, and a remittance task is set."; }
- if(k===2){ S.team.unshift({w:"Get proof of the source of funds from M. Mwale (K30,000)",to:"Natasha Mumba",by:ROLE.name,d:W(2),m:5,st:"todo",pr:"high",files:["Bank advice, M. MWALE K30,000.pdf"],out:[]}); log(5,"K30,000 from a third party held until the source of funds is checked");
-  d.st="held"; d.res="Held, not on J. Mwale's ledger yet. Natasha Mumba has a task to get proof of the source of funds."; }
+ if(k===2){ S.team.unshift({w:"Get proof of the source of funds from M. Mwale (K30,000)",to:"Linda Sinkala",by:ROLE.name,d:W(2),m:5,st:"todo",pr:"high",files:["Bank advice, M. MWALE K30,000.pdf"],out:[]}); log(5,"K30,000 from a third party held until the source of funds is checked");
+  d.st="held"; d.res="Held, not on J. Mwale's ledger yet. Linda Sinkala has a task to get proof of the source of funds."; }
  if(k===3){ S.paid=true; S.docs[3].push({st:3,n:"Receipt, invoice GM-INV-2026-0429.pdf",by:"Accounts",d:new Date(T0),vis:"c",v:1,isNew:1}); log(3,"Invoice GM-INV-2026-0429 paid by Airtel Money; receipt sent to the client");
   d.st="ok"; d.res="Invoice GM-INV-2026-0429 is paid. The receipt is in the client's app and the ZRA record is updated."; }
  return true; }
@@ -527,32 +642,32 @@ const wkday = d => { const x=new Date(d); if(x.getDay()===6) x.setDate(x.getDate
 const INBOX = {
  partner:{stats:[["Read today",63],["Filed",21],["Dates found",4],["Tasks made",7],["Questions",3]], items:[
   ibw("10:02","Director, Copperbelt Ventures","Photo: “We were served with a writ today”","alert",`A supplier has sued the company. The photo shows a writ served today, so appearance and defence are due on ${fd(wkday(D(14)))}. I can start the defence process.`,7,
-   [["Start the defence process",()=>{ const due=wkday(D(14)); S.ev[7].push({d:due,t:"",k:"dl",w:"Appearance and defence due (supplier's claim)",where:"High Court",c:true}); S.team.unshift({w:"Open a new matter for the supplier's claim and run the conflict check",to:"Natasha Mumba",by:"Mukumba Mulele",d:W(1),m:7,st:"todo",pr:"high",files:["Photo of the writ.jpg"],out:[]}); S.team.unshift({w:"Draft the appearance and defence",to:"Natasha Mumba",by:"Mukumba Mulele",d:new Date(due.getTime()-3*864e5),m:7,st:"todo",pr:"high",files:[],out:[]}); (S.req[7]=S.req[7]||[]).push({n:"The supply contract, invoices and letters with the supplier",done:0}); log(7,"Defence process started from a WhatsApp photo: deadline, 2 tasks, request to the client"); return "Process started: the deadline is in the calendar, Natasha Mumba has 2 tasks, and the client was asked for the papers."; },"b-ink"]]),
+   [["Start the defence process",()=>{ const due=wkday(D(14)); S.ev[7].push({d:due,t:"",k:"dl",w:"Appearance and defence due (supplier's claim)",where:"High Court",c:true}); S.team.unshift({w:"Open a new matter for the supplier's claim and run the conflict check",to:"Linda Sinkala",by:"Kelvin Hamoonga",d:W(1),m:7,st:"todo",pr:"high",files:["Photo of the writ.jpg"],out:[]}); S.team.unshift({w:"Draft the appearance and defence",to:"Linda Sinkala",by:"Kelvin Hamoonga",d:new Date(due.getTime()-3*864e5),m:7,st:"todo",pr:"high",files:[],out:[]}); (S.req[7]=S.req[7]||[]).push({n:"The supply contract, invoices and letters with the supplier",done:0}); log(7,"Defence process started from a WhatsApp photo: deadline, 2 tasks, request to the client"); return "Process started: the deadline is in the calendar, Linda Sinkala has 2 tasks, and the client was asked for the papers."; },"b-ink"]]),
   ibw("09:20","Head of recoveries, First Kafue Bank","“When is the scheduling conference? Do you need me there?”","question",`The conference is on ${fd(W(9))} at 09:30 and the preparation meeting with her team is on ${fd(W(6))}. I drafted a reply. Send it from your WhatsApp Business number?`,0,
-   [["Approve and send",()=>{ (S.journal[0]=S.journal[0]||[]).unshift({d:new Date(T0),k:"client",who:"Mukumba Mulele",w:"WhatsApp reply to the bank's head of recoveries",sum:`Confirmed the scheduling conference on ${fd(W(9))} at 09:30 and the preparation meeting on ${fd(W(6))}.`,isNew:1}); log(0,"WhatsApp reply approved and sent; saved to the activity"); return "Sent, and saved to the matter's activity."; },"b-ink"]]),
+   [["Approve and send",()=>{ (S.journal[0]=S.journal[0]||[]).unshift({d:new Date(T0),k:"client",who:"Kelvin Hamoonga",w:"WhatsApp reply to the bank's head of recoveries",sum:`Confirmed the scheduling conference on ${fd(W(9))} at 09:30 and the preparation meeting on ${fd(W(6))}.`,isNew:1}); log(0,"WhatsApp reply approved and sent; saved to the activity"); return "Sent, and saved to the matter's activity."; },"b-ink"]]),
   ib("08:42","Mwansa & Co.","Without prejudice: settlement proposal","alert","The settlement proposal the other side promised has arrived: 65% of the claim over 9 months. The bank's authority is 80% over 6 months. I filed it under “Scheduling conference” as without prejudice.",0,
-   [["Make a task: advise the bank by "+fd(W(2)),()=>{ tasksOf(0).push({w:"Send Mwansa's proposal to the bank with advice",who:"Freddie Tembo",d:W(2),done:0,src:"your assistant, from email"}); S.docs[0].push({st:4,n:"Settlement proposal, without prejudice.pdf",by:"Assistant, from email",d:new Date(T0),vis:"i",v:1,isNew:1}); log(0,"Assistant filed the settlement proposal and made a task for Freddie Tembo"); return "Task given to Freddie Tembo, and the proposal is in the matter."; },"b-ink"]]),
+   [["Make a task: advise the bank by "+fd(W(2)),()=>{ tasksOf(0).push({w:"Send Mwansa's proposal to the bank with advice",who:"Brian Kangwa",d:W(2),done:0,src:"your assistant, from email"}); S.docs[0].push({st:4,n:"Settlement proposal, without prejudice.pdf",by:"Assistant, from email",d:new Date(T0),vis:"i",v:1,isNew:1}); log(0,"Assistant filed the settlement proposal and made a task for Brian Kangwa"); return "Task given to Brian Kangwa, and the proposal is in the matter."; },"b-ink"]]),
   ib("08:15","Kitwe High Court registry","Notice: ruling on the additional witness","propose",`The court will give its ruling on the extra witness on ${fd(W(12))} at 09:00, Court 2. This date is not in the calendar yet.`,1,
    [["Add to the calendar",()=>{ S.ev[1].push({d:W(12),t:"09:00",k:"court",w:"Ruling on the additional witness",where:"Kitwe High Court, Court 2",c:true}); log(1,"Assistant added a court date from the registry's email"); return "Added to Zambezi Copper Haulage, shown to the client with reminders."; },"b-ink"]]),
-  ib("07:58","First Kafue Bank, recoveries","Updated statement of account, 3rd defendant","propose","This is the document Freddie asked the bank for. I can file it and close the request in the client app.",0,
+  ib("07:58","First Kafue Bank, recoveries","Updated statement of account, 3rd defendant","propose","This is the document Brian asked the bank for. I can file it and close the request in the client app.",0,
    [["File it and close the request",()=>{ S.docs[0].push({st:4,n:"Statement of account, 3rd defendant, updated.xlsx",by:"First Kafue Bank Ltd",d:new Date(T0),vis:"c",v:1,from:1,isNew:1}); if(S.req[0]&&S.req[0][0]) S.req[0][0].done=1; log(0,"Assistant filed the bank's updated statement and closed the request"); return "Filed under “Scheduling conference” and the request is closed."; },"b-ink"]]),
   ib("07:31","Unknown sender","Inquiry: a supplier owes us for 40 tonnes of maize, Chipata","question","This looks like a new client. Shall I open an inquiry and run the conflict check on the names in the email?",null,
    [["Open an inquiry",()=>{ S.intake=0; setTimeout(()=>{location.hash="intake";},400); return "Inquiry opened in New client. The conflict check is one tap away."; },"b-ink"],["Not a client",()=>"Noted. I will not ask about this sender again.","b-line"]]),
   ib("06:50","Law Association of Zambia","CPD points for "+YR,"propose","You are 2 points short for this year. Courses before 31 December are listed in the email.",null,
-   [["Make a task for me",()=>{ S.team.unshift({w:"Book a CPD course for 2 points before 31 December",to:"Mukumba Mulele",by:"Your assistant",d:W(7),m:null,st:"todo",pr:"normal",files:[],out:[]}); return "Task on your desk, due "+fd(W(7))+"."; },"b-ink"]]),
+   [["Make a task for me",()=>{ S.team.unshift({w:"Book a CPD course for 2 points before 31 December",to:"Kelvin Hamoonga",by:"Your assistant",d:W(7),m:null,st:"todo",pr:"normal",files:[],out:[]}); return "Task on your desk, due "+fd(W(7))+"."; },"b-ink"]]),
   ib("—","12 newsletters and notices","Read and filed as reading","info","Nothing to do.",null)
  ]},
  associate:{stats:[["Read today",38],["Filed",13],["Dates found",1],["Tasks made",4],["Questions",1]], items:[
   ibw("10:15","Court Clerk","Photo: grant of letters of administration, collected","propose","The clerk collected the grant. I can file it, close the clerk's task, move the estate to “Inventory and accounts”, and set the inventory deadline.",2,
    [["Do all four",()=>{ S.docs[2].push({st:2,n:"Grant of letters of administration.pdf",by:"Court Clerk",d:new Date(T0),vis:"c",v:1,isNew:1}); const t=S.team.find(x=>/grant of letters/i.test(x.w)&&x.st!=="done"); if(t){ t.st="done"; t.out=["Grant of letters of administration.pdf"]; } if(M[2].s<3) M[2].s=3; S.ev[2].push({d:W(22),t:"",k:"dl",w:"Inventory to the beneficiaries (30 days from the grant)",where:"",c:true}); log(2,"Grant filed from the clerk's WhatsApp photo; moved to Inventory and accounts; deadline set"); return "Filed, task closed, stage moved, deadline set. The family sees the new stage."; },"b-ink"]]),
   ib("09:05","Northgate Insurance, claims","Comments on the draft defence","propose","Three comments on version 2 of the Statement of defence. I can attach them to the draft and give you a task to update it.",6,
-   [["Attach and make the task",()=>{ S.docs[6].push({st:2,n:"Northgate comments on the defence.pdf",by:"Northgate Insurance Ltd",d:new Date(T0),vis:"i",v:1,from:1,isNew:1}); tasksOf(6).push({w:"Update the defence with Northgate's 3 comments",who:"Prisca Banda",d:W(3),done:0,src:"your assistant, from email"}); log(6,"Assistant attached the insurer's comments and made a task"); return "Attached to the matter. Task due "+fd(W(3))+"."; },"b-ink"]]),
+   [["Attach and make the task",()=>{ S.docs[6].push({st:2,n:"Northgate comments on the defence.pdf",by:"Northgate Insurance Ltd",d:new Date(T0),vis:"i",v:1,from:1,isNew:1}); tasksOf(6).push({w:"Update the defence with Northgate's 3 comments",who:"Ruth Simukonda",d:W(3),done:0,src:"your assistant, from email"}); log(6,"Assistant attached the insurer's comments and made a task"); return "Attached to the matter. Task due "+fd(W(3))+"."; },"b-ink"]]),
   ib("08:20","Chanda family","The beneficiary in South Africa has signed","question","I filed the signed consent under “Letters of administration”. It is the family's own document: show it in their app?",2,
    [["Show it to the family",()=>{ S.docs[2].push({st:2,n:"Consent of beneficiary, signed.pdf",by:"Chanda family",d:new Date(T0),vis:"c",v:1,from:1,isNew:1}); log(2,"Assistant filed the signed consent, shared with the family"); return "Filed and shared with the family."; },"b-ink"],["Lawyers only",()=>{ S.docs[2].push({st:2,n:"Consent of beneficiary, signed.pdf",by:"Chanda family",d:new Date(T0),vis:"i",v:1,from:1,isNew:1}); return "Filed for the lawyers only."; },"b-line"]]),
-  ib("07:45","Freddie Tembo","Default judgment point","info","Freddie asks about the research task he gave you. It is already on your list, due "+fd(W(2))+".",0)
+  ib("07:45","Brian Kangwa","Default judgment point","info","Brian asks about the research task he gave you. It is already on your list, due "+fd(W(2))+".",0)
  ]},
  criminal:{stats:[["Read today",19],["Filed",6],["Dates found",1],["Tasks made",2],["Questions",1]], items:[
-  ib("02:14","Night line","Missed call from Lusaka Central Police","alert","A call at 02:14 from the police station's number, no message. It may be a new arrest. The on-call lawyer was Natasha Mumba.",null,
+  ib("02:14","Night line","Missed call from Lusaka Central Police","alert","A call at 02:14 from the police station's number, no message. It may be a new arrest. The on-call lawyer was Linda Sinkala.",null,
    [["Open the Criminal Desk",()=>{ setTimeout(()=>{location.hash="criminal";},400); return "Opening the Criminal Desk."; },"b-ink"]]),
   ib("08:10","State Advocate's office","Disclosure: statements PW9 to PW11","propose","Three of the five missing statements. I can file them under “Disclosure” and update the task: 2 still to come.",5,
    [["File and update the task",()=>{ S.docs[5].push({st:3,n:"Prosecution statements PW9 to PW11.pdf",by:"State Advocate",d:new Date(T0),vis:"i",v:1,isNew:1}); const t=tasksOf(5).find(x=>/PW9/.test(x.w)); if(t) t.w="Chase statements PW12 and PW13"; log(5,"Assistant filed PW9 to PW11 and updated the disclosure task"); return "Filed. The task now asks for PW12 and PW13 only."; },"b-ink"]])
@@ -602,7 +717,7 @@ const upcoming = i => (S.ev[i]||[]).map((e,k)=>({...e,k2:k})).filter(e=>e.d>=T0)
 const held = i => (S.ev[i]||[]).map((e,k)=>({...e,k2:k})).filter(e=>e.d<=T0 && e.k!=="dl").sort((a,b)=>b.d-a.d);
 const log = (i,t) => (S.hist[i]=S.hist[i]||[]).unshift({d:new Date(), t});
 const plural = (n,w) => `${n} ${w}${n===1?"":"s"}`;
-const foot = `<footer class="demo">Demonstration only. Every client, matter, case number and figure here is invented. Prepared by MIA Technology for GM Legal Practitioners.</footer>`;
+const foot = `<footer class="demo">Demonstration only. Every person, client, matter, case number and figure here is invented. Prepared by MIA Technology for GM Legal Practitioners.</footer>`;
 
 /* ---------- sample voice-note drafts for notes after a hearing ---------- */
 const VOICE = {
@@ -619,7 +734,7 @@ V.matters = () => {
  return `<h2 class="page">Matters</h2><p class="sub">Every matter has an owner, a backup, a stage in its funnel and a next date. Restricted matters show only to their team.</p>
  <div class="chips">${[["all","Both offices"],["Lusaka","Lusaka"],["Kitwe","Kitwe"]].map(([k,l])=>`<button type="button" class="chip ${S.off===k?"on":""}" data-off="${k}">${l}</button>`).join("")}</div>
  <div class="card" style="overflow-x:auto"><table><thead><tr><th>Matter</th><th class="hide-sm">Court and number</th><th>Stage</th><th>Next</th></tr></thead><tbody>
- ${list.map(m=>{ const n=FS(m).length; return `<tr class="click" data-matter="${M.indexOf(m)}"><td><div class="ttl">${esc(m.t)}${m.restricted?' <span class="tag t-bad">Restricted</span>':""}</div>${mLink(m)} · <span class="small">${esc(m.lead)}</span><div style="margin-top:4px">${tagRisk(m)}</div></td><td class="hide-sm small">${esc(m.court)}<br><span class="case">${esc(m.cause)}</span></td><td class="small"><b>${m.s+1} of ${n}</b> · ${esc(stName(m))}<div class="mbar"><i style="width:${(m.s+1)/n*100}%"></i></div></td><td class="small"><b>${fd(m.next.d)}</b><br>${esc(m.next.w)}</td></tr>`; }).join("")}
+ ${list.map(m=>{ const n=FS(m).length; return `<tr class="click" data-matter="${M.indexOf(m)}"><td><div class="ttl"><a class="mlink" href="#m-${M.indexOf(m)}">${esc(m.t)}</a>${m.restricted?' <span class="tag t-bad">Restricted</span>':""}</div>${mLink(m)} · <span class="small">${esc(m.lead)}</span><div style="margin-top:4px">${tagRisk(m)}</div></td><td class="hide-sm small">${esc(m.court)}<br><span class="case">${esc(m.cause)}</span></td><td class="small"><b>${m.s+1} of ${n}</b> · ${esc(stName(m))}<div class="mbar"><i style="width:${(m.s+1)/n*100}%"></i></div></td><td class="small"><b>${fd(m.next.d)}</b><br>${esc(m.next.w)}</td></tr>`; }).join("")}
  </tbody></table></div>${foot}`;
 };
 
@@ -715,7 +830,7 @@ const tabAct = i => { const f=S.jf[i]||"all", all=S.journal[i]||[], list=all.fil
    <button type="button" class="btn b-line" ${sbtn} data-mtab="${i}:ai">Read this week's summary</button></div></div></div>`; };
 
 const tabTasks = i => { const m=M[i], ts=tasksOf(i).map((t,k)=>({t,k})), open=ts.filter(x=>!x.t.done).sort((a,b)=>a.t.d-b.t.d), done=ts.filter(x=>x.t.done);
- const owners=[...new Set([m.lead,m.partner,...(m.restricted?[]:["Prisca Banda","Natasha Mumba"]),"Court Clerk"])];
+ const owners=[...new Set([m.lead,m.partner,...(m.restricted?[]:["Ruth Simukonda","Linda Sinkala"]),"Court Clerk"])];
  return `<div class="grid g2"><div><div class="card"><h3>Open tasks <small>${open.length}</small></h3><div class="list">${open.map(x=>tRow(i,x.t,x.k)).join("")||'<p class="small muted">No open tasks.</p>'}</div>${done.length?`<div class="day" style="margin-top:14px">Done</div><div class="list">${done.map(x=>tRow(i,x.t,x.k)).join("")}</div>`:""}</div>
   ${(()=>{ const tt=S.team.filter(t=>t.m===i); return tt.length?`<div class="card" style="margin-top:16px"><h3>Team tasks on this matter <small>${tt.filter(t=>t.st!=="done").length} open</small></h3>${tt.map(teamCard).join("")}</div>`:""; })()}</div>
   ${canEdit()?`<div class="card"><h3>Add a task</h3><label class="f" for="tW" style="margin-top:0">Task</label><input type="text" id="tW" placeholder="e.g. Draft the consent order">
@@ -763,8 +878,8 @@ V.intake = () => {
  const kycDone = Object.values(S.kyc).every(Boolean);
  let body = "";
  if(st===0) body = `<div class="card"><h3>New inquiry <small>from the website form</small></h3>
-  <div class="grid g2"><div><label class="f">Client</label><input type="text" value="Mwila Transport Ltd" readonly></div><div><label class="f">Matter type</label><input type="text" value="Commercial dispute: unpaid haulage invoices" readonly></div>
-  <div><label class="f">Other side</label><input type="text" value="Zambezi Copper Haulage Ltd" readonly></div><div><label class="f">Office</label><input type="text" value="Kitwe" readonly></div></div>
+  <div class="grid g2"><div><label class="f" for="inqC">Client</label><input type="text" id="inqC" value="Mwila Transport Ltd" readonly></div><div><label class="f" for="inqT">Matter type</label><input type="text" id="inqT" value="Commercial dispute: unpaid haulage invoices" readonly></div>
+  <div><label class="f" for="inqO">Other side</label><input type="text" id="inqO" value="Zambezi Copper Haulage Ltd" readonly></div><div><label class="f" for="inqF">Office</label><input type="text" id="inqF" value="Kitwe" readonly></div></div>
   <div class="row" style="margin-top:14px"><button class="btn b-ink" data-act="runConflict">Run conflict check</button><span class="small muted">Searches clients, opposing parties, directors and closed matters.</span></div></div>`;
  if(st===1) body = `<div class="card"><h3>Conflict check <small>3 names searched in 0.4 seconds</small></h3>
   <div class="result no"><b>Conflict found.</b> Zambezi Copper Haulage Ltd is a current client of the firm in <span class="case">GM/KTW/2026/0061</span>, against Mwila Transport Ltd. The firm cannot act for both sides in the same dispute.</div>
@@ -781,7 +896,7 @@ V.intake = () => {
   <div class="sheet small mono" style="line-height:1.7">Dear Sirs,<br>RE: SALE OF STAND 18832, LUSAKA WEST<br>We confirm your instructions to act for you in the purchase ... Our fees will be charged on the scale under the Legal Practitioners' (Conveyancing and Non-Contentious Matters) (Costs) Order, as agreed with you on taking instructions ...<br><br>Yours faithfully,<br>GM LEGAL PRACTITIONERS</div>
   <div class="row" style="margin-top:12px"><button class="btn b-ink" data-act="sign">Send for e-signature and request the deposit</button></div></div>`;
  if(st===4) body = `<div class="card"><h3>Matter opened <span class="tag t-good">All three gates passed</span></h3>
-  <p>The matter <span class="case">GM/LSK/2026/0209</span> is open. Bennet Banda handles it with Gideon Kalandanya as partner. The client received a welcome message in the client app with the next steps.</p>
+  <p>The matter <span class="case">GM/LSK/2026/0209</span> is open. Felix Mwiinga handles it with Victor Siwale as partner. The client received a welcome message in the client app with the next steps.</p>
   <div class="row"><a class="btn b-ink" href="#matters" style="text-decoration:none">Go to matters</a><button class="btn b-line" data-act="resetIntake">Run the demo again</button></div></div>`;
  return `<h2 class="page">New client</h2><p class="sub">A matter opens only after three gates: conflict check, KYC and a signed engagement letter.</p>
  <div class="steps">${steps.map((s,k)=>`<span class="${k<st?"done":k===st?"cur":""}">${k<st?"✓ ":""}${s}</span>`).join("")}</div>${body}${foot}`;
@@ -833,12 +948,12 @@ V.funnel = () => {
  <div class="ai" style="margin-top:16px"><div class="lab">Assistant · where matters get stuck</div><p class="small" style="margin:6px 0 0">${esc(F.note)}</p></div>${foot}`;
 };
 
-V.criminal = () => `<h2 class="page">Criminal Desk</h2><p class="sub">Built around Malizani's day: the call at night, the custody clock, bail, disclosure and trial, in fraud, money-laundering and corruption cases. Restricted to the criminal team.</p>
+V.criminal = () => `<h2 class="page">Criminal Desk</h2><p class="sub">Built for criminal defence: the custody clock, bail, disclosure and trial. Restricted to the criminal team.</p>
  <div class="chips" aria-label="Agencies">${["Zambia Police","Drug Enforcement Commission","Anti-Corruption Commission","National Prosecution Authority"].map(a=>`<span class="chip" style="cursor:default">${a}</span>`).join("")}</div>
  <div class="grid g3">
   <div class="card" style="grid-column:span 1"><h3>Arrest card <span class="tag t-bad">In custody</span></h3>
    <div class="small muted">Client</div><div class="ttl">K. Phiri (sample)</div>
-   <div class="small" style="margin-top:6px">Held by the Drug Enforcement Commission, Lusaka<br>Alleged: money laundering<br>Called in: ${S.arrest.getHours().toString().padStart(2,"0")}:${S.arrest.getMinutes().toString().padStart(2,"0")} · on-call: Natasha Mumba</div>
+   <div class="small" style="margin-top:6px">Held by the Drug Enforcement Commission, Lusaka<br>Alleged: money laundering<br>Called in: ${S.arrest.getHours().toString().padStart(2,"0")}:${S.arrest.getMinutes().toString().padStart(2,"0")} · on-call: Linda Sinkala</div>
    <div class="small muted" style="margin-top:10px">Time in custody</div><div class="clock" id="clock">--:--:--</div>
    <div class="row" style="margin-top:12px"><button class="btn b-ink" data-act="bond">Draft police bond request</button></div>
    <label class="row small" style="margin-top:10px;gap:8px"><input type="checkbox" id="consent" ${S.consent?"checked":""}> Client consents to updates to his wife</label></div>
@@ -904,7 +1019,7 @@ V.portal = () => {
  return `<h2 class="page">Client app</h2><p class="sub">What a client of the firm sees, in GM Legal's name: where the case stands, the next dates, the update after each hearing, and documents in both directions.</p>
  <div class="chips"><button type="button" class="chip ${pi===3?"on":""}" data-pc="3">Lumbwe Holdings · property purchase</button><button type="button" class="chip ${pi===0?"on":""}" data-pc="0">First Kafue Bank · court case</button></div>
  <div class="grid g2"><div>
- <div class="phone"><div class="ph"><div class="small" style="color:rgba(255,255,255,.6)">My GM Legal</div><b>${esc(m.client)}</b></div><div class="pb">
+ <div class="phone"><div class="ph"><select class="lang-pick plang" data-for="client" aria-label="Language"><option value="en">English</option><option value="ny">Chinyanja</option></select><div class="small" style="color:rgba(255,255,255,.6)">My GM Legal</div><b>${esc(m.client)}</b></div><div class="pb">
   <div class="small muted">${pi===3?"Stand 18832, Lusaka West":esc(m.cause)}</div><div class="ttl">${pi===3?"Purchase of the property":"Claim against Copperline Traders Ltd and 2 others"}</div>
   <div class="small" style="margin-top:6px">Step ${m.s+1} of ${F.length}: <b>${esc(stName(m))}</b></div>
   <ul class="vst">${F.map((s,k)=>`<li class="${k<m.s?"d":k===m.s?"c":""}"><i>${k<m.s?"✓":""}</i>${esc(s)}</li>`).join("")}</ul>
@@ -923,7 +1038,7 @@ V.portal = () => {
   <div class="it"><span class="tag t-gold">4</span><div>Open the documents the lawyer has shared, stage by stage</div></div>
   <div class="it"><span class="tag t-gold">5</span><div>Upload what the lawyer asks for, from the phone camera or files. It is filed in the matter under the current stage and the lawyer is told</div></div>
   <div class="it"><span class="tag t-gold">6</span><div>Pay invoices by mobile money or card, and message the lawyer securely</div></div>
- </div><p class="small muted" style="margin:10px 0 0">Try it: upload a file here, then switch to Mukumba Mulele and open the matter. It is there, under the current stage.</p></div>
+ </div><p class="small muted" style="margin:10px 0 0">Try it: upload a file here, then switch to Kelvin Hamoonga and open the matter. It is there, under the current stage.</p></div>
  <div class="card" style="margin-top:16px"><h3>For banks and companies</h3><p class="small">A corporate client sees all its matters on one page: exposure in litigation, money collected and remitted, invoices, and the next court dates.</p>
  <table><thead><tr><th>First Kafue Bank · matters</th><th>Value</th></tr></thead><tbody><tr><td>Recovery portfolio, 48 debtors</td><td class="mono">K9.8m</td></tr><tr><td>Defence of a staff claim</td><td class="mono">K420k</td></tr><tr><td>Security perfection, 6 facilities</td><td class="mono">—</td></tr></tbody></table></div></div></div>${foot}`;
 };
@@ -950,7 +1065,7 @@ const moneyCard = () => { const ti=sumR(MONEY.incRows), te=sumR(MONEY.expRows), 
   <div class="grid g2" style="margin-top:12px"><div style="overflow-x:auto">${rows("Income",MONEY.incRows)}</div><div style="overflow-x:auto">${rows("Expenses",MONEY.expRows)}</div></div>
   <p class="small muted" style="margin:10px 0 0">Client money is never counted as income. This card shows only to users a partner has approved.</p></div>`; };
 
-const permCard = () => `<div class="card"><h3>Who sees income and expenses</h3><div class="list small">${[["associate","Prisca Banda","Associate"],["criminal","Malizani","Partner, Criminal Desk"],["clerk","Court Clerk","Registry runs"],["accounts","Accounts","Client account and billing"]].map(([id,n,r])=>`<label class="it" style="align-items:center;cursor:pointer"><input type="checkbox" data-perm="${id}" ${S.perm[id]?"checked":""} style="width:20px;height:20px;accent-color:var(--gold);flex:none"><div style="flex:1"><b>${n}</b><br><span class="muted">${r}</span></div></label>`).join("")}</div><p class="small muted" style="margin:8px 0 0">Partners always see it. Every change is recorded. Try it: allow Prisca, then switch to her desk.</p></div>`;
+const permCard = () => `<div class="card"><h3>Who sees income and expenses</h3><div class="list small">${[["associate","Ruth Simukonda","Associate"],["criminal","Daliso Ngoma","Partner, Criminal Desk"],["clerk","Court Clerk","Registry runs"],["accounts","Accounts","Client account and billing"]].map(([id,n,r])=>`<label class="it" style="align-items:center;cursor:pointer"><input type="checkbox" data-perm="${id}" ${S.perm[id]?"checked":""} style="width:20px;height:20px;accent-color:var(--gold);flex:none"><div style="flex:1"><b>${n}</b><br><span class="muted">${r}</span></div></label>`).join("")}</div><p class="small muted" style="margin:8px 0 0">Partners always see it. Every change is recorded. Try it: allow Ruth, then switch to her desk.</p></div>`;
 
 const myTasks = me => { const out=[];
  S.team.forEach((t,k)=>{ if(t.to===me && t.st!=="done" && (t.m==null||canSee(M[t.m]))) out.push({w:t.w,d:t.d,src:`from ${t.by}`,m:t.m,team:1,st:t.st,pr:t.pr}); });
@@ -961,7 +1076,7 @@ const filedCard = () => { const list=S.filed.filter(f=>canSee(M[f.to])).slice(0,
 
 V.today = () => {
  const r=ROLE.id, me=ME[r], isP=r==="partner", money=isP||S.perm[r];
- const hello = `Good ${new Date().getHours()<12?"morning":"afternoon"}${({partner:", Mr Mulele",associate:", Prisca",criminal:", Malizani"})[r]||""}`;
+ const hello = `Good ${new Date().getHours()<12?"morning":"afternoon"}${({partner:", Mr Hamoonga",associate:", Ruth",criminal:", Daliso"})[r]||""}`;
  const mt = myTasks(me), late = mt.filter(t=>t.d<T0).length;
  const kpis = {
   partner:[["Open matters","780","+38 this month","up"],["Court dates, 7 days","17","11 Lusaka · 5 Kitwe · 1 Ndola","muted"],["Billed this month","K612,400","78% collected","up"],["Client account",K(LEDGER.reduce((a,b)=>a+b.bal,0)),"Reconciled to last month-end","up"]],
@@ -986,7 +1101,7 @@ V.today = () => {
   ${isP?`<div class="ai"><div class="lab">Morning brief · draft by the assistant</div>
    <p style="margin:8px 0">Two items need a partner today. The scheduling conference brief in <b>First Kafue Bank v Copperline</b> is due in 2 days and the draft is ready for review. Kafue Agro has two employment permits expiring within 60 days and the client has not been told. One Kitwe invoice of K91,200 is 67 days unpaid. The client account reconciled with no difference.</p>
    <div class="row"><button class="btn b-ink" data-act="brief">${S.briefApproved?"Sent to partners ✓":"Approve and send to partners"}</button><span class="small muted">Nothing goes out until a person approves it.</span></div></div>`
-   :`<div class="ai"><div class="lab">Your assistant</div><p class="small" style="margin:8px 0 0">Tap <b>Assistant</b> at the bottom of the screen and say what to note, file or update: “File this in Kafue Bank”, “Remind Bennet to chase Lands tomorrow”, “Hearing in Zambezi on 10 Feb at 09:00”. It shows what it will do, and you confirm.</p></div>`}
+   :`<div class="ai"><div class="lab">Your assistant</div><p class="small" style="margin:8px 0 0">Tap <b>Assistant</b> at the bottom of the screen and say what to note, file or update: “File this in Kafue Bank”, “Remind Felix to chase Lands tomorrow”, “Hearing in Zambezi on 10 Feb at 09:00”. It shows what it will do, and you confirm.</p></div>`}
  </div>${foot}`;
 };
 
@@ -1074,7 +1189,7 @@ V.inbox = () => { const r=ROLE.id, box=INBOX[r]; if(!box) return V[ROLE.home]();
 
 /* ---------- the demo guide: scenes 0 to 9 ---------- */
 const SCENES = [
- {k:0, role:"partner", h:"answers", t:"Your answers", d:"What Mr Mulele told us, and where each answer lives"},
+ {k:0, role:"partner", h:"answers", t:"Priorities", d:"Sample priorities, and where each one lives"},
  {k:1, role:"partner", h:"today", t:"Your desk", d:"The firm on one screen, and who sees the money"},
  {k:2, role:"partner", h:"m-0", tab:"over", t:"A matter, stage by stage", d:"First Kafue Bank: the stage bar, then the tabs"},
  {k:3, role:"partner", h:"m-0", tab:"ai", t:"The case assistant", d:"Recommendations a lawyer turns into tasks"},
@@ -1082,7 +1197,7 @@ const SCENES = [
  {k:5, role:"partner", h:"inbox", t:"Your personal assistant", d:"Email and WhatsApp, read, filed and turned into work"},
  {k:6, role:"partner", h:"team", t:"Team tasks", d:"Work passed between people, with the papers"},
  {k:7, role:"partner", h:"account", t:"Accounts and banking", d:"Trust accounts, deposits and receipts in the matter"},
- {k:8, role:"criminal", h:"criminal", t:"Malizani's Criminal Desk", d:"Custody clock, fees by stage, secure line"},
+ {k:8, role:"criminal", h:"criminal", t:"The Criminal Desk", d:"Custody clock, fees by stage, secure line"},
  {k:9, role:"client", h:"portal", pc:0, t:"What your clients see", d:"The five questions, answered on their phone"}
 ];
 function go(k){ const sc=SCENES[k]; if(!sc) return; S.guide=false;
@@ -1099,18 +1214,18 @@ function drawGuide(){ const el=$("#guide"); if(!el) return;
   ${SCENES.map(s=>`<button type="button" class="sc" data-scene="${s.k}"><span class="k">${s.k}</span><span><b>${esc(s.t)}</b><br><span class="small muted">${esc(s.d)}</span></span></button>`).join("")}</div>`:""}`; }
 
 const ANS = [
- {t:"Your firm", a:"Five or more partners, 15 to 25 people across Lusaka and Kitwe, 600 to 1,000 open matters, 25 to 50 new ones a month.", go:[[1,"Your desk"]]},
- {t:"Your three priorities", a:"FIC, data protection and ZRA compliance. Never missing a court date. A client account that always reconciles.", go:[[4,"Court dates"],[7,"Client account"]]},
- {t:"How dates are kept", a:"In the office diary and each lawyer's own diary. How sure no date can slip: “less than I would like”.", go:[[4,"Calendar"],[5,"Reminders"]]},
- {t:"Lusaka and Kitwe", a:"Kitwe mostly runs on its own.", go:[["Kitwe","Kitwe matters"]]},
- {t:"Files and documents", a:"Paper files and email inboxes. Each lawyer keeps his own templates. Many originals in safe custody.", go:[[2,"Documents by stage"],[5,"Mail, filed"]]},
- {t:"Fees and the client account", a:"Hourly, by seniority. Some lawyers record time. Smart Invoice: “not sure”. The client account is kept from bank statements.", go:[[7,"Accounts and banking"]]},
- {t:"Your clients ask", a:"What is happening in my case? When is the next hearing? What do you need from me? Can I have a copy? How much do I owe?", go:[[9,"The client app"]]},
- {t:"Criminal practice", a:"Malizani. Fraud, money laundering and corruption. DEC, ACC, NPA and the police. Called on his mobile at night.", go:[[8,"Criminal Desk"]]},
- {t:"Who uses it, who decides", a:"All lawyers and secretaries use it. All the partners decide together.", go:[[6,"Team tasks"],[3,"Case assistant"]]}
+ {t:"Every date kept", a:"Court dates, filing deadlines and preparation meetings in one calendar, each with an owner, a backup and reminders.", go:[[4,"Court dates"],[5,"Reminders"]]},
+ {t:"Files in one place", a:"Every document filed under its matter and stage, whether it came by email, WhatsApp, the registry or the client.", go:[[2,"Documents by stage"],[5,"Mail, filed"]]},
+ {t:"Client money kept apart", a:"Trust, designated and office accounts on one screen, with a three-way reconciliation every month.", go:[[7,"Accounts and banking"]]},
+ {t:"The next step, suggested", a:"A case assistant reads each matter and suggests what to do next. A lawyer decides.", go:[[3,"Case assistant"]]},
+ {t:"Work passed with its papers", a:"Tasks between lawyers, the clerk and accounts, with the files attached and delivered back.", go:[[6,"Team tasks"]]},
+ {t:"Clients kept informed", a:"Clients see the stage, the next dates and a short update after each hearing, on their phone.", go:[[9,"The client app"]]},
+ {t:"A desk for criminal defence", a:"Custody clock, bail conditions, disclosure and fees by stage, restricted to the criminal team.", go:[[8,"Criminal Desk"]]},
+ {t:"Both offices, one view", a:"Lusaka and Kitwe on the same screens, or one office at a time.", go:[["Kitwe","Kitwe matters"],[1,"Your desk"]]},
+ {t:"The firm at a glance", a:"Open matters, court dates, billing and the client account for the partners, every morning.", go:[[1,"Your desk"]]}
 ];
-V.answers = () => `<h2 class="page">You told us. Here is what you will see.</h2>
- <p class="sub">Your instructions to MIA Technology, dated at Lusaka on 24 November 2026. Each answer below opens the part of GM Chambers built for it.</p>
+V.answers = () => `<h2 class="page">What a busy practice needs. Here is where you will see it.</h2>
+ <p class="sub">Sample priorities, invented for this demonstration. Each one opens the part of GM Chambers built for it.</p>
  <div class="grid g3">${ANS.map(x=>`<div class="card" style="display:flex;flex-direction:column"><h3>${esc(x.t)}</h3><p class="small" style="margin:0 0 12px;flex:1">${esc(x.a)}</p><div class="row" style="gap:6px">${x.go.map(([k,l])=>typeof k==="number"?`<button type="button" class="btn b-line" ${sbtn} data-scene="${k}">${esc(l)} →</button>`:`<button type="button" class="btn b-line" ${sbtn} data-office="${k}">${esc(l)} →</button>`).join("")}</div></div>`).join("")}</div>
  <div class="row" style="margin-top:18px"><button type="button" class="btn b-gold" data-scene="1">Start the tour</button><span class="small muted">Or open the Demo guide at the bottom left, or press 1 to 9 on the keyboard.</span></div>${foot}`;
 
@@ -1131,6 +1246,7 @@ function render(keep){
  drawAsst(); drawGuide();
 }
 function drawNav(){
+ if(window.miaLang) miaLang.setUser(ROLE.id);
  $("#nav").innerHTML = NAV.map(n=> n.sec ? `<div class="sec">${n.sec}</div>` : (n.r.includes(ROLE.id)?`<a href="#${n.id}" data-id="${n.id}"><span class="dot"></span>${n.t}</a>`:"")).join("");
  $("#av").textContent = ROLE.ini; $("#whoName").textContent = ROLE.name; $("#whoRole").textContent = ROLE.role;
  $("#roleSel").innerHTML = ROLES.map(r=>`<option value="${r.id}" ${r.id===ROLE.id?"selected":""}>View as: ${r.name}</option>`).join("");
@@ -1194,7 +1310,7 @@ document.addEventListener("click", e=>{
  const a = b.dataset.act;
  if(a==="brief"){ S.briefApproved=true; toast("Morning brief sent to the partners."); render(); }
  if(a==="runConflict"){ S.intake=1; render(); }
- if(a==="declineConflict"){ S.conflictDecision="Declined by Mukumba Mulele: the firm acts for the other side. Letter of regret drafted; no information about the other client disclosed."; render(); }
+ if(a==="declineConflict"){ S.conflictDecision="Declined by Kelvin Hamoonga: the firm acts for the other side. Letter of regret drafted; no information about the other client disclosed."; render(); }
  if(a==="demoClear"){ S.intake=2; render(); }
  if(a==="toEngage"){ S.intake=3; render(); }
  if(a==="sign"){ S.intake=4; toast("Signed by the client. Deposit request sent."); render(); }
